@@ -1,0 +1,88 @@
+﻿<#@ template debug="true" hostspecific="true" language="C#" #>
+<#@ include file="..\..\BaseTemplate.tt"#>
+<#@ output extension="\\" #>
+<#
+CustomHost host = (CustomHost)Host;
+
+OdcmModel model = host.Model;
+
+var entities = model.GetEntityTypes();
+
+foreach(var entity in entities)
+{	
+	var entityName = GetPrefix() + entity.Name + "Fetcher";
+#><#=GetCommentHeader()#>
+
+#import <office365_odata_base/office365_odata_base.h>
+#import "<#=GetPrefix() + entity.Name#>Operations.h"
+#import "<#=GetPrefix() + entity.Name#>.h"
+<#
+var s = new StringBuilder();
+	
+	string ss = "#import \"{0}{1}{2}.h\"";
+	foreach(var r in entity.NavigationProperties()){
+			s.AppendFormat(ss, GetPrefix(),r.Type.Name, r.IsCollection() ? "CollectionFetcherProtocol" : "FetcherProtocol").AppendLine();
+	}
+#>
+<#=s.ToString()#>
+<#foreach(var child in entity.ChildEntities()){#>
+#import "<#=GetPrefix() + child.Name#>FetcherProtocol.h"<#
+}#>
+<#
+		foreach(var prop in entity.NavigationProperties())
+		{
+			if(prop.IsCollection()){
+#>
+#import "<#=GetPrefix() + prop.Type.Name#>CollectionFetcherProtocol.h"
+#import "<#=GetPrefix() + prop.Type.Name#>FetcherProtocol.h"
+<#
+			}
+			else{
+#>
+#import "<#=GetPrefix() + prop.Type.Name#>FetcherProtocol.h"
+<#		
+			
+			}
+		}
+#>
+
+<#=GetHeaderDoc(entityName)#>
+@protocol <#=entityName#><MSODataEntityFetcher>
+
+@optional
+-(<#=GetTaskType()#> *)read:(void (^)(<#=GetPrefix() + entity.Name#>* <#=entity.Name.ToLowerFirstChar()#>, MSODataException *error))callback;
+-(<#=GetTaskType()#>*) update<#=entity.Name#>:(id)entity withCallback:(void (^)(<#=GetPrefix() + entity.Name#>*, MSODataException * error))callback;
+-(<#=GetTaskType()#>*) delete<#=entity.Name#>:(void (^)(int status, MSODataException * error))callback;
+-(id<<#=GetPrefix() + entity.Name#>Fetcher>)addCustomParameters : (NSString*)name : (id)value;
+-(id<<#=GetPrefix() + entity.Name#>Fetcher>)addCustomHeaderWithName : (NSString*)name andValue : (NSString*) value;
+-(id<<#=GetPrefix() + entity.Name#>Fetcher>)select : (NSString*) params;
+-(id<<#=GetPrefix() + entity.Name#>Fetcher>)expand : (NSString*) value;
+
+@required
+-(<#=GetPrefix() + entity.Name#>Operations*) getOperations;
+<#
+		foreach(var prop in entity.NavigationProperties())
+		{
+			if(prop.IsCollection()){
+#>
+-(id<<#=GetPrefix() + prop.Type.Name#>CollectionFetcher>) get<#=prop.Name#>;
+
+-(id<<#=GetPrefix() + prop.Type.Name#>Fetcher>) get<#=prop.Name#>ById : (NSString*)_id;
+<#
+			}
+			else{
+#>
+-(id<<#=GetPrefix() + prop.Type.Name#>Fetcher>) get<#=prop.Name#>;
+<#		
+			
+			}
+		}
+#>
+	<#foreach(var child in entity.ChildEntities()){#>
+	
+-(id<<#=GetPrefix() + child.Name#>Fetcher>) as<#=child.Name#>;	
+	<#}#>
+@end
+<#=CreateEndOfFile(entityName)#><#
+}
+#>

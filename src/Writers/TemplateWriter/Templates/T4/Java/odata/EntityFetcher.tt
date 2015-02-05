@@ -1,0 +1,105 @@
+﻿<#@ template debug="true" hostspecific="true" language="C#" #>
+<#@ include file="..\BaseTemplateCustomHost.tt"#>
+<#@ output extension="\\" #>
+<#
+
+CustomHost host = (CustomHost)Host;
+OdcmModel model = host.Model;
+OdcmClass entity = host.OdcmType.AsOdcmClass();
+
+var className = entity.Kind == OdcmClassKind.MediaEntity ? "ODataMediaEntityFetcher" :  "ODataEntityFetcher";
+
+#>
+<#=GetCommentHeader()#>
+package <#=model.Namespaces.FirstOrDefault().Name#>;
+
+import com.google.common.util.concurrent.*;
+import <#=model.Namespaces.FirstOrDefault().Name#>.*;
+import <#=model.Namespaces.FirstOrDefault().Name#>.Readable;
+import <#=model.Namespaces.FirstOrDefault().Name#>.interfaces.*;
+
+/**
+ * The type  <#=entity.Name#>Fetcher.
+ */
+public class <#=entity.Name#>Fetcher extends <#=className#><<#=entity.Name#>,<#=entity.Name#>Operations> 
+                                     implements Readable<<#=entity.Name#>> {
+
+     /**
+     * Instantiates a new <#=entity.Name#>Fetcher.
+     *
+     * @param urlComponent the url component
+     * @param parent the parent
+     */
+     public <#=entity.Name#>Fetcher(String urlComponent, ODataExecutable parent) {
+        super(urlComponent, parent, <#=entity.Name#>.class, <#=entity.Name#>Operations.class);
+    }
+
+     /**
+     * Add parameter.
+     *
+     * @param name the name
+     * @param value the value
+     * @return the fetcher
+     */
+    public <#=entity.Name#>Fetcher addParameter(String name, Object value) {
+        addCustomParameter(name, value);
+        return this;
+    }
+
+     /**
+     * Add header.
+     *
+     * @param name the name
+     * @param value the value
+     * @return the fetcher
+     */
+    public <#=entity.Name#>Fetcher addHeader(String name, String value) {
+        addCustomHeader(name, value);
+        return this;
+    }
+
+    <#foreach(var child in entity.Derived){#>
+
+    public <#=child.Name#>Fetcher as<#=child.Name#>(){
+        return new <#=child.Name#>Fetcher(this.urlComponent, this.parent);
+    }	   
+<#
+}
+#>
+    <#
+    foreach(var prop in entity.NavigationProperties()){
+    if(prop.IsCollection()){
+    #>
+     /**
+     * Gets <#=prop.Name.SplitCamelCase().ToLower()#>.
+     *
+     * @return the <#=prop.Name.SplitCamelCase().ToLower()#>
+     */
+    public ODataCollectionFetcher<<#=prop.Type#>, <#=prop.Type#>Fetcher, <#=prop.Type#>CollectionOperations> get<#=prop.Name#>() {
+        return new ODataCollectionFetcher<<#=prop.Type#>, <#=prop.Type#>Fetcher,<#=prop.Type#>CollectionOperations>("<#=prop.Name#>", this, <#=prop.Type#>.class,<#=prop.Type#>CollectionOperations.class);
+    }
+
+    /**
+     * Gets <#=prop.Name.SplitCamelCase().ToLower().Singularize()#>.
+     *
+     * @return the <#=prop.Name.SplitCamelCase().ToLower().Singularize()#>
+     */
+    public <#=prop.Type#>Fetcher get<#=prop.Name.Singularize()#>(String id){
+         return new ODataCollectionFetcher<<#=prop.Type#>, <#=prop.Type#>Fetcher,<#=prop.Type#>CollectionOperations>("<#=prop.Name#>", this, <#=prop.Type#>.class,<#=prop.Type#>CollectionOperations.class).getById(id);
+    }
+<#
+    }else{
+#>
+     /**
+     * Gets <#=prop.Name.ToLower()#>.
+     *
+     * @return the <#=prop.Name.SplitCamelCase().ToLower()#>
+     */
+    public <#=prop.Type#>Fetcher get<#=prop.Name#>() {
+        return new <#=prop.Type#>Fetcher("<#=prop.Name#>", this);
+    }
+<#             
+}
+}
+#>
+}

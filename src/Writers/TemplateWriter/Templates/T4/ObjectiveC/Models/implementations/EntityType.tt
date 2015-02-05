@@ -1,0 +1,24 @@
+﻿<#@ template debug="true" hostspecific="true" language="C#" #>
+<#@ include file="..\..\BaseTemplate.tt"#>
+<#@ output extension="\\" #>
+<#
+CustomHost host = (CustomHost)Host;
+
+OdcmModel model = host.Model;
+
+var entityTypes = model.GetEntityTypes();
+
+foreach(var entity in entityTypes)
+{	
+
+#>
+<#=GetCommentHeader()#>
+
+#import "<#=GetPrefix() + entity.Name #>.h"
+
+<#=GetImplementationDoc(entity.Name)#>
+@implementation <#=GetPrefix() + entity.Name#>	
+@end
+<#=CreateEndOfFile(GetPrefix() + entity.Name)#><#
+}
+#>

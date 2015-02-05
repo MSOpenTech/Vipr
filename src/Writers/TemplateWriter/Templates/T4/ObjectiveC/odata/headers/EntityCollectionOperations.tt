@@ -1,0 +1,62 @@
+﻿<#@ template debug="true" hostspecific="true" language="C#" #>
+<#@ include file="..\..\BaseTemplate.tt"#>
+<#@ output extension="\\" #>
+<#
+CustomHost host = (CustomHost)Host;
+
+OdcmModel model = host.Model;
+
+var entities = model.GetEntityTypes();
+
+foreach(var entity in entities)
+{	
+	var entityName = GetPrefix() +entity.Name + "CollectionOperations";
+	string baseEntity = entity.Base == null ? "MSODataOperations" 
+					  : GetPrefix() + entity.Base.Name.Substring(entity.Base.Name.LastIndexOf(".") +1) + "CollectionOperations" ;
+#><#=GetCommentHeader()#>
+<#=GetImports(entity.Properties)#>
+<#=GetImports(entity.Properties)#>
+<#
+	if(entity.HasActions()){
+			foreach(var action in entity.Actions()){
+				if(action.IsBoundToCollection){
+					if(action.ReturnType.IsComplex()){
+#>
+#import "<#=action.ReturnType.GetTypeString()#>.h"
+<#
+					}
+					
+					foreach(var parameter in action.Parameters){
+						if(parameter.Type.IsComplex()){
+#>
+#import "<#=parameter.Type.GetTypeString()#>.h"
+<#
+						}	
+					}
+				}
+			}
+	}
+#>
+
+<#if(entity.Base != null){#>#import "<#=baseEntity#>.h"
+<#}#>#import <office365_odata_base/office365_odata_base.h>
+
+<#=GetHeaderDoc(entityName)#>
+@interface <#=entityName#> : <#=baseEntity#>
+<#
+		if(entity.HasActions()){
+			foreach(var action in entity.Actions()){
+if(action.IsBoundToCollection){
+#>
+-(<#=GetTaskType()#>*)<#= action.Name.ToLowerFirstChar() #> <#=GetParamsString(action.Parameters)#>(void (^)(<#=GetParamString(action.ReturnType)#>, MSODataException *error))callback;			
+<#if(!action.IsFunction()){#>
+-(<#=GetTaskType()#>*)<#= action.Name.ToLowerFirstChar() #>Raw <#=GetParamsForRaw(action.Parameters.Select(p => p.Name))#>(void (^)(<#=GetParamRaw(action.ReturnType.Name)#>, MSODataException *error))callback;			
+<#}
+				}
+			}
+		}
+#>
+@end
+<#=CreateEndOfFile(entityName)#><#
+}
+#>

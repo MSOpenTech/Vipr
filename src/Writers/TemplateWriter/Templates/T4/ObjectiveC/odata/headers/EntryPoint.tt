@@ -1,0 +1,40 @@
+﻿<#@ template debug="true" hostspecific="true" language="C#" #>
+<#@ include file="..\..\BaseTemplate.tt"#>
+<#@ output extension="\\" #>
+<#
+CustomHost host = (CustomHost)Host;
+
+OdcmModel model = host.Model;
+
+var containerProps = model.EntityContainer.Properties;
+#><#=GetCommentHeader()#>
+
+#import <office365_odata_base/office365_odata_base.h><#
+	foreach(var containerProp in containerProps){
+#>
+<#
+	}
+
+	var entityName = GetPrefix() + "Client"; 
+#>
+<#=GetHeaderDoc(entityName)#>
+@interface <#=entityName#> : MSODataBaseContainer
+
+-(id)initWithUrl : (NSString *)url  dependencyResolver : (id<MSODataDependencyResolver>) resolver;
+<#
+foreach(var prop in containerProps){
+
+	if(prop.IsCollection()){
+#>
+-(<#=prop.Type.GetTypeString()#>CollectionFetcher*) get<#=prop.Name#>;
+<#
+	}else{
+#>
+-(<#=prop.Type.GetTypeString()#>Fetcher*) get<#=prop.Name#>;
+<#	
+	}
+}
+#>
+@end
+<#=CreateEndOfFile(entityName)#><#
+#>

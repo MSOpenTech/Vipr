@@ -1,0 +1,44 @@
+﻿<#@ template debug="true" hostspecific="true" language="C#" #>
+<#@ include file="..\..\BaseTemplate.tt"#>
+<#@ output extension="\\" #>
+<#
+CustomHost host = (CustomHost)Host;
+
+OdcmModel model = host.Model;
+
+var entities = model.GetEntityTypes();
+
+foreach(var entity in entities){
+
+var entityName = GetPrefix() + entity.Name + "CollectionFetcher";
+#><#=GetCommentHeader()#>
+m
+#import <office365_odata_base/office365_odata_base.h>
+#import "<#=GetPrefix() + entity.Name#>.h"
+#import "<#=GetPrefix() + entity.Name#>FetcherProtocol.h"
+
+<#=GetHeaderDoc(entityName)#>
+@protocol <#=entityName#><MSODataCollectionFetcher>
+
+@optional
+-(<#=GetTaskType()#>*)read:(void (^)(NSArray<<#=GetPrefix() + entity.Name#>> *<#=entity.Name.ToLowerFirstChar()#>s, MSODataException *error))callback;
+
+-(id<<#=GetPrefix() + entity.Name#>CollectionFetcher>)select : (NSString*) params;
+-(id<<#=GetPrefix() + entity.Name#>CollectionFetcher>)filter : (NSString*) params;
+-(id<<#=GetPrefix() + entity.Name#>CollectionFetcher>)top : (int) value;
+-(id<<#=GetPrefix() + entity.Name#>CollectionFetcher>)skip : (int) value;
+-(id<<#=GetPrefix() + entity.Name#>CollectionFetcher>)expand : (NSString*) value;
+-(id<<#=GetPrefix() + entity.Name#>CollectionFetcher>)orderBy : (NSString*) params;
+-(id<<#=GetPrefix() + entity.Name#>CollectionFetcher>)addCustomParameters : (NSString*)name : (id)value;
+-(id<<#=GetPrefix() + entity.Name#>CollectionFetcher>)addCustomHeaderWithName : (NSString*)name andValue : (NSString*) value;
+
+@required
+
+-(id)initWithUrl:(NSString *)urlComponent parent:(id<MSODataExecutable>)parent;
+-(id<<#=GetPrefix() + entity.Name#>Fetcher>)getById:(NSString *)Id;
+-(<#=GetTaskType()#>*)add<#=entity.Name#>:(<#=GetPrefix() + entity.Name#>* )entity withCallback:(void (^)(<#=GetPrefix() + entity.Name#> *<#=entity.Name.ToLowerFirstChar()#>, MSODataException *e))callback;
+
+@end
+<#=CreateEndOfFile(entityName)#><#
+}
+#>

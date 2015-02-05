@@ -1,0 +1,27 @@
+﻿<#@ template debug="true" hostspecific="true" language="C#" #>
+<#@ include file="..\..\BaseTemplate.tt"#>
+<#@ output extension="\\" #>
+<#
+CustomHost host = (CustomHost)Host;
+
+OdcmModel model = host.Model;
+
+var entities = model.GetEntityTypes();
+
+foreach(var entity in entities){
+
+var entityName = GetPrefix() + entity.Name + "CollectionFetcher";
+#><#=GetCommentHeader()#>
+
+#import <office365_odata_base/office365_odata_base.h>
+#import "<#=GetPrefix() + entity.Name#>.h"
+#import "<#=GetPrefix() + entity.Name#>CollectionFetcherProtocol.h"
+
+<#=GetHeaderDoc(entityName)#>
+
+@interface <#=entityName#> : MSODataCollectionFetcher<<#=entityName#>>
+
+@end
+<#=CreateEndOfFile(entityName)#><#
+}
+#>

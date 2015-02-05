@@ -1,0 +1,25 @@
+﻿<#@ template debug="true" hostspecific="true" language="C#" #>
+<#@ include file="..\..\BaseTemplate.tt"#>
+<#@ output extension="\\" #>
+<#
+CustomHost host = (CustomHost)Host;
+
+OdcmModel model = host.Model;
+
+var entities = model.GetEntityTypes();
+
+foreach(var entity in entities)
+{	
+	var entityName = GetPrefix() + entity.Name + "Fetcher";
+	var extends =  (entity.HasStream ? "MSODataMediaEntityFetcher<": "MSODataEntityFetcher<") + entityName+ ">";
+#><#=GetCommentHeader()#>
+
+#import "<#=entityName#>Protocol.h"
+<#=GetHeaderDoc(entityName)#>
+
+@interface <#=entityName#> : <#=extends#>
+
+@end
+<#=CreateEndOfFile(entityName)#><#
+}
+#>

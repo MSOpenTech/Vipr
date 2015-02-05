@@ -1,0 +1,33 @@
+﻿<#@ template debug="true" hostspecific="true" language="C#" #>
+<#@ include file="..\..\BaseTemplate.tt"#>
+<#@ output extension="\\" #>
+<#
+CustomHost host = (CustomHost)Host;
+
+OdcmModel model = host.Model;
+
+var enumTypes = model.GetEnumTypes();
+
+foreach(var enumType in enumTypes)
+{	
+#>
+<#=GetCommentHeader()#>
+
+@interface NSObject ()
+
+typedef enum {
+<#
+	for(var i=1; i <= enumType.Members.Count; i++)
+	{
+		string value = enumType.Members[i -1].Name + (i == enumType.Members.Count ? string.Empty : ",");
+#>
+	<#= value#>
+<#	
+	}
+#>
+} <#=GetPrefix() + enumType.Name #>;
+
+@end
+<#=CreateEndOfFile(GetPrefix() + enumType.Name)#><#
+}
+#>
