@@ -38,7 +38,7 @@ namespace ODataReader.v4
                 if (!serviceMetadata.ContainsKey(MetadataKey))
                     throw new ArgumentException("Argument must contain value for key \"$metadata\"", "serviceMetadata");
 
-                var edmx = XElement.Parse(serviceMetadata[MetadataKey]);
+                var edmx = XDocument.Parse(serviceMetadata[MetadataKey]);
 
                 IEnumerable<EdmError> errors;
                 if (!EdmxReader.TryParse(edmx.CreateReader(ReaderOptions.None), out _edmModel, out errors))

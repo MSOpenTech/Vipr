@@ -5,8 +5,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using System.Xml.Linq;
+using ODataReader.v4;
 using Vipr.Core;
+using Vipr.Properties;
 
 namespace Vipr
 {
@@ -14,7 +15,7 @@ namespace Vipr
     {
         private static void Main(string[] args)
         {
-            ODataToFile<ODataReader.v4.Reader>("odataDemo.cs", Properties.Resources.sharepoint_full_edmx);
+            ODataToFile<Reader>("odataDemo.cs", Resources.sharepoint_full_edmx);
         }
 
         private static void ODataToFile<T>(string fileName, string edmxString) where T : IReader, new()
@@ -29,7 +30,6 @@ namespace Vipr
 
         private static string ODataToString<T>(string edmxString) where T : IReader, new()
         {
-            var edmx = XElement.Parse(edmxString);
             var reader = new T();
             var model = reader.GenerateOdcmModel(new Dictionary<string, string>(){{"$metadata", edmxString}});
             var writer = new CSharpWriter.CSharpWriter(model, null);
