@@ -1,6 +1,6 @@
 using System;
 
-namespace Vipr.CLI
+namespace Vipr.CLI.Strategies
 {
     public interface IStrategy
     {

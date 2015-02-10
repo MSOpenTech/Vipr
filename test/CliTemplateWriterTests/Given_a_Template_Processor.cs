@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using TemplateWriter;
 using Vipr.CLI;
+using Vipr.CLI.Strategies;
 
 namespace CliTemplateWriterTests
 {

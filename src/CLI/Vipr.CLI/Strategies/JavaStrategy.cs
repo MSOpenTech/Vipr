@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using TemplateWriter;
 
-namespace Vipr.CLI
+namespace Vipr.CLI.Strategies
 {
     public class JavaStrategy : BaseStrategy, IStrategy
     {

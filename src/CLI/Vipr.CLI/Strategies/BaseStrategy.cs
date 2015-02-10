@@ -7,10 +7,11 @@ using System.Text;
 using Microsoft.VisualStudio.TextTemplating;
 using ODataReader.v4;
 using TemplateWriter;
+using Vipr.CLI.Output;
 using Vipr.Core;
 using Vipr.Core.CodeModel;
 
-namespace Vipr.CLI
+namespace Vipr.CLI.Strategies
 {
     public abstract class BaseStrategy : IStrategy
     {
@@ -25,7 +26,7 @@ namespace Vipr.CLI
         {
             Arguments = configArguments;
             Engine = new Engine();
-            BaseTemplatePath = Path.Combine(Arguments.BuilderArguments.TemplatesDir, Name);
+            BaseTemplatePath = Path.Combine(Arguments.BuilderArguments.OutputDir, Name);
         }
 
         protected virtual void ProcessModelTemplates()

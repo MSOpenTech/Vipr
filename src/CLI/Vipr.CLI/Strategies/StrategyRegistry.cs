@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using TemplateWriter;
 
-namespace Vipr.CLI
+namespace Vipr.CLI.Strategies
 {
     public class StrategyRegistry : IStrategyResgistry
     {

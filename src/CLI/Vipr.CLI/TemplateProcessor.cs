@@ -1,5 +1,6 @@
 using System;
 using TemplateWriter;
+using Vipr.CLI.Strategies;
 
 namespace Vipr.CLI
 {

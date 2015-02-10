@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using TemplateWriter;
 
-namespace Vipr.CLI
+namespace Vipr.CLI.Strategies
 {
     public interface IStrategyResgistry
     {

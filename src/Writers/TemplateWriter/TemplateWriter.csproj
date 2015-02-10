@@ -65,15 +65,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <EmbeddedResource Include="Templates\T4\Java\BaseTemplateCustomHost.tt" />
-    <EmbeddedResource Include="Templates\T4\Java\models\ComplexType.tt" />
-    <EmbeddedResource Include="Templates\T4\Java\models\EntityType.tt" />
-    <EmbeddedResource Include="Templates\T4\Java\models\EnumType.tt" />
-    <EmbeddedResource Include="Templates\T4\Java\models\ODataBaseEntity.tt" />
-    <EmbeddedResource Include="Templates\T4\Java\odata\EntityCollectionOperations.tt" />
-    <EmbeddedResource Include="Templates\T4\Java\odata\EntityFetcher.tt" />
-    <EmbeddedResource Include="Templates\T4\Java\odata\EntityOperations.tt" />
-    <EmbeddedResource Include="Templates\T4\Java\odata\EntryPoint.tt" />
+    <EmbeddedResource Include="Templates\T4\Java\Base\BaseTemplateCustomHost.tt" />
+    <EmbeddedResource Include="Templates\T4\Java\Models\ComplexType.tt" />
+    <EmbeddedResource Include="Templates\T4\Java\Models\EntityType.tt" />
+    <EmbeddedResource Include="Templates\T4\Java\Models\EnumType.tt" />
+    <EmbeddedResource Include="Templates\T4\Java\Models\ODataBaseEntity.tt" />
+    <EmbeddedResource Include="Templates\T4\Java\OData\EntityCollectionOperations.tt" />
+    <EmbeddedResource Include="Templates\T4\Java\OData\EntityFetcher.tt" />
+    <EmbeddedResource Include="Templates\T4\Java\OData\EntityOperations.tt" />
+    <EmbeddedResource Include="Templates\T4\Java\OData\EntryPoint.tt" />
+    <None Include="Templates.json" />
     <None Include="Templates\T4\ObjectiveC\BaseTemplate.tt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

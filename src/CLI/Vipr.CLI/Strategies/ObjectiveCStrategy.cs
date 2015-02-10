@@ -1,7 +1,7 @@
 ﻿using System;
 using TemplateWriter;
 
-namespace Vipr.CLI
+namespace Vipr.CLI.Strategies
 {
     public class ObjectiveCStrategy : BaseStrategy, IStrategy
     {

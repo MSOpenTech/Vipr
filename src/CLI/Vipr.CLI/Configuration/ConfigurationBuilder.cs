@@ -2,7 +2,7 @@
 using Mono.Options;
 using TemplateWriter;
 
-namespace Vipr.CLI
+namespace Vipr.CLI.Configuration
 {
     public class ConfigurationBuilder : IConfigurationBuilder
     {
@@ -40,7 +40,6 @@ namespace Vipr.CLI
                 },
                 {"in|inputFile=", "OData Metadata file", v => _arguments.InputFile = v},
                 {"out|outputDir=", "Directory to save the generated files(required).", v => _arguments.OutputDir = v},
-                {"t|templatesDir=", "Directory where the T4 templates are located.", v => _arguments.TemplatesDir = v},
                 {"p|plugins=", "Diferents configurations.(optional)", v => _arguments.Plugins = v.Split(',')},
             };
             OptionSet.Parse(args);

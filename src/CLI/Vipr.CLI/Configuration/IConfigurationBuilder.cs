@@ -1,7 +1,7 @@
 using Mono.Options;
 using TemplateWriter;
 
-namespace Vipr.CLI
+namespace Vipr.CLI.Configuration
 {
     public interface IConfigurationBuilder
     {

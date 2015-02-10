@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using TemplateWriter;
 using Vipr.CLI;
+using Vipr.CLI.Configuration;
 
 namespace CliTemplateWriterTests
 {
@@ -63,7 +64,7 @@ namespace CliTemplateWriterTests
         [TestMethod]
         public void When_passing_specific_Arguments_should_procces_templates()
         {
-            var args = "--language=java --inputFile=Metadata\\Exchange.edmx.xml --outputDir=Out --templatesDir=Templates\\T4".Split(' ');
+            var args = "--language=java --inputFile=Metadata\\Exchange.edmx.xml --outputDir=Out".Split(' ');
             var builder = new ConfigurationBuilder().WithArguments(args);
             var entrypoint = new CLIEntryPoint(builder, new TemplateProcessor());
             entrypoint.Process();

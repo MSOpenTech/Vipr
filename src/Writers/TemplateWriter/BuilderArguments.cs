@@ -14,7 +14,6 @@ namespace TemplateWriter
 
         public string OutputDir { get; set; }
         public string InputFile { get; set; }
-        public string TemplatesDir { get; set; }
         public string[] Plugins { get; set; }
         public bool ShowHelp { get; set; }
     }

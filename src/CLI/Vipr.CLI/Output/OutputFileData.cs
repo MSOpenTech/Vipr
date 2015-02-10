@@ -1,4 +1,4 @@
-﻿namespace Vipr.CLI
+﻿namespace Vipr.CLI.Output
 {
     public class OutputFileData
     {
