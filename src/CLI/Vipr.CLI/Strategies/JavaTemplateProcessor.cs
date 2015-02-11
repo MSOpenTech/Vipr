@@ -30,7 +30,7 @@ namespace Vipr.CLI.Strategies
 
         public Dictionary<string, Action<string>> Templates { get; set; }
 
-        public JavaTemplateProcessor(OdcmModel model, IFileWriter fileWriter, IConfigArguments arguments)
+        public JavaTemplateProcessor(IFileWriter fileWriter, OdcmModel model, IConfigArguments arguments)
         {
             _model = model;
             _fileWriter = fileWriter;
@@ -90,9 +90,9 @@ namespace Vipr.CLI.Strategies
             }
         }
 
-        private void ProcessTemplate(string templateFile, OdcmObject complexType)
+        private void ProcessTemplate(string templateFile, OdcmObject odcmObject)
         {
-            var host = new CustomHost(JavaStrategyName, complexType) //TODO: v3? How?
+            var host = new CustomHost(JavaStrategyName, odcmObject) //TODO: v3? How?
             {
                 TemplateFile = templateFile,
             };
@@ -105,7 +105,7 @@ namespace Vipr.CLI.Strategies
                 var errors = LogErrors(host);
                 throw new InvalidOperationException(errors);
             }
-            _fileWriter.WriteText(_arguments.BuilderArguments.OutputDir, output);
+            _fileWriter.WriteText(odcmObject.Name, output);
         }
 
         protected static string LogErrors(CustomHost host)

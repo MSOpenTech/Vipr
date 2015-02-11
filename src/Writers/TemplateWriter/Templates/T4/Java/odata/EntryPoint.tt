@@ -1,5 +1,5 @@
 ﻿<#@ template debug="true" hostspecific="true" language="C#" #>
-<#@ include file="..\BaseTemplateCustomHost.tt"#>
+<#@ include file="BaseTemplateCustomHost.tt"#>
 <#@ output extension="\\" #>
 <#
 CustomHost host = (CustomHost)Host;

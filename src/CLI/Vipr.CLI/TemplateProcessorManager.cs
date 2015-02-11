@@ -36,7 +36,7 @@ namespace Vipr.CLI
                 { "$metadata", File.ReadAllText(configuration.BuilderArguments.InputFile) }
             });
 
-            var javaProcessor = new JavaTemplateProcessor(model, new JavaFileWriter(), configuration);
+            var javaProcessor = new JavaTemplateProcessor(new JavaFileWriter(model, configuration), model, configuration);
 
             foreach (var template in runnableTemplates)
             {
