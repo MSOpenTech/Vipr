@@ -2,8 +2,6 @@
 using Moq;
 using TemplateWriter;
 using Vipr.CLI;
-using Vipr.CLI.Output;
-using Vipr.CLI.Strategies;
 using Vipr.Core;
 
 namespace CliTemplateWriterTests
@@ -15,25 +13,18 @@ namespace CliTemplateWriterTests
         [TestMethod]
         public void When_Instantiated_should_have_a_valid_state()
         {
-            var fileWriter = new Mock<IFileWriter>();
             var reader = new Mock<IReader>();
-            var configArguments = new Mock<IConfigArguments>();
+            var tempLocationWriter = new Mock<ITemplateTempLocationFileWriter>();
+            var processorManager = new TemplateProcessorManager(reader.Object, tempLocationWriter.Object);
 
-            var singleFileStrategy = new SingleFileStrategy(fileWriter.Object, reader.Object, configArguments.Object);
-
-            Assert.IsNotNull(singleFileStrategy);
+            Assert.IsNotNull(processorManager);
         }
 
         [TestMethod]
         public void Can_create_a_representation_of_templates_from_an_assembly()
         {
-            var arguments = new Mock<IConfigArguments>();
-            var reader = new TemplateAssemblyReader(arguments.Object);
-
-            arguments.SetupGet(x => x.BuilderArguments)
-                     .Returns(new BuilderArguments { Language = "Java" });
-
-            reader.Read(typeof(CustomHost));
+            var reader = new TemplateAssemblyReader();
+            reader.Read(typeof(CustomHost), new BuilderArguments { Language = "Java" });
         }
 
         [TestMethod]

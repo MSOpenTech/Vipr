@@ -68,7 +68,6 @@
   <ItemGroup>
     <Compile Include="Given_a_Set_of_Arguments_to_CLI.cs" />
     <Compile Include="Given_a_Single_File_Processing_Strategy.cs" />
-    <Compile Include="Given_a_Template_Processor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

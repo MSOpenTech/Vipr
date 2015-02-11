@@ -1,14 +1,15 @@
 using System;
 using System.IO;
 using Vipr.CLI.Configuration;
+using Vipr.CLI.Strategies;
 
 namespace Vipr.CLI
 {
     public class CLIEntryPoint
     {
         private readonly IConfigurationBuilder _configBuilder;
-        private readonly ITemplateProcessor _processor;
-        public CLIEntryPoint(IConfigurationBuilder configBuilder, ITemplateProcessor processor)
+        private readonly ITemplateProcessorManager _processor;
+        public CLIEntryPoint(IConfigurationBuilder configBuilder, ITemplateProcessorManager processor)
         {
             _configBuilder = configBuilder;
             _processor = processor;

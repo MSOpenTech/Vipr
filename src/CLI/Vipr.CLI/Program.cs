@@ -2,6 +2,7 @@
 using System.IO;
 using Mono.Options;
 using Vipr.CLI.Configuration;
+using Vipr.CLI.Strategies;
 
 namespace Vipr.CLI
 {
@@ -13,7 +14,7 @@ namespace Vipr.CLI
             try
             {
                 var builder = new ConfigurationBuilder().WithArguments(args);
-                var entrypoint = new CLIEntryPoint(builder, new TemplateProcessor());
+                var entrypoint = new CLIEntryPoint(builder, new TemplateProcessorManager());
                 entrypoint.Process();
 
             }

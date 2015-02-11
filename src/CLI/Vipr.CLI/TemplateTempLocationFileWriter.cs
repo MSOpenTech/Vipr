@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using TemplateWriter;
 
 namespace Vipr.CLI
 {
-    public class TemplateTempLocationFileWriter
+    public class TemplateTempLocationFileWriter : ITemplateTempLocationFileWriter
     {
         private readonly ITemplateAssemblyReader _templateAssemblyReader;
 
@@ -13,10 +14,10 @@ namespace Vipr.CLI
             _templateAssemblyReader = templateAssemblyReader;
         }
 
-        public IList<Template> WriteUsing(Type sourceType)
+        public IList<Template> WriteUsing(Type sourceType, BuilderArguments arguments)
         {
             var writtenTemplates = new List<Template>();
-            var templates = _templateAssemblyReader.Read(sourceType);
+            var templates = _templateAssemblyReader.Read(sourceType, arguments);
 
             foreach (var template in templates)
             {
