@@ -4,7 +4,7 @@ using TemplateWriter;
 
 namespace Vipr.CLI
 {
-    public interface ITemplateAssemblyReader
+    public interface ITemplateSourceReader
     {
         IList<Template> Read(Type targetType, BuilderArguments arguments);
     }

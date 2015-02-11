@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using Vipr.CLI.Configuration;
-using Vipr.CLI.Strategies;
 
 namespace Vipr.CLI
 {

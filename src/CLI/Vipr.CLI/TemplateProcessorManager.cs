@@ -16,7 +16,7 @@ namespace Vipr.CLI
         private readonly ITemplateTempLocationFileWriter _tempLocationFileWriter;
 
         public TemplateProcessorManager()
-            : this(new Reader(), new TemplateTempLocationFileWriter(new TemplateAssemblyReader()))
+            : this(new Reader(), new TemplateTempLocationFileWriter(new TemplateSourceReader()))
         {
         }
 

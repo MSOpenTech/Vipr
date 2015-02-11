@@ -1,7 +1,6 @@
 ﻿using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Text;
 using Microsoft.VisualStudio.TextTemplating;
@@ -15,6 +14,13 @@ namespace Vipr.CLI.Strategies
     {
         public const string ComplexType = "ComplexType";
         public const string EntityType = "EntityType";
+        public const string EnumType = "EnumType";
+        public const string ODataBaseEntity = "ODataBaseEntity";
+        public const string EntityCollectionOperation = "EntityCollectionOperation";
+        public const string EntityFetcher = "EntityFetcher";
+        public const string EntityOperations = "EntityOperations";
+        public const string EntryPoint = "EntryPoint";
+
         public const String JavaStrategyName = "Java";
 
         private readonly IFileWriter _fileWriter;
@@ -23,11 +29,6 @@ namespace Vipr.CLI.Strategies
         private readonly OdcmModel _model;
 
         public Dictionary<string, Action<string>> Templates { get; set; }
-
-        public string Name
-        {
-            get { return JavaStrategyName; }
-        }
 
         public JavaTemplateProcessor(OdcmModel model, IFileWriter fileWriter, IConfigArguments arguments)
         {
@@ -38,17 +39,35 @@ namespace Vipr.CLI.Strategies
 
             Templates = new Dictionary<string, Action<string>>(StringComparer.InvariantCultureIgnoreCase)
             {
+                //Model
+                {EntityType, EntityTypes},
                 {ComplexType, ComplexTypes},
-                {EntityType, EntityTypes}
+                {EnumType, EnumTypes},
+                {ODataBaseEntity, BaseEntity},
+                //OData
+                {EntityCollectionOperation, EntityTypes},
+                {EntityFetcher, EntityTypes},
+                {EntityOperations, EntityTypes},
+                //EntityContainer
+                {EntryPoint, CreateEntryPoint},
             };
         }
 
-        public Action<string> GetStrategy(string templateName)
+        private void CreateEntryPoint(string templateName)
         {
-            Action<string> action;
-            Templates.TryGetValue(templateName, out action);
-            Debug.Assert(action != null, "strategy != null");
-            return action;
+            var container = _model.EntityContainer;
+            ProcessTemplate(templateName, container);
+        }
+
+        private void BaseEntity(string templateName)
+        {
+            ProcessTemplate(templateName, null);
+        }
+
+        private void EnumTypes(string templateName)
+        {
+            var enums = _model.GetEnumTypes();
+            ProcessingAction(enums, templateName);
         }
 
         public void ComplexTypes(string templateFile)
@@ -67,21 +86,26 @@ namespace Vipr.CLI.Strategies
         {
             foreach (var complexType in source)
             {
-                var host = new CustomHost(JavaStrategyName, complexType) //TODO: v3? How?
-                {
-                    TemplateFile = templateFile,
-                };
-
-                var templateContent = File.ReadAllText(host.TemplateFile);
-                var output = _engine.ProcessTemplate(templateContent, host);
-
-                if (host.Errors != null && host.Errors.HasErrors)
-                {
-                    var errors = LogErrors(host);
-                    throw new InvalidOperationException(errors);
-                }
-                _fileWriter.WriteText(_arguments.BuilderArguments.OutputDir, output);
+                ProcessTemplate(templateFile, complexType);
             }
+        }
+
+        private void ProcessTemplate(string templateFile, OdcmObject complexType)
+        {
+            var host = new CustomHost(JavaStrategyName, complexType) //TODO: v3? How?
+            {
+                TemplateFile = templateFile,
+            };
+
+            var templateContent = File.ReadAllText(host.TemplateFile);
+            var output = _engine.ProcessTemplate(templateContent, host);
+
+            if (host.Errors != null && host.Errors.HasErrors)
+            {
+                var errors = LogErrors(host);
+                throw new InvalidOperationException(errors);
+            }
+            _fileWriter.WriteText(_arguments.BuilderArguments.OutputDir, output);
         }
 
         protected static string LogErrors(CustomHost host)

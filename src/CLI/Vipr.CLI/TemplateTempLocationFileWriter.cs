@@ -7,17 +7,17 @@ namespace Vipr.CLI
 {
     public class TemplateTempLocationFileWriter : ITemplateTempLocationFileWriter
     {
-        private readonly ITemplateAssemblyReader _templateAssemblyReader;
+        private readonly ITemplateSourceReader _templateSourceReader;
 
-        public TemplateTempLocationFileWriter(ITemplateAssemblyReader templateAssemblyReader)
+        public TemplateTempLocationFileWriter(ITemplateSourceReader templateSourceReader)
         {
-            _templateAssemblyReader = templateAssemblyReader;
+            _templateSourceReader = templateSourceReader;
         }
 
         public IList<Template> WriteUsing(Type sourceType, BuilderArguments arguments)
         {
             var writtenTemplates = new List<Template>();
-            var templates = _templateAssemblyReader.Read(sourceType, arguments);
+            var templates = _templateSourceReader.Read(sourceType, arguments);
 
             foreach (var template in templates)
             {

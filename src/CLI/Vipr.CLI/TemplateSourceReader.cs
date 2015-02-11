@@ -6,7 +6,7 @@ using Vipr.CLI.Extensions;
 
 namespace Vipr.CLI
 {
-    public class TemplateAssemblyReader : ITemplateAssemblyReader
+    public class TemplateSourceReader : ITemplateSourceReader
     {
         public IList<Template> Read(Type targetType, BuilderArguments arguments)
         {
