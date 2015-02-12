@@ -81,4 +81,3 @@ foreach(var prop in model.EntityContainer.Properties){
     }
 }
 #>
-<#=CreateEndOfFile("SomeContainer")#>

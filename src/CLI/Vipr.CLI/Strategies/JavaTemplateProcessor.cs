@@ -74,7 +74,7 @@ namespace Vipr.CLI.Strategies
                 throw new InvalidOperationException(errors);
             }
 
-            _fileWriter.WriteText(_model.EntityContainer.Name, output);
+            _fileWriter.WriteText(template, _model.EntityContainer.Name, output);
         }
 
         private void EnumTypes(Template template)
@@ -119,7 +119,7 @@ namespace Vipr.CLI.Strategies
                 var errors = LogErrors(host, template);
                 throw new InvalidOperationException(errors);
             }
-            _fileWriter.WriteText(odcmObject.Name, output);
+            _fileWriter.WriteText(template, odcmObject.Name, output);
         }
 
         protected static string LogErrors(CustomHost host, Template template)

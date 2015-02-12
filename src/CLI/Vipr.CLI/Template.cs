@@ -14,6 +14,8 @@ namespace Vipr.CLI
 
         public string Path { get; set; }
 
+        public string FolderName { get; set; }
+
         public string ResourceName { get; set; }
 
         public Template(string name, string resourceName)

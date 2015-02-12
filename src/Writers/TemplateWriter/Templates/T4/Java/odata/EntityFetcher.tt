@@ -102,4 +102,5 @@ public class <#=entity.Name#>Fetcher extends <#=className#><<#=entity.Name#>,<#=
 }
 }
 #>
+
 }

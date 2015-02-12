@@ -16,13 +16,22 @@ namespace Vipr.CLI.Output
             _configuration = configuration;
         }
 
-        public void WriteText(string fileName, string text)
+        private static string FileName(Template template, string identifier)
+        {
+            return template.FolderName == "odata" ? template.Name.Replace("Entity", identifier) 
+                                                  : identifier;
+        }
+
+        public void WriteText(Template template, string fileName, string text)
         {
             var destPath = string.Format("{0}{1}", Path.DirectorySeparatorChar, _configuration.BuilderArguments.OutputDir);
-            var pathFromNamespace = CreatePathFromNamespace(_model.GetNamespace());
+            var @namespace = _model.GetNamespace() + "." + template.FolderName;
+            var pathFromNamespace = CreatePathFromNamespace(@namespace);
+            
+            var identifier = FileName(template, fileName);
+
             var fullPath = Path.Combine(destPath, pathFromNamespace);
-            var filePath = Path.Combine(fullPath,
-                string.Format("{0}{1}", fileName, _configuration.BuilderArguments.FileExtension));
+            var filePath = Path.Combine(fullPath, string.Format("{0}{1}", identifier, _configuration.BuilderArguments.FileExtension));
 
             using (var writer = new StreamWriter(filePath, false, Encoding.ASCII))
             {
