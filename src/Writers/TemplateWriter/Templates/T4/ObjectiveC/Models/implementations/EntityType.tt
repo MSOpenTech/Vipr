@@ -3,22 +3,26 @@
 <#@ output extension="\\" #>
 <#
 CustomHost host = (CustomHost)Host;
-
-OdcmModel model = host.Model;
-
-var entityTypes = model.GetEntityTypes();
-
-foreach(var entity in entityTypes)
-{	
+var entity = host.OdcmType.AsEntityType();
 
 #>
 <#=GetCommentHeader()#>
 
-#import "<#=GetPrefix() + entity.Name #>.h"
+#import "<#=GetPrefix() + "Models.h"
 
 <#=GetImplementationDoc(entity.Name)#>
 @implementation <#=GetPrefix() + entity.Name#>	
-@end
-<#=CreateEndOfFile(GetPrefix() + entity.Name)#><#
+
+<# 
+if(entity.BaseType == null)
+{
+#>
+-(id)init{
+	self.$$__ODataType = @"#<#=entity.Namespace#>.<#=entity.Name#>";
+	return self;
+}
+<#
 }
 #>
+
+@end

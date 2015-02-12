@@ -7,18 +7,15 @@ CustomHost host = (CustomHost)Host;
 OdcmModel model = host.Model;
 
 #>
-#import <Foundation/Foundation.h>
-
 <#
-
+		
 var enums = model.GetEnumTypes();
 
 foreach(var e in enums)
 {
 
 #>
-@protocol <#=GetPrefix() + e.Name #>
-@end
+#import "<#=GetPrefix() + e.Name #>.h"
 <#
 
 }
@@ -29,11 +26,9 @@ foreach(var c in complexTypes)
 {
 
 #>
-
-@protocol <#=GetPrefix() + c.Name #>
-@end
+#import "<#=GetPrefix() + c.Name #>.h"
 <#
-		
+
 }
 
 var entityTypes = model.GetEntityTypes();
@@ -42,11 +37,9 @@ foreach(var et in entityTypes)
 {
 		 
 #>
-
-@protocol <#=GetPrefix() + et.Name #>
-@end
+#import "<#=GetPrefix() + et.Name #>.h"
 <#
-		
+
 }
 
 #>

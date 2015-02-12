@@ -3,60 +3,46 @@
 <#@ output extension="\\" #>
 <#
 CustomHost host = (CustomHost)Host;
+OdcmModel entity = host.OdcmType.AsEntityType();
 
-OdcmModel model = host.Model;
+var entityName = GetPrefix() + entity.Name + "Operations";
+string baseEntity = entity.Base == null ? "MSODataOperations" 
+					  : GetPrefix() + entity.Base.Name.Substring(entity.Base.Name.LastIndexOf(".") +1) + "Operations";
 
-var entities = model.GetEntityTypes();
-
-foreach(var entity in entities)
-{	
-	var entityName = GetPrefix() + entity.Name + "Operations";
-	string baseEntity = entity.Base == null ? "MSODataOperations" 
-					  : GetPrefix() + entity.Base.Name.Substring(entity.Base.Name.LastIndexOf(".") +1) + "Operations" ;
-#><#=GetCommentHeader()#>
-
+#>
+<#=GetCommentHeader()#>
+					  		
 #import <office365_odata_base/office365_odata_base.h>
-#import "<#=GetPrefix() + entity.Name#>.h"
-<# if(entity.Base != null) {#>#import "<#=baseEntity#>.h"<#}#>
-<#=GetImports(entity.Properties)#>
-<#
-	if(entity.HasActions()){
-			foreach(var action in entity.Actions()){
-				if(!action.IsBoundToCollection){
-					if(action.ReturnType.IsComplex()){
-#>
-#import "<#=action.ReturnType.GetTypeString()#>.h"
-<#
-					}
-					
-					foreach(var parameter in action.Parameters){
-						if(parameter.Type.IsComplex()){
-#>#import "<#=parameter.Type.GetTypeString()#>.h"<#
-						}	
-					}
-				}
-			}
-	}
-#>
+#import "<#=GetPrefix()#>Models".h"
 
 <#=GetHeaderDoc(entityName)#>
 @interface <#=entityName#> : <#=baseEntity#>
 
 -(id)initWithUrl:(NSString *)urlComponent parent:(id<MSODataExecutable>)parent;
+
 <#
-		if(entity.HasActions()){
-			foreach(var action in entity.Actions()){
-				if(!action.IsBoundToCollection){
+if(entity.HasActions())
+{
+	foreach(var action in entity.Actions())
+	{
+		if(!action.IsBoundToCollection)
+		{
+
 #>
--(<#=GetTaskType()#>*)<#= action.Name.ToLowerFirstChar() #> <#=GetParamsString(action.Parameters)#>(void (^)(<#=action.ReturnType == null ? "" :GetParamString(action.ReturnType)#>, MSODataException *error))callback;			
-<#if(!action.IsFunction()){#>
--(<#=GetTaskType()#>*)<#= action.Name.ToLowerFirstChar() #>Raw <#=GetParamsForRaw(action.Parameters.Select(p => p.Name))#>(void (^)(<#=GetParamRaw(action.ReturnType.Name)#>, MSODataException *error))callback;			
-<#}
-				}
-			}
+<#=GetMethodHeader(action)#>
+<#				
+
 		}
+
+		if(action.IsFunction())
+		{
+
 #>
-@end
-<#=CreateEndOfFile(entityName)#><#
+<#=GetMethodHeaderRaw(action)#>
+<#
+
+		}
+	}
 }
 #>
+@end

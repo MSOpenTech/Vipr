@@ -3,22 +3,14 @@
 <#@ output extension="\\" #>
 <#
 CustomHost host = (CustomHost)Host;
-
-OdcmModel model = host.Model;
-
-var complexTypes = model.GetComplexTypes();
-
-foreach(var c in complexTypes)
-{	
+OdcmModel entity = host.OdcType.AsOdcmClass();
+	
 #>
 <#=GetCommentHeader()#>
 
-#import "<#=GetPrefix() + c.Name#>.h"
+#import "<#=GetPrefix() + "Models.h"
 
 <#=GetImplementationDoc(c.Name)#>
-@implementation <#=GetPrefix() + c.Name#>	
+@implementation <#=GetPrefix() + entity.Name#>	
 
 @end
-<#=CreateEndOfFile(GetPrefix() +  c.Name)#><#
-}
-#>

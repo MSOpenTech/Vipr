@@ -3,28 +3,34 @@
 <#@ output extension="\\" #>
 <#
 CustomHost host = (CustomHost)Host;
+var entity = host.OdcmType.AsOdcmClass();
 
-OdcmModel model = host.Model;
-
-var entityTypes = model.GetEntityTypes();
-
-foreach(var entity in entityTypes)
-{	
 #>	
 <#=GetCommentHeader()#>
 
 <#=GetImportsClass(entity.Properties)#>
+
 <#=GetInterfaceLine(entity)#>
-<#		
-		foreach(var prop in entity.Properties)
-		{
+
+<#
+
+if(entity.BaseType == null)
+{
+
+#>
+@property NSString *$$__ODataType;
+<#
+}
+
+foreach(var prop in entity.Properties)
+{
+
 #>
 @property <#=prop.ToPropertyString()#>;
 <#			
-		}
+
+}
+
 #>
 
 @end
-<#=CreateEndOfFile(GetPrefix() + entity.Name)#><#
-}
-#>

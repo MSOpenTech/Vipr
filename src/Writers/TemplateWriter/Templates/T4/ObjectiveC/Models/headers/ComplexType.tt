@@ -3,29 +3,26 @@
 <#@ output extension="\\" #>
 <#
 CustomHost host = (CustomHost)Host;
+var entity = host.OdcmType.AsOdcmClass();
 
-OdcmModel model = host.Model;
-
-var complexTypes = model.GetComplexTypes();
-
-foreach(var c in complexTypes)
-{	
 #>
 <#=GetCommentHeader()#>
 
-<#=GetImportsClass(c.Properties)#>
-<#=GetInterfaceLine(c)#>
+<#=GetImportsClass(entity.Properties)#>
+
+<#=GetInterfaceLine(entity)#>
 
 <#
-		foreach(var prop in c.Properties)
-		{
+
+foreach(var prop in entity.Properties)
+{
+
 #>
 @property <#=prop.ToPropertyString()#>;
 <#			
-		}
+
+}
+
 #>
 
 @end
-<#=CreateEndOfFile(GetPrefix() + c.Name)#><#
-}
-#>
