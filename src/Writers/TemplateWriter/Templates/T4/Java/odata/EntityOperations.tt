@@ -169,18 +169,10 @@ request.getUrl().appendPathComponent("<#= someAction.Name#>");
         return transformToStringListenableFuture(future);
     }
 
-<# } #>
+<#} #>
 
 <#              }
-
             }
-
-}
-
-#>
-
-}
-<#=CreateEndOfFile(entity.Name + "Operation")#>
-<#
 }
 #>
+

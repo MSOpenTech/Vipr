@@ -24,20 +24,18 @@ namespace Vipr.CLI.Strategies
         public const String JavaStrategyName = "Java";
 
         private readonly IFileWriter _fileWriter;
-        private readonly IConfigArguments _arguments;
         private readonly Engine _engine;
         private readonly OdcmModel _model;
 
-        public Dictionary<string, Action<string>> Templates { get; set; }
+        public Dictionary<string, Action<Template>> Templates { get; set; }
 
-        public JavaTemplateProcessor(IFileWriter fileWriter, OdcmModel model, IConfigArguments arguments)
+        public JavaTemplateProcessor(IFileWriter fileWriter, OdcmModel model)
         {
             _model = model;
             _fileWriter = fileWriter;
-            _arguments = arguments;
             _engine = new Engine();
 
-            Templates = new Dictionary<string, Action<string>>(StringComparer.InvariantCultureIgnoreCase)
+            Templates = new Dictionary<string, Action<Template>>(StringComparer.InvariantCultureIgnoreCase)
             {
                 //Model
                 {EntityType, EntityTypes},
@@ -53,48 +51,18 @@ namespace Vipr.CLI.Strategies
             };
         }
 
-        private void CreateEntryPoint(string templateName)
+        private void CreateEntryPoint(Template template)
         {
             var container = _model.EntityContainer;
-            ProcessTemplate(templateName, container);
+            ProcessTemplate(template, container);
         }
 
-        private void BaseEntity(string templateName)
+        private void BaseEntity(Template template)
         {
-            ProcessTemplate(templateName, null);
-        }
-
-        private void EnumTypes(string templateName)
-        {
-            var enums = _model.GetEnumTypes();
-            ProcessingAction(enums, templateName);
-        }
-
-        public void ComplexTypes(string templateFile)
-        {
-            var complexTypes = _model.GetComplexTypes();
-            ProcessingAction(complexTypes, templateFile);
-        }
-
-        public void EntityTypes(string templateFile)
-        {
-            var entityTypes = _model.GetEntityTypes();
-            ProcessingAction(entityTypes, templateFile);
-        }
-
-        public void ProcessingAction(IEnumerable<OdcmObject> source, string templateFile)
-        {
-            foreach (var complexType in source)
+            var host = new CustomHost(JavaStrategyName, null)
             {
-                ProcessTemplate(templateFile, complexType);
-            }
-        }
-
-        private void ProcessTemplate(string templateFile, OdcmObject odcmObject)
-        {
-            var host = new CustomHost(JavaStrategyName, odcmObject) //TODO: v3? How?
-            {
-                TemplateFile = templateFile,
+                TemplateFile = template.Path,
+                Model = _model
             };
 
             var templateContent = File.ReadAllText(host.TemplateFile);
@@ -102,18 +70,65 @@ namespace Vipr.CLI.Strategies
 
             if (host.Errors != null && host.Errors.HasErrors)
             {
-                var errors = LogErrors(host);
+                var errors = LogErrors(host, template);
+                throw new InvalidOperationException(errors);
+            }
+
+            _fileWriter.WriteText(_model.EntityContainer.Name, output);
+        }
+
+        private void EnumTypes(Template template)
+        {
+            var enums = _model.GetEnumTypes();
+            ProcessingAction(enums, template);
+        }
+
+        public void ComplexTypes(Template template)
+        {
+            var complexTypes = _model.GetComplexTypes();
+            ProcessingAction(complexTypes, template);
+        }
+
+        public void EntityTypes(Template template)
+        {
+            var entityTypes = _model.GetEntityTypes();
+            ProcessingAction(entityTypes, template);
+        }
+
+        public void ProcessingAction(IEnumerable<OdcmObject> source, Template template)
+        {
+            foreach (var complexType in source)
+            {
+                ProcessTemplate(template, complexType);
+            }
+        }
+
+        private void ProcessTemplate(Template template, OdcmObject odcmObject)
+        {
+            var host = new CustomHost(JavaStrategyName, odcmObject)
+            {
+                TemplateFile = template.Path,
+                Model = _model
+            };
+
+            var templateContent = File.ReadAllText(host.TemplateFile);
+            var output = _engine.ProcessTemplate(templateContent, host);
+
+            if (host.Errors != null && host.Errors.HasErrors)
+            {
+                var errors = LogErrors(host, template);
                 throw new InvalidOperationException(errors);
             }
             _fileWriter.WriteText(odcmObject.Name, output);
         }
 
-        protected static string LogErrors(CustomHost host)
+        protected static string LogErrors(CustomHost host, Template template)
         {
             var sb = new StringBuilder();
             if (host.Errors == null || host.Errors.Count <= 0) return sb.ToString();
             foreach (CompilerError error in host.Errors)
             {
+                sb.AppendLine("Error template name: " + template.Name);
                 sb.AppendLine("Error template" + host.TemplateFile);
                 sb.AppendLine(error.ErrorText);
                 sb.AppendLine("In line: " + error.Line);

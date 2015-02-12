@@ -29,21 +29,21 @@ namespace Vipr.CLI
         public void Process(IConfigArguments configuration)
         {
             var runnableTemplates = _tempLocationFileWriter.WriteUsing(typeof(CustomHost), configuration.BuilderArguments)
-                                                                   .Where(x => !x.IsBase);
+                                                           .Where(x => !x.IsBase);
 
             var model = _reader.GenerateOdcmModel(new Dictionary<string, string>
             {
                 { "$metadata", File.ReadAllText(configuration.BuilderArguments.InputFile) }
             });
 
-            var javaProcessor = new JavaTemplateProcessor(new JavaFileWriter(model, configuration), model, configuration);
+            var javaProcessor = new JavaTemplateProcessor(new JavaFileWriter(model, configuration), model);
 
             foreach (var template in runnableTemplates)
             {
-                Action<string> action;
+                Action<Template> action;
                 if (javaProcessor.Templates.TryGetValue(template.Name, out action))
                 {
-                    action(template.Path);
+                    action(template);
                 }
             }
         }

@@ -7,9 +7,15 @@ namespace TemplateWriter
 {
     public static class OdcmModelExtensions
     {
+        public static bool IsCollection(this OdcmProperty odcmProperty)
+        {
+            return odcmProperty.Field != null && odcmProperty.Field.IsCollection;
+        }
+
+
         private static OdcmNamespace GetOdcmNamespace(OdcmModel model)
         {
-            return model.Namespaces.Find(x => String.Equals(x.Name, 
+            return model.Namespaces.Find(x => String.Equals(x.Name,
                                               ConfigurationService.PrimaryNamespaceName,
                                               StringComparison.InvariantCultureIgnoreCase));
         }
@@ -63,6 +69,16 @@ namespace TemplateWriter
         {
             var @namespace = GetOdcmNamespace(model);
             return @namespace.Name;
+        }
+
+        public static OdcmClass AsOdcmClass(this OdcmObject odcmObject)
+        {
+            return odcmObject as OdcmClass;
+        }
+
+        public static OdcmEnum AsOdcmEnum(this OdcmObject odcmObject)
+        {
+            return odcmObject as OdcmEnum;
         }
     }
 }

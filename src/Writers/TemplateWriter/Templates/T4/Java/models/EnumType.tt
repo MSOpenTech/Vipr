@@ -4,7 +4,7 @@
 <#
 
 CustomHost host = (CustomHost)Host;
-OdcmClass entity = host.OdcmType.AsOdcmEnum();
+var enumT = host.OdcmType.AsOdcmEnum();
 
 #>
 <#=GetCommentHeader()#>
