@@ -13,5 +13,6 @@ namespace TemplateWriter
         IReadOnlyDictionary<string, string> Parameters { get; set; }
 
         HashSet<string> Languages { get; set; }
+        string NamespacePrefix { get; set; }
     }
 }

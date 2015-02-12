@@ -38,7 +38,7 @@ namespace Vipr.CLI
 
             var javaProcessor = new JavaTemplateProcessor(new JavaFileWriter(model, configuration), model);
 
-            foreach (var template in runnableTemplates)
+            foreach (var template in runnableTemplates.AsParallel())
             {
                 Action<Template> action;
                 if (javaProcessor.Templates.TryGetValue(template.Name, out action))
