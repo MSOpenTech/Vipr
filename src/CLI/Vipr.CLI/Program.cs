@@ -10,7 +10,7 @@ namespace Vipr.CLI
 
         static void Main(string[] args)
         {
-            try
+			try
             {
                 var builder = new ConfigurationBuilder().WithArguments(args);
                 var entrypoint = new CLIEntryPoint(builder, new TemplateProcessorManager());

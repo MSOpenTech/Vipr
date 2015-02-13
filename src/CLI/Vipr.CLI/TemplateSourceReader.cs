@@ -43,6 +43,5 @@ namespace Vipr.CLI
             }
             return string.Empty;
         }
-
     }
 }

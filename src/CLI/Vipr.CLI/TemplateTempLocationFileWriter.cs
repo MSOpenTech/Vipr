@@ -42,6 +42,5 @@ namespace Vipr.CLI
                 stream.CopyTo(fileStream);
             }
         }
-
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TemplateWriter;
 
 namespace Vipr.CLI
 {
@@ -58,6 +59,11 @@ namespace Vipr.CLI
         public override string ToString()
         {
             return ResourceName;
+        }
+
+        public bool IsForLanguaje(string languaje)
+        {
+            return ResourceName.ToLower().IndexOf(languaje.ToLower(), StringComparison.Ordinal) >= 0;
         }
     }
 }

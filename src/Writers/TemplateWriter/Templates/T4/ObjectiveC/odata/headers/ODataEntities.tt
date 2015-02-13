@@ -1,5 +1,5 @@
 ﻿<#@ template debug="true" hostspecific="true" language="C#" #>
-<#@ include file="..\..\BaseTemplate.tt"#>
+<#@ include file="BaseTemplate.tt"#>
 <#@ output extension=".h" #>
 <#=GetCommentHeader()#>
 

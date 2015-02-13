@@ -1,5 +1,3 @@
-using Vipr.Core.CodeModel;
-
 namespace Vipr.CLI.Output
 {
     public interface IFileWriter
