@@ -51,7 +51,7 @@ namespace Vipr.CLI
             ITemplateProcessor processor = _processors[configuration.BuilderArguments.Language].Invoke(model,
                 configuration, baseTemplate.Path);
 
-            foreach (var template in runnableTemplates)
+			foreach (var template in runnableTemplates.AsParallel())
             {
                 Action<Template> action;
                 if (processor.Templates.TryGetValue(template.Name, out action))

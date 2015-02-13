@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using System.Text;
 using TemplateWriter;
 using Vipr.Core.CodeModel;
@@ -14,7 +15,7 @@ namespace Vipr.CLI.Output
         public override void WriteText(Template template, string fileName, string text)
         {
             var destPath = string.Format("{0}{1}", Path.DirectorySeparatorChar, Configuration.BuilderArguments.OutputDir);
-            var @namespace = Model.GetNamespace() + "." + template.FolderName;
+			var @namespace = CreateNamespace(template.FolderName).ToLower();
             var pathFromNamespace = CreatePathFromNamespace(@namespace);
             
             var identifier = FileName(template, fileName);
@@ -28,20 +29,28 @@ namespace Vipr.CLI.Output
             }
         }
 
+		private string CreateNamespace(string folderName)
+		{
+			var @namespace = Model.GetNamespace();
+			var prefix = Configuration.TemplateConfiguration.NamespacePrefix;
+
+			return string.IsNullOrEmpty(prefix) ? string.Format("{0}.{1}", @namespace, folderName)
+                                                : string.Format("{0}.{1}.{2}", prefix, @namespace, folderName);
+		}
+
         private string CreatePathFromNamespace(string @namespace)
         {
             var splittedPaths = @namespace.Split('.');
-            var fullPath = string.Empty;
 
-            foreach (var path in splittedPaths)
+			var destinationPath = splittedPaths.Aggregate(string.Empty, (current, path) =>
+							      current + string.Format("{0}{1}", Path.DirectorySeparatorChar, path));
+
+			if (!DirectoryExists(destinationPath))
             {
-                fullPath += string.Format("{0}{1}", Path.DirectorySeparatorChar, path);
-                if (!Directory.Exists(fullPath))
-                {
-                    Directory.CreateDirectory(fullPath);
-                }
+					CreateDirectory(destinationPath);
             }
-            return fullPath;
+
+			return destinationPath;
         }
     }
 }

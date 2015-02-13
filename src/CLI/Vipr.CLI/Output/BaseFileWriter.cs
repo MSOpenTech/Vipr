@@ -43,17 +43,7 @@ namespace Vipr.CLI.Output
         /// <param name="directoryPath"></param>
         public void CreateDirectory(string directoryPath)
         {
-            var splittedPaths = directoryPath.Split('\\');
-            var fullPath = string.Empty;
-
-            foreach (var path in splittedPaths)
-            {
-                fullPath += string.Format("\\{0}", path);
-                if (!Directory.Exists(fullPath))
-                {
-                    Directory.CreateDirectory(fullPath);
-                }
-            }
+			Directory.CreateDirectory(directoryPath);
         }
 
         public bool DirectoryExists(string directoryPath)
