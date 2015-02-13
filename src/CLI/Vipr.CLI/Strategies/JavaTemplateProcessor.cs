@@ -128,7 +128,7 @@ namespace Vipr.CLI.Strategies
             if (host.Errors == null || host.Errors.Count <= 0) return sb.ToString();
             foreach (CompilerError error in host.Errors)
             {
-                sb.AppendLine("Error template name: " + template.Name);
+                sb.AppendLine("Template name: " + template.Name);
                 sb.AppendLine("Error template" + host.TemplateFile);
                 sb.AppendLine(error.ErrorText);
                 sb.AppendLine("In line: " + error.Line);
