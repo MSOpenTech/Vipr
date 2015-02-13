@@ -9,7 +9,7 @@ namespace TemplateWriter
     {
         public static bool IsCollection(this OdcmProperty odcmProperty)
         {
-            return odcmProperty.Field != null && odcmProperty.Field.IsCollection;
+            return odcmProperty.IsCollection;
         }
 
 

@@ -61,7 +61,7 @@ namespace TemplateWriter.Helpers.ObjectiveC
         public static string GetFullType(this OdcmProperty property)
         {
             string result;
-            if (property.Field.IsCollection)
+            if (property.IsCollection)
                 result = !property.IsSystem() ? 
                 string.Format("NSMutableArray<{0}>", property.GetTypeString()) : "NSMutableArray";
             else
@@ -110,7 +110,7 @@ namespace TemplateWriter.Helpers.ObjectiveC
 
         public static bool IsCollection(this OdcmProperty property)
         {
-            return property.Field.IsCollection;
+            return property.IsCollection;
         }
     }
 }

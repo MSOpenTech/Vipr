@@ -117,20 +117,12 @@ namespace CSharpWriter
 
         public static string GetPropertyFieldName(OdcmProperty odcmProperty)
         {
-            if (odcmProperty.Field != null)
-                return odcmProperty.Field.Name;
-
             return "_" + odcmProperty.Name;
         }
 
         public static Identifier GetExtensionTypeName(string extensionTypeName)
         {
             return new Identifier(ExtensionNamespace, extensionTypeName);
-        }
-
-        public static string GetFieldName(OdcmField odcmField)
-        {
-            return odcmField.Name;
         }
 
         public static Identifier GetFetcherTypeName(OdcmType odcmType)
@@ -255,6 +247,11 @@ namespace CSharpWriter
             }
 
             return name;
+        }
+
+        public static string GetModelPropertyName(OdcmProperty odcmProperty)
+        {
+            return odcmProperty.Name;
         }
     }
 }

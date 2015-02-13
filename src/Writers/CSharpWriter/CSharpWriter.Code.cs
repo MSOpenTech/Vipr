@@ -283,7 +283,7 @@ namespace CSharpWriter
             WriteSignature(method);
             using (_builder.IndentBraced)
             {
-                _("return propertyName == null ? _path : _path + \" / \" + propertyName;");
+                _("return propertyName == null ? _path : _path + \"/\" + propertyName;");
             }
         }
 
@@ -334,7 +334,7 @@ namespace CSharpWriter
 
                 using (_builder.IndentBraced)
                 {
-                    _("var path = GetPath((i) => {0});", indexer.ParameterToPropertyMap.ToEquivalenceString("i"));
+                    _("var path = GetPath<{0}>((i) => {1});", NamesService.GetConcreteTypeName(indexer.OdcmClass), indexer.ParameterToPropertyMap.ToEquivalenceString("i"));
                     _("var fetcher = new {0}();", NamesService.GetFetcherTypeName(indexer.OdcmClass));
                     _("fetcher.Initialize(Context, path);");
                     _("");
@@ -352,7 +352,7 @@ namespace CSharpWriter
 
                 using (_builder.IndentBraced)
                 {
-                    _("this._query = new {0}(Context.CreateQuery<{1}>(GetPath(null)), Context);", method.QueryableSetType, method.FetchedType);
+                    _("this._query = CreateQuery<{0}, {1}>();", method.FetchedType, method.FetchedTypeInterface);
                 }
 
                 _("return this._query;");
@@ -894,6 +894,20 @@ namespace CSharpWriter
             }
         }
 
+        private void Write(ObsoletedProperty property)
+        {
+            _("[EditorBrowsable(EditorBrowsableState.Never)]");
+            _("[Obsolete(\"Use {0} instead.\")]", property.UpdatedName);
+            WriteDeclaration(property);
+
+            using (_builder.IndentBraced)
+            {
+                WriteObsoletedPropertyGet(property);
+
+                WriteObsoletedPropertySet(property);
+            }
+        }
+
         private void Write(StructuralCollectionProperty property)
         {
             WriteDeclaration(property);
@@ -973,7 +987,7 @@ namespace CSharpWriter
                 using (_builder.IndentBraced)
                 {
                     _("{0} = value;", property.FieldName);
-                    _("OnPropertyChanged(\"{0}\");", property.Name);
+                    _("OnPropertyChanged(\"{0}\");", property.ModelName);
                 }
             }
         }
@@ -984,6 +998,24 @@ namespace CSharpWriter
             using (_builder.IndentBraced)
             {
                 _("return {0};", property.FieldName);
+            }
+        }
+
+        private void WriteObsoletedPropertySet(ObsoletedProperty property)
+        {
+            _("set");
+            using (_builder.IndentBraced)
+            {
+                _("{0} = value;", property.UpdatedName);
+            }
+        }
+
+        private void WriteObsoletedPropertyGet(ObsoletedProperty property)
+        {
+            _("get");
+            using (_builder.IndentBraced)
+            {
+                _("return {0};", property.UpdatedName);
             }
         }
 
@@ -1028,37 +1060,6 @@ namespace CSharpWriter
             }
             _("partial void OnContextCreated();");
         }
-
-        public void Write(IEnumerable<OdcmField> fields)
-        {
-            foreach (var odcmField in fields)
-            {
-                Write(odcmField);
-            }
-        }
-
-        public void Write(OdcmField odcmField)
-        {
-            _("private {0} {1};", NamesService.GetPublicTypeName(odcmField.Type).FullName, odcmField.Name);
-        }
-
-        public void Write(IEnumerable<OdcmMethod> methods)
-        {
-            foreach (var odcmMethod in methods)
-            {
-                Write(odcmMethod);
-            }
-        }
-
-        public void Write(OdcmMethod odcmMethod)
-        {
-            var returnType = NamesService.GetPublicTypeName(odcmMethod.ReturnType);
-
-            var parameters = string.Join(", ",
-                (from i in odcmMethod.Parameters select NamesService.GetPublicTypeName(i.Type, i.IsCollection) + " " + i.Name));
-        }
-
-
 
         private void _(string text, params object[] args)
         {
