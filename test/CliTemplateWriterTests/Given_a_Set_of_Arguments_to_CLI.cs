@@ -64,7 +64,7 @@ namespace CliTemplateWriterTests
         [TestMethod]
         public void When_passing_specific_Arguments_should_procces_templates()
         {
-            var args = "--language=java --inputFile=Metadata\\Exchange.edmx.xml --outputDir=Out".Split(' ');
+            var args = "--language=java --inputFile=Metadata\\OneNote.edmx.xml --outputDir=Out".Split(' ');
             var builder = new ConfigurationBuilder().WithArguments(args);
             var entrypoint = new CLIEntryPoint(builder, new TemplateProcessorManager());
             entrypoint.Process();

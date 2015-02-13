@@ -15,9 +15,15 @@ namespace TemplateWriter
 
         private static OdcmNamespace GetOdcmNamespace(OdcmModel model)
         {
-            return model.Namespaces.Find(x => String.Equals(x.Name,
-                                              ConfigurationService.PrimaryNamespaceName,
-                                              StringComparison.InvariantCultureIgnoreCase));
+            var filtered = model.Namespaces.Where(x => !x.Name.Equals("Edm", StringComparison.InvariantCultureIgnoreCase))
+                                           .ToList();
+            if (filtered.Count() > 1)
+            {
+                return model.Namespaces.Find(x => String.Equals(x.Name,
+                    ConfigurationService.PrimaryNamespaceName,
+                    StringComparison.InvariantCultureIgnoreCase));
+            }
+            return filtered.Single();
         }
 
         public static IEnumerable<OdcmClass> GetComplexTypes(this OdcmModel model)
