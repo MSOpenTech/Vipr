@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -29,17 +29,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject>
-    </StartupObject>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.TextTemplating">
       <HintPath>..\..\..\packages\Mono.TextTemplating.1.0.0\lib\Mono.TextTemplating.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Collections.Immutable, Version=1.1.32.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\System.Collections.Immutable.1.1.32-beta\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -48,6 +40,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Collections.Immutable">
+      <HintPath>..\..\..\packages\System.Collections.Immutable.1.1.32-beta\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuilderArguments.cs" />
@@ -75,63 +70,26 @@
     <EmbeddedResource Include="Templates\T4\Java\OData\EntityOperations.tt" />
     <EmbeddedResource Include="Templates\T4\Java\OData\EntryPoint.tt" />
     <None Include="Templates.json" />
-    <None Include="Templates\T4\ObjectiveC\BaseTemplate.tt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Templates\T4\ObjectiveC\Models\headers\ComplexType.tt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Templates\T4\ObjectiveC\Models\headers\EntityType.tt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Templates\T4\ObjectiveC\Models\headers\EnumType.tt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Templates\T4\ObjectiveC\Models\headers\Protocols.tt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Templates\T4\ObjectiveC\Models\implementations\ComplexType.tt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Templates\T4\ObjectiveC\Models\implementations\EntityType.tt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Templates\T4\ObjectiveC\odata\headers\EntityCollectionFetcher.tt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Templates\T4\ObjectiveC\odata\headers\EntityCollectionFetcherProtocols.tt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Templates\T4\ObjectiveC\odata\headers\EntityCollectionOperations.tt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Templates\T4\ObjectiveC\odata\headers\EntityFetcher.tt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Templates\T4\ObjectiveC\odata\headers\EntityFetcherProtocol.tt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Templates\T4\ObjectiveC\odata\headers\EntityOperations.tt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Templates\T4\ObjectiveC\odata\headers\EntryPoint.tt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Templates\T4\ObjectiveC\odata\implementations\EntityCollectionFetcher.tt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Templates\T4\ObjectiveC\odata\implementations\EntityCollectionOperations.tt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Templates\T4\ObjectiveC\odata\implementations\EntityFetcher.tt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Templates\T4\ObjectiveC\odata\implementations\EntityOperations.tt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Templates\T4\ObjectiveC\odata\implementations\EntryPoint.tt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <EmbeddedResource Include="Templates\T4\ObjectiveC\Models\headers\ComplexType.tt" />
+    <EmbeddedResource Include="Templates\T4\ObjectiveC\Models\headers\EntityType.tt" />
+    <EmbeddedResource Include="Templates\T4\ObjectiveC\Models\headers\EnumType.tt" />
+    <EmbeddedResource Include="Templates\T4\ObjectiveC\Models\headers\Models.tt">
+      <LastGenOutput>Models.h</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Templates\T4\ObjectiveC\Models\headers\Protocols.tt" />
+    <EmbeddedResource Include="Templates\T4\ObjectiveC\Models\implementations\ComplexType.tt" />
+    <EmbeddedResource Include="Templates\T4\ObjectiveC\Models\implementations\EntityType.tt" />
+    <EmbeddedResource Include="Templates\T4\ObjectiveC\odata\headers\EntityCollectionFetcher.tt" />
+    <EmbeddedResource Include="Templates\T4\ObjectiveC\odata\headers\EntityCollectionOperations.tt" />
+    <EmbeddedResource Include="Templates\T4\ObjectiveC\odata\headers\EntityFetcher.tt" />
+    <EmbeddedResource Include="Templates\T4\ObjectiveC\odata\headers\EntityOperations.tt" />
+    <EmbeddedResource Include="Templates\T4\ObjectiveC\odata\headers\EntryPoint.tt" />
+    <EmbeddedResource Include="Templates\T4\ObjectiveC\odata\headers\ODataEntities.tt" />
+    <EmbeddedResource Include="Templates\T4\ObjectiveC\odata\implementations\EntityCollectionFetcher.tt" />
+    <EmbeddedResource Include="Templates\T4\ObjectiveC\odata\implementations\EntityCollectionOperations.tt" />
+    <EmbeddedResource Include="Templates\T4\ObjectiveC\odata\implementations\EntityFetcher.tt" />
+    <EmbeddedResource Include="Templates\T4\ObjectiveC\odata\implementations\EntityOperations.tt" />
+    <EmbeddedResource Include="Templates\T4\ObjectiveC\odata\implementations\EntryPoint.tt" />
     <None Include="Templates\T4\Swift\Core\Actions\Actions.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
@@ -215,6 +173,7 @@
     <None Include="Templates\T4\Swift\Models\EnumType.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
+    <EmbeddedResource Include="Templates\T4\ObjectiveC\Base\BaseTemplate.tt" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Templates\T4\Swift\Core\JsonParser\Headers\JsonParser.h">
@@ -233,11 +192,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Vipr.Core\Vipr.Core.csproj">
-      <Project>{04c24936-006a-4fd8-a872-ee55588c1cbe}</Project>
+      <Project>{04C24936-006A-4FD8-A872-EE55588C1CBE}</Project>
       <Name>Vipr.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Readers\ODataReader.v4\ODataReader.v4.csproj">
-      <Project>{6d8d8008-0a34-490f-8b38-21d9c8bf25c0}</Project>
+      <Project>{6D8D8008-0A34-490F-8B38-21D9C8BF25C0}</Project>
       <Name>ODataReader.v4</Name>
     </ProjectReference>
   </ItemGroup>
@@ -254,4 +213,5 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup />
 </Project>

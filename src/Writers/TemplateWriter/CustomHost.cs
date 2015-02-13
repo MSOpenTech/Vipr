@@ -17,7 +17,7 @@ namespace TemplateWriter
     //-------------------------------------------------------------------------
     public class CustomHost : ITextTemplatingEngineHost
     {
-        private readonly OdcmObject _odcmObject;
+        private OdcmObject _odcmObject;
 
         static readonly String BaseTemplateDirPattern =
             "Templates" + Path.DirectorySeparatorChar + "T4" + Path.DirectorySeparatorChar + "{0}";
@@ -36,6 +36,7 @@ namespace TemplateWriter
         public OdcmObject OdcmType
         {
             get { return _odcmObject; }
+            set { _odcmObject = value; }
         }
 
         public OdcmModel Model { get; set; }
@@ -133,7 +134,8 @@ namespace TemplateWriter
             }
         }
 
-       
+        public string BaseTemplatePath { get; set; }
+
 
         //The engine calls this method based on the optional include directive
         //if the user has specified it in the text template.
@@ -147,14 +149,13 @@ namespace TemplateWriter
         public bool LoadIncludeText(string requestFileName, out string content, out string location)
         {
             content = string.Empty;
-            location = requestFileName.Contains("BaseTemplate") ? GetBaseTemplatePath()
-                                                                : Directory.GetCurrentDirectory();
+            location = GetBaseTemplatePath();
 
             //If the argument is the fully qualified path of an existing file,
             //then we are done.
             //----------------------------------------------------------------
 
-            var path = Path.Combine(location, requestFileName);
+            var path = location;
 
             if (File.Exists(path))
             {
@@ -170,7 +171,8 @@ namespace TemplateWriter
 
         string GetBaseTemplatePath()
         {
-            return Path.Combine(Directory.GetCurrentDirectory(), string.Format(BaseTemplateDirPattern, Language));
+            return BaseTemplatePath;
+                // Path.Combine(Directory.GetCurrentDirectory(), string.Format(BaseTemplateDirPattern, Language));
         }
 
         //Called by the Engine to enquire about 

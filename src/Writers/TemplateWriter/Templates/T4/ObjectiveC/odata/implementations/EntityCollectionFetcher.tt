@@ -1,20 +1,15 @@
 ﻿<#@ template debug="true" hostspecific="true" language="C#" #>
-<#@ include file="..\..\BaseTemplate.tt"#>
+<#@ include file="BaseTemplate.tt"#>
 <#@ output extension="\\" #>
 <#
 CustomHost host = (CustomHost)Host;
-
-OdcmModel model = host.Model;
-
-var entities = model.GetEntityTypes();
-
-foreach(var entity in entities){
-
+var entity = host.OdcmType.AsEntityType();
 var entityName = GetPrefix() + entity.Name + "CollectionFetcher";
-#><#=GetCommentHeader()#>
 
-#import "<#=entityName#>.h"
-#import "<#=GetPrefix() + entity.Name#>Fetcher.h"
+#>
+<#=GetCommentHeader()#>
+
+#import "<#=GetPrefix()#>ODataEntities.h"
 
 <#=GetImplementationDoc(entityName)#>
 @implementation <#=entityName#>
@@ -23,7 +18,7 @@ var entityName = GetPrefix() + entity.Name + "CollectionFetcher";
     return [super initWithUrl:urlComponent parent:parent andEntityClass:[<#=GetPrefix() + entity.Name#> class]];
 }
 
--(<#=GetTaskType()#>*)add<#=entity.Name#>:(<#=GetPrefix() + entity.Name#>*)entity withCallback:(void (^)(<#=GetPrefix() + entity.Name#> *<#=entity.Name.ToLowerFirstChar()#>, MSODataException *e))callback{
+-(NSURLSessionDataTask*)add<#=entity.Name#>:(<#=GetPrefix() + entity.Name#>*)entity withCallback:(void (^)(<#=GetPrefix() + entity.Name#> *<#=entity.Name.ToLowerFirstChar()#>, MSODataException *e))callback{
 	
 	return [super add:entity :^(id r, MSODataException *e) {
         callback(r,e);
@@ -35,6 +30,3 @@ var entityName = GetPrefix() + entity.Name + "CollectionFetcher";
     return [[<#=GetPrefix() + entity.Name#>Fetcher alloc] initWithUrl:[[NSString alloc] initWithFormat:@"('%@')" ,Id] parent : self andEntityClass :[<#=GetPrefix() + entity.Name#> class]];
 }
 @end
-<#=CreateEndOfFile(entityName)#><#
-}
-#>

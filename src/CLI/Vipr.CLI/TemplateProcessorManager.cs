@@ -7,6 +7,7 @@ using TemplateWriter;
 using Vipr.CLI.Output;
 using Vipr.CLI.Strategies;
 using Vipr.Core;
+using Vipr.Core.CodeModel;
 
 namespace Vipr.CLI
 {
@@ -14,6 +15,7 @@ namespace Vipr.CLI
     {
         private readonly IReader _reader;
         private readonly ITemplateTempLocationFileWriter _tempLocationFileWriter;
+        private readonly Dictionary<string, Func<OdcmModel, IConfigArguments, string, ITemplateProcessor>> _processors;
 
         public TemplateProcessorManager()
             : this(new Reader(), new TemplateTempLocationFileWriter(new TemplateSourceReader()))
@@ -24,24 +26,35 @@ namespace Vipr.CLI
         {
             _reader = reader;
             _tempLocationFileWriter = tempLocationFileWriter;
+            _processors = new Dictionary<string, Func<OdcmModel, IConfigArguments, string, ITemplateProcessor>>
+            {
+                {"java", (model, configArguments, baseFilePath) => 
+                    new JavaTemplateProcessor(new JavaFileWriter(model, configArguments), model,baseFilePath)},
+                {"objectivec", (model, configArguments,baseFilePath) =>
+                    new ObjectiveCTemplateProcessor(new BaseFileWriter(model, configArguments), model, baseFilePath )}
+            };
         }
 
         public void Process(IConfigArguments configuration)
         {
             var runnableTemplates = _tempLocationFileWriter.WriteUsing(typeof(CustomHost), configuration.BuilderArguments)
-                                                           .Where(x => !x.IsBase);
+                                                           .Where(x => !x.IsBase && x.IsForLanguaje(configuration.BuilderArguments.Language));
+
+            var baseTemplate = _tempLocationFileWriter.WriteUsing(typeof(CustomHost), configuration.BuilderArguments)
+                                                           .Single(x => x.IsBase && x.IsForLanguaje(configuration.BuilderArguments.Language));
 
             var model = _reader.GenerateOdcmModel(new Dictionary<string, string>
             {
                 { "$metadata", File.ReadAllText(configuration.BuilderArguments.InputFile) }
             });
 
-            var javaProcessor = new JavaTemplateProcessor(new JavaFileWriter(model, configuration), model);
+            ITemplateProcessor processor = _processors[configuration.BuilderArguments.Language].Invoke(model,
+                configuration, baseTemplate.Path);
 
-            foreach (var template in runnableTemplates.AsParallel())
+			foreach (var template in runnableTemplates.AsParallel())
             {
                 Action<Template> action;
-                if (javaProcessor.Templates.TryGetValue(template.Name, out action))
+                if (processor.Templates.TryGetValue(template.Name, out action))
                 {
                     action(template);
                 }

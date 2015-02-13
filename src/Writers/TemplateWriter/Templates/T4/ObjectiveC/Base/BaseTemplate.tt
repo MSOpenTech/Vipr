@@ -2,32 +2,56 @@
 <#@ output extension="//"#>
 <#+
 
-public string GetPrefix(){
-
+public string GetPrefix()
+{
 	return  "MSO" + ((CustomHost)Host).Model.EntityContainer.Name;
 }
 
+public string GetCommentHeader()
+{
 
-public string GetInterfaceLine(OdcmClass e){
-
-	string baseEntity = e.Base == null ? "NSObject" 
-					  : GetPrefix() + e.Base.Name.Substring(e.Base.Name.LastIndexOf(".") +1);
-	
-	var s = new StringBuilder();
-	s.AppendLine("#import <Foundation/Foundation.h>");
-	s.AppendLine("#import \""+GetPrefix()+"Protocols.h\"");
-
-	if(baseEntity != "NSObject"){
-		s.AppendFormat("#import \"{0}.h\"", baseEntity);
-	}
-
-	s.AppendLine().AppendLine().AppendLine(GetHeaderDoc(e.Name))
-	.AppendFormat("@interface {0}{1} : {2}",GetPrefix(), e.Name, baseEntity);
-	
-	return s.ToString();
+	return 
+@"/*******************************************************************************" +
+@"/* Copyright (c) Microsoft Open Technologies, Inc." +
+@"/* All Rights Reserved" +
+@"/* Licensed under the Apache License, Version 2.0." +
+@"/* See License.txt in the project root for license information." +
+@"/*" +
+@"/* Warning: This code was generated automatically. Edits will be overwritten." +
+@"/* To make changes to this code, please make changes to the generation framework itself:" +
+@"/* https://github.com/MSOpenTech/odata-codegen" +
+@"/*******************************************************************************/";
 }
 
-public string GetParams(IEnumerable<OdcmProperty> parameters){
+public string GetHeaderDoc(string name)
+{
+
+	var stringBuilder = new StringBuilder();
+	stringBuilder.Append(@"/**");
+	stringBuilder.AppendLine().AppendFormat(@"* The header for type {0}.",name);
+    stringBuilder.AppendLine().AppendLine(@"*/");
+
+    return stringBuilder.ToString();
+}
+
+public string GetImplementationDoc(string name)
+{
+
+	var stringBuilder = new StringBuilder();
+	stringBuilder.Append(@"/**");
+	stringBuilder.AppendLine().AppendFormat(@"* The implementation file for type {0}.",name);
+    stringBuilder.AppendLine().AppendLine(@"*/");
+	
+	return stringBuilder.ToString();
+}
+
+public string GetMethodDoc(string name, List<OdcmProperty> parameters)
+{
+	return "";
+}
+
+public string GetParams(IEnumerable<OdcmProperty> parameters)
+{
 	string param = ": ";
 	
 	foreach(var p in parameters){
@@ -43,7 +67,8 @@ public string GetParams(IEnumerable<OdcmProperty> parameters){
 	return param;
 }
 
-public string GetParamsForRaw(IEnumerable<string> parameters){
+public string GetParamsForRaw(IEnumerable<string> parameters)
+{
 	string param = ": ";
 	
 	foreach(var p in parameters){
@@ -53,7 +78,8 @@ public string GetParamsForRaw(IEnumerable<string> parameters){
 	return param;
 }
 
-public string GetParam(OdcmProperty type){
+public string GetParam(OdcmProperty type)
+{
 	if(type.IsComplex()){
 		return type.IsSystem() ? string.Empty : type.GetTypeString() + " *" + type.Name.ToLowerFirstChar();
 	}
@@ -61,12 +87,14 @@ public string GetParam(OdcmProperty type){
 	return type.GetTypeString() + " " + type.Name;
 }
 
-public string GetParamRaw(string type){
+public string GetParamRaw(string type)
+{
 		return "NSString*" + type.ToLowerFirstChar();
 
 }
 
-public string GetType(OdcmType type){
+public string GetType(OdcmType type)
+{
 	if(type.IsComplex()){
 		return type.IsSystem() ? string.Empty : type.GetTypeString() + " *";
 	}
@@ -74,17 +102,8 @@ public string GetType(OdcmType type){
 	return type.GetTypeString();
 }
 
-public string GetImports(List<OdcmProperty> references){
-	var s = new StringBuilder();
-	
-	string ss = "#import \"{0}{1}.h\"";
-	foreach(var r in references){
-		s.AppendFormat(ss, GetPrefix(),r.Name).AppendLine();
-	}
-	return s.ToString();
-}
-
-public string GetImportsClass(List<OdcmProperty> references){
+public string GetImportsClass(List<OdcmProperty> references)
+{
 	var imports = new StringBuilder();
 	var classes = new StringBuilder();
 	foreach(var r in references){
@@ -94,39 +113,17 @@ public string GetImportsClass(List<OdcmProperty> references){
 			classes.AppendFormat("@class {0}{1};",GetPrefix(), r.Name).AppendLine();
 		}
 	}
-	return imports.ToString() + classes.ToString();
+	return classes.ToString() + imports.ToString();
 }
 
-public string GetClass(OdcmProperty type){
+public string GetClass(OdcmProperty type)
+{
 
 	return type.IsComplex() ? string.Format("[{0}{1} class]",GetPrefix(), type.GetTypeString()) : "nil";
 }
 
-public string GetReferences(List<OdcmProperty> properties){
-
-	var s = new StringBuilder();
-	
-	string ss = "#import \"{0}{1}{2}.h\"";
-	foreach(var r in properties){
-			s.AppendFormat(ss, GetPrefix(),r.Type, r.Field.IsCollection ? "CollectionFetcher" : "Fetcher").AppendLine();
-	}
-
-	return s.ToString();
-}
-
-public string GetReferencesClass(List<OdcmProperty> properties){
-
-	var s = new StringBuilder();
-	
-	string ss = "@class {0}{1}{2};";
-	foreach(var r in properties){
-			s.AppendFormat(ss, GetPrefix(),r.Type, r.Field.IsCollection ? "CollectionFetcher" : "Fetcher").AppendLine();
-	}
-
-	return s.ToString();
-}
-
-public string GetParametersToJsonRaw(IEnumerable<string> parameters){
+public string GetParametersToJsonRaw(IEnumerable<string> parameters)
+{
 	if(!parameters.Any()) { return string.Empty;}
 	
 	var result = new StringBuilder();
@@ -145,7 +142,8 @@ public string GetParametersToJsonRaw(IEnumerable<string> parameters){
 	return result.ToString();
 }
 
-public string GetParametersToJson(List<OdcmParameter> parameters){
+public string GetParametersToJson(List<OdcmParameter> parameters)
+{
 	if(!parameters.Any()) { return string.Empty;}
 	
 	var result = new StringBuilder();
@@ -167,7 +165,8 @@ public string GetParametersToJson(List<OdcmParameter> parameters){
 	return result.ToString();
 }
 
-public string GetParametersForRawCall(IEnumerable<String> parameters){
+public string GetParametersForRawCall(IEnumerable<String> parameters)
+{
 	if(!parameters.Any()) { return string.Empty;}
 	
 	var result = new StringBuilder();
@@ -179,58 +178,8 @@ public string GetParametersForRawCall(IEnumerable<String> parameters){
 	return result.ToString();
 }
 
-
-public string GetCommentHeader(){
-
-	return @"/*******************************************************************************
- * Copyright (c) Microsoft Open Technologies, Inc.
- * All Rights Reserved
- * Licensed under the Apache License, Version 2.0.
- * See License.txt in the project root for license information.
- *
- * Warning: This code was generated automatically. Edits will be overwritten.
- * To make changes to this code, please make changes to the generation framework itself:
- * https://github.com/MSOpenTech/odata-codegen
- *******************************************************************************/";
-}
-
-public string GetTaskType(){
-	return "NSURLSessionDataTask";
-}
-
-public string GetProjectReference(){
-	return "office365_odata_interfaces";
-}
-
-
-public string GetHeaderDoc(string name){
-
-	var stringBuilder = new StringBuilder();
-	stringBuilder.Append(@"/**");
-	stringBuilder.AppendLine().AppendFormat(@"* The header for type {0}.",name);
-    stringBuilder.AppendLine().AppendLine(@"*/");
-	return stringBuilder.ToString();
- }
-
- public string GetImplementationDoc(string name){
-
-	var stringBuilder = new StringBuilder();
-	stringBuilder.Append(@"/**");
-	stringBuilder.AppendLine().AppendFormat(@"* The implementation file for type {0}.",name);
-    stringBuilder.AppendLine().AppendLine(@"*/");
-	return stringBuilder.ToString();
- }
-
- public string GetMethodDoc(string name, List<OdcmProperty> parameters){
-
-	return "";
- }
-
- public string GetHelperRef(){
-	return "office365_exchange_helpers";
- }
-
- public string GetFunctionParameters(List<OdcmParameter> parameters){
+public string GetFunctionParameters(List<OdcmParameter> parameters)
+{
 	var result = new StringBuilder();
 	//&&NSDictionary* params = [[NSDictionary alloc] initWithObjectsAndKeys :path,@"path",nil ];
 
@@ -260,12 +209,12 @@ public string GetHeaderDoc(string name){
 	if(parameters.Any()){
 		result.AppendLine("nil];");
 	}
-
-
+		
 	return result.ToString();
 }
 
-public string CreateEndOfFile(string name){
+public string CreateEndOfFile(string name)
+{
 	return string.Format("/n{0} EndOfFile",name);
 }	
 

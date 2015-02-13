@@ -6,33 +6,22 @@ using Vipr.Core.CodeModel;
 
 namespace Vipr.CLI.Output
 {
-    class JavaFileWriter : IFileWriter
+    public class JavaFileWriter : BaseFileWriter
     {
-        private readonly OdcmModel _model;
-        private readonly IConfigArguments _configuration;
-
-        public JavaFileWriter(OdcmModel model, IConfigArguments configuration)
+        public JavaFileWriter(OdcmModel model, IConfigArguments configuration) : base(model,configuration)
         {
-            _model = model;
-            _configuration = configuration;
         }
 
-        private static string FileName(Template template, string identifier)
+        public override void WriteText(Template template, string fileName, string text)
         {
-            return template.FolderName == "odata" ? template.Name.Replace("Entity", identifier)
-                                                  : identifier;
-        }
-
-        public void WriteText(Template template, string fileName, string text)
-        {
-            var destPath = string.Format("{0}{1}", Path.DirectorySeparatorChar, _configuration.BuilderArguments.OutputDir);
-            var @namespace = CreateNamespace(template.FolderName).ToLower();
+            var destPath = string.Format("{0}{1}", Path.DirectorySeparatorChar, Configuration.BuilderArguments.OutputDir);
+			var @namespace = CreateNamespace(template.FolderName).ToLower();
             var pathFromNamespace = CreatePathFromNamespace(@namespace);
-
+            
             var identifier = FileName(template, fileName);
 
             var fullPath = Path.Combine(destPath, pathFromNamespace);
-            var filePath = Path.Combine(fullPath, string.Format("{0}{1}", identifier, _configuration.BuilderArguments.FileExtension));
+            var filePath = Path.Combine(fullPath, string.Format("{0}{1}", identifier, Configuration.BuilderArguments.FileExtension));
 
             using (var writer = new StreamWriter(filePath, false, Encoding.ASCII))
             {
@@ -40,35 +29,28 @@ namespace Vipr.CLI.Output
             }
         }
 
-        private string CreateNamespace(string folderName)
-        {
-            var @namespace = _model.GetNamespace();
-            var prefix = _configuration.TemplateConfiguration.NamespacePrefix;
-            return string.IsNullOrEmpty(prefix) ? string.Format("{0}.{1}", @namespace, folderName)
+		private string CreateNamespace(string folderName)
+		{
+			var @namespace = Model.GetNamespace();
+			var prefix = Configuration.TemplateConfiguration.NamespacePrefix;
+
+			return string.IsNullOrEmpty(prefix) ? string.Format("{0}.{1}", @namespace, folderName)
                                                 : string.Format("{0}.{1}.{2}", prefix, @namespace, folderName);
-        }
+		}
 
         private string CreatePathFromNamespace(string @namespace)
         {
             var splittedPaths = @namespace.Split('.');
-            var destinationPath = splittedPaths.Aggregate(string.Empty, (current, path) =>
-                current + string.Format("{0}{1}", Path.DirectorySeparatorChar, path));
 
-            if (!DirectoryExists(destinationPath))
+			var destinationPath = splittedPaths.Aggregate(string.Empty, (current, path) =>
+							      current + string.Format("{0}{1}", Path.DirectorySeparatorChar, path));
+
+			if (!DirectoryExists(destinationPath))
             {
-                CreateDirectory(destinationPath);
+					CreateDirectory(destinationPath);
             }
-            return destinationPath;
-        }
 
-        public void CreateDirectory(string directoryPath)
-        {
-            Directory.CreateDirectory(directoryPath);
-        }
-
-        public bool DirectoryExists(string directoryPath)
-        {
-            return Directory.Exists(directoryPath);
+			return destinationPath;
         }
     }
 }

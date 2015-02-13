@@ -1,39 +1,18 @@
 ﻿<#@ template debug="true" hostspecific="true" language="C#" #>
-<#@ include file="..\..\BaseTemplate.tt"#>
+<#@ include file="BaseTemplate.tt"#>
 <#@ output extension="\\" #>
 <#
 CustomHost host = (CustomHost)Host;
 
 OdcmModel model = host.Model;
 
-var entities = model.GetEntityTypes();
-
-foreach(var entity in entities)
-{	
+var entity = host.OdcmType.AsEntityType();
 var entityName = GetPrefix() + entity.Name;
 
-#><#=GetCommentHeader()#>
+#>
+<#=GetCommentHeader()#>
 
-#import "<#=entityName#>Fetcher.h"
-<#=GetImplementationDoc(entityName + "Fetcher")#>
-<#
-		foreach(var prop in entity.NavigationProperties())
-		{
-			if(prop.IsCollection()){
-#>
-#import "<#=GetPrefix() + prop.Type.Name#>CollectionFetcher.h"
-#import "<#=GetPrefix() + prop.Type.Name#>Fetcher.h"
-<#
-			}
-			else{
-#>
-#import "<#=GetPrefix() + prop.Type.Name#>Fetcher.h"
-<#
-			}
-		}
-#>
-<#foreach(var child in entity.ChildEntities()){#>
-#import "<#=GetPrefix() + child.Name#>Fetcher.h"<#}#>
+#import "<#=GetPrefix()#>ODataEntities.h"
 
 @implementation <#=entityName#>Fetcher
 
@@ -42,24 +21,26 @@ var entityName = GetPrefix() + entity.Name;
 }
 
 -(id)initWithUrl:(NSString*)urlComponent :(id<MSODataExecutable>)parent{
-    
     self.Parent = parent;
     self.UrlComponent = urlComponent;
+
     return [super initWithUrl:urlComponent parent:parent andEntityClass : [<#=entityName#> class]];
 }
 
--(<#=GetTaskType()#>*) update<#=entity.Name#>:(id)entity withCallback:(void (^)(<#=GetPrefix() + entity.Name#>*, MSODataException * error))callback{
+-(NSURLSessionDataTask*) update<#=entity.Name#>:(id)entity withCallback:(void (^)(<#=GetPrefix() + entity.Name#>*, MSODataException * error))callback{
 	return [super update:entity : callback];
 }
 
--(<#=GetTaskType()#>*) delete<#=entity.Name#>:(void (^)(int status, MSODataException * error))callback{
+-(NSURLSessionDataTask*) delete<#=entity.Name#>:(void (^)(int status, MSODataException * error))callback{
 	return [super delete:callback];
 }
 
 <#
-		foreach(var prop in entity.NavigationProperties())
-		{
-			if(prop.IsCollection()){
+
+foreach(var prop in entity.NavigationProperties())
+{
+	if(prop.IsCollection())
+	{
 #>
 -(<#=GetPrefix() + prop.Type.Name#>CollectionFetcher*) get<#=prop.Name#>{
     return [[<#=GetPrefix() + prop.Type.Name#>CollectionFetcher alloc] initWithUrl:@"<#=prop.Name#>" parent:self andEntityClass:[<#=GetPrefix() + prop.Type#> class]];
@@ -69,21 +50,27 @@ var entityName = GetPrefix() + entity.Name;
     return [[[<#=GetPrefix() + prop.Type.Name#>CollectionFetcher alloc] initWithUrl:@"<#=prop.Name#>" parent:self andEntityClass:[<#=GetPrefix() + prop.Type#> class]] getById:_id];
 }
 <#
-			}
-			else{
+	}
+	else
+	{
 #>
 -(<#=GetPrefix() + prop.Type.Name#>Fetcher*) get<#=prop.Name#>{
 	 return [[<#=GetPrefix() + prop.Type.Name#>Fetcher alloc] initWithUrl:@"<#=prop.Name#>" parent:self andEntityClass: [<#=GetPrefix() + prop.Type.Name#> class]];
 }
 <#		
 			
-			}
-		}
-#><#foreach(var child in entity.ChildEntities()){#>
+	}
+}
+
+foreach(var child in entity.ChildEntities())
+{
+#>
 -(<#=GetPrefix() + child.Name#>Fetcher*) as<#=child.Name#>{
 	return [[<#=GetPrefix() +child.Name#>Fetcher alloc] initWithUrl :self.UrlComponent parent:self.Parent andEntityClass:[<#=GetPrefix() + child.Name#> class]];
-}<#}#>
-@end
-<#=CreateEndOfFile(entityName)#><#
+}
+<#
+
 }
 #>
+
+@end
