@@ -22,13 +22,13 @@ namespace Vipr.CLI.Strategies
 
         private void Models(Template template)
         {
-            var enums = _model.GetEntityTypes();
+            var enums = Model.GetEntityTypes();
             ProcessingAction(enums, template);
         }
 
         private void Protocols(Template template)
         {
-            var enums = _model.GetEntityTypes();
+            var enums = Model.GetEntityTypes();
             ProcessingAction(enums, template);
         }
     }

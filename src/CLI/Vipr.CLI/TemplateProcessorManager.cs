@@ -38,20 +38,21 @@ namespace Vipr.CLI
         public void Process(IConfigArguments configuration)
         {
             var runnableTemplates = _tempLocationFileWriter.WriteUsing(typeof(CustomHost), configuration.BuilderArguments)
-                                                           .Where(x => !x.IsBase && x.IsForLanguaje(configuration.BuilderArguments.Language));
+                                                           .Where(x => !x.IsBase &&
+                                                                        x.IsForLanguage(configuration.BuilderArguments.Language));
 
             var baseTemplate = _tempLocationFileWriter.WriteUsing(typeof(CustomHost), configuration.BuilderArguments)
-                                                           .Single(x => x.IsBase && x.IsForLanguaje(configuration.BuilderArguments.Language));
+                                                           .Single(x => x.IsBase && x.IsForLanguage(configuration.BuilderArguments.Language));
 
             var model = _reader.GenerateOdcmModel(new Dictionary<string, string>
             {
                 { "$metadata", File.ReadAllText(configuration.BuilderArguments.InputFile) }
             });
 
-            ITemplateProcessor processor = _processors[configuration.BuilderArguments.Language].Invoke(model,
-                configuration, baseTemplate.Path);
+            var processor = _processors[configuration.BuilderArguments.Language]
+                                .Invoke(model, configuration, baseTemplate.Path);
 
-			foreach (var template in runnableTemplates.AsParallel())
+            foreach (var template in runnableTemplates)
             {
                 Action<Template> action;
                 if (processor.Templates.TryGetValue(template.Name, out action))

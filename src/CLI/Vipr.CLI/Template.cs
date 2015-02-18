@@ -61,9 +61,9 @@ namespace Vipr.CLI
             return ResourceName;
         }
 
-        public bool IsForLanguaje(string languaje)
+        public bool IsForLanguage(string language)
         {
-            return ResourceName.ToLower().IndexOf(languaje.ToLower(), StringComparison.Ordinal) >= 0;
+            return ResourceName.ToLower().IndexOf(language.ToLower(), StringComparison.Ordinal) >= 0;
         }
     }
 }

@@ -2,9 +2,7 @@
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.TextTemplating;
 using TemplateWriter;
 using Vipr.CLI.Output;
@@ -14,6 +12,8 @@ namespace Vipr.CLI.Strategies
 {
     public class BaseTemplateProcessor : ITemplateProcessor
     {
+        public string StrategyName = "default";
+
         public const string ComplexType = "ComplexType";
         public const string EntityType = "EntityType";
         public const string EnumType = "EnumType";
@@ -22,22 +22,23 @@ namespace Vipr.CLI.Strategies
         public const string EntityFetcher = "EntityFetcher";
         public const string EntityOperations = "EntityOperations";
         public const string EntryPoint = "EntryPoint";
-        public string _baseFilePath;
 
-        public String StrategyName = "default";
+        protected readonly IFileWriter FileWriter;
+        protected readonly Engine Engine;
+        protected readonly OdcmModel Model;
 
-        protected readonly IFileWriter _fileWriter;
-        protected readonly Engine _engine;
-        protected readonly OdcmModel _model;
+        private static CustomHost _hostIntance;
 
         public Dictionary<string, Action<Template>> Templates { get; set; }
 
+        public string BaseFilePath { get; private set; }
+
         public BaseTemplateProcessor(IFileWriter fileWriter, OdcmModel model, string baseFilePath)
         {
-            _model = model;
-            _fileWriter = fileWriter;
-            _engine = new Engine();
-            _baseFilePath = baseFilePath;
+            Engine = new Engine();
+            Model = model;
+            FileWriter = fileWriter;
+            BaseFilePath = baseFilePath;
 
             Templates = new Dictionary<string, Action<Template>>(StringComparer.InvariantCultureIgnoreCase)
             {
@@ -57,7 +58,7 @@ namespace Vipr.CLI.Strategies
 
         private void CreateEntryPoint(Template template)
         {
-            var container = _model.EntityContainer;
+            var container = Model.EntityContainer;
             ProcessTemplate(template, container);
         }
 
@@ -66,11 +67,12 @@ namespace Vipr.CLI.Strategies
             var host = new CustomHost(StrategyName, null)
             {
                 TemplateFile = template.Path,
-                Model = _model
+                Model = Model,
+                BaseTemplatePath = BaseFilePath
             };
 
             var templateContent = File.ReadAllText(host.TemplateFile);
-            var output = _engine.ProcessTemplate(templateContent, host);
+            var output = Engine.ProcessTemplate(templateContent, host);
 
             if (host.Errors != null && host.Errors.HasErrors)
             {
@@ -78,24 +80,24 @@ namespace Vipr.CLI.Strategies
                 throw new InvalidOperationException(errors);
             }
 
-            _fileWriter.WriteText(template, _model.EntityContainer.Name, output);
+            FileWriter.WriteText(template, Model.EntityContainer.Name, output);
         }
 
         private void EnumTypes(Template template)
         {
-            var enums = _model.GetEnumTypes();
+            var enums = Model.GetEnumTypes();
             ProcessingAction(enums, template);
         }
 
         public void ComplexTypes(Template template)
         {
-            var complexTypes = _model.GetComplexTypes();
+            var complexTypes = Model.GetComplexTypes();
             ProcessingAction(complexTypes, template);
         }
 
         public void EntityTypes(Template template)
         {
-            var entityTypes = _model.GetEntityTypes();
+            var entityTypes = Model.GetEntityTypes();
             ProcessingAction(entityTypes, template);
         }
 
@@ -107,19 +109,17 @@ namespace Vipr.CLI.Strategies
             }
         }
 
-        private static CustomHost HostIntance;
-
         private CustomHost GetCustomHost(Template template, OdcmObject odcmObject)
         {
-            if(HostIntance == null)
-                HostIntance = new CustomHost(StrategyName, odcmObject);
+            if(_hostIntance == null)
+                _hostIntance = new CustomHost(StrategyName, odcmObject);
 
-            HostIntance.BaseTemplatePath = _baseFilePath;
-            HostIntance.TemplateFile = template.Path;
-            HostIntance.Model = _model;
-            HostIntance.OdcmType = odcmObject;
+            _hostIntance.BaseTemplatePath = BaseFilePath;
+            _hostIntance.TemplateFile = template.Path;
+            _hostIntance.Model = Model;
+            _hostIntance.OdcmType = odcmObject;
 
-            return HostIntance;
+            return _hostIntance;
         }
 
         private void ProcessTemplate(Template template, OdcmObject odcmObject)
@@ -127,14 +127,14 @@ namespace Vipr.CLI.Strategies
             var host = GetCustomHost(template, odcmObject);
 
             var templateContent = File.ReadAllText(host.TemplateFile);
-            var output = _engine.ProcessTemplate(templateContent, host);
+            var output = Engine.ProcessTemplate(templateContent, host);
 
             if (host.Errors != null && host.Errors.HasErrors)
             {
                 var errors = LogErrors(host, template);
                 throw new InvalidOperationException(errors);
             }
-            _fileWriter.WriteText(template, odcmObject.Name, output);
+            FileWriter.WriteText(template, odcmObject.Name, output);
         }
 
         public string LogErrors(CustomHost host, Template template)

@@ -25,7 +25,7 @@ public class <#=complex.Name#><#=extends#> {
 <# 
     foreach(var property in complex.Properties){
 
-        var propertyType = property.Field.IsCollection ? string.Format("java.util.List<{0}>", property.GetTypeString()) : property.GetTypeString();
+        var propertyType = property.IsCollection ? string.Format("java.util.List<{0}>", property.GetTypeString()) : property.GetTypeString();
 #>
 
     private <#=propertyType#> <#=property.Name#>;

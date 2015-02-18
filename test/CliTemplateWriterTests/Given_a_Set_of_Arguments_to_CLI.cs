@@ -62,9 +62,18 @@ namespace CliTemplateWriterTests
         }
 
         [TestMethod]
-        public void When_passing_specific_Arguments_should_procces_templates()
+        public void When_passing_specific_Arguments_should_procces_one_note_metadata()
         {
             var args = "--language=java --inputFile=Metadata\\OneNote.edmx.xml --outputDir=Out".Split(' ');
+            var builder = new ConfigurationBuilder().WithArguments(args);
+            var entrypoint = new CLIEntryPoint(builder, new TemplateProcessorManager());
+            entrypoint.Process();
+        }
+
+        [TestMethod]
+        public void When_passing_specific_Arguments_should_procces_exchange_metadata()
+        {
+            var args = "--language=java --inputFile=Metadata\\Exchange.edmx.xml --outputDir=Out".Split(' ');
             var builder = new ConfigurationBuilder().WithArguments(args);
             var entrypoint = new CLIEntryPoint(builder, new TemplateProcessorManager());
             entrypoint.Process();

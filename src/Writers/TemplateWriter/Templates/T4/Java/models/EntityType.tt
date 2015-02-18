@@ -24,8 +24,8 @@ public class <#=entity.Name#><#=extends#> {
 
     <#
     foreach(var navProperty in entity.NavigationProperties()){
-        var navPropertyType = navProperty.Field.IsCollection ? string.Format("java.util.List<{0}>", navProperty.GetTypeString()) : navProperty.GetTypeString();
-        var newType = navProperty.Field.IsCollection ? string.Format("new java.util.ArrayList<{0}>();", navProperty.GetTypeString()) : "null;" ;
+        var navPropertyType = navProperty.IsCollection ? string.Format("java.util.List<{0}>", navProperty.GetTypeString()) : navProperty.GetTypeString();
+        var newType = navProperty.IsCollection ? string.Format("new java.util.ArrayList<{0}>();", navProperty.GetTypeString()) : "null;" ;
     #>
 
     private <#=navPropertyType#> <#=navProperty.GetSanitizedPropertyName()#> = <#=newType#>
@@ -39,7 +39,7 @@ public class <#=entity.Name#><#=extends#> {
         return this.<#=navProperty.GetSanitizedPropertyName()#>; 
     }
     <#
-    if (!navProperty.Field.IsCollection)
+    if (!navProperty.IsCollection)
     {
     #>
 
@@ -58,7 +58,7 @@ public class <#=entity.Name#><#=extends#> {
     #>
 <# 
     foreach(var property in entity.Properties){
-    var propertyType = property.Field.IsCollection ? string.Format("java.util.List<{0}>", property.GetTypeString()) : property.GetTypeString();
+    var propertyType = property.IsCollection ? string.Format("java.util.List<{0}>", property.GetTypeString()) : property.GetTypeString();
 #>
     
     private <#=propertyType#> <#=property.GetSanitizedPropertyName()#>;
