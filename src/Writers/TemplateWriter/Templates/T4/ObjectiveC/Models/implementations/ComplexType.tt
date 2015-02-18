@@ -3,14 +3,14 @@
 <#@ output extension="\\" #>
 <#
 CustomHost host = (CustomHost)Host;
-OdcmModel entity = host.OdcType.AsOdcmClass();
+var entity = host.OdcmType.AsOdcmClass();
 	
 #>
 <#=GetCommentHeader()#>
 
-#import "<#=GetPrefix() + "Models.h"
+#import "<#=GetPrefix()#>Models.h"
 
-<#=GetImplementationDoc(c.Name)#>
+<#=GetImplementationDoc(entity.Name)#>
 @implementation <#=GetPrefix() + entity.Name#>	
 
 @end

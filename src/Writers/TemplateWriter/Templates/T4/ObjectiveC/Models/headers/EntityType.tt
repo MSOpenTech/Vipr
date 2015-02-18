@@ -14,7 +14,7 @@ var entity = host.OdcmType.AsOdcmClass();
 
 <#
 
-if(entity.BaseType == null)
+if(entity.Base == null)
 {
 
 #>
