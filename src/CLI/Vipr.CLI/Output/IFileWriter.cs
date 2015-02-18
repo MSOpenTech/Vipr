@@ -7,5 +7,7 @@ namespace Vipr.CLI.Output
         void CreateDirectory(string directoryPath);
 
         bool DirectoryExists(string directoryPath);
+
+		string FileExtension { get; }
     }
 }

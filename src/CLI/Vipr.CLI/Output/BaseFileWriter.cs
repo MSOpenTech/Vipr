@@ -10,6 +10,11 @@ namespace Vipr.CLI.Output
         protected readonly OdcmModel Model;
         protected readonly IConfigArguments Configuration;
 
+        public string FileExtension
+        {
+            get { return ".txt"; }
+        }
+
         public BaseFileWriter(OdcmModel model, IConfigArguments configuration)
         {
             Model = model;
@@ -18,18 +23,16 @@ namespace Vipr.CLI.Output
 
         protected static string FileName(Template template, string identifier)
         {
-            return template.FolderName == "odata" ? template.Name.Replace("Entity", identifier) 
+            return template.FolderName == "odata" ? template.Name.Replace("Entity", identifier)
                                                   : identifier;
         }
 
         public virtual void WriteText(Template template, string fileName, string text)
         {
             var destPath = string.Format("{0}{1}", Path.DirectorySeparatorChar, Configuration.BuilderArguments.OutputDir);
-            
             var identifier = FileName(template, fileName);
-
             var fullPath = Path.Combine(destPath, destPath);
-            var filePath = Path.Combine(fullPath, string.Format("{0}{1}", identifier, Configuration.BuilderArguments.FileExtension));
+            var filePath = Path.Combine(fullPath, string.Format("{0}{1}", identifier, FileExtension));
 
             using (var writer = new StreamWriter(filePath, false, Encoding.ASCII))
             {
@@ -43,7 +46,7 @@ namespace Vipr.CLI.Output
         /// <param name="directoryPath"></param>
         public void CreateDirectory(string directoryPath)
         {
-			Directory.CreateDirectory(directoryPath);
+            Directory.CreateDirectory(directoryPath);
         }
 
         public bool DirectoryExists(string directoryPath)

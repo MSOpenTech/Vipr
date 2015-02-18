@@ -4,7 +4,7 @@
 
 public string GetPrefix()
 {
-	return  "MSO" + ((CustomHost)Host).Model.EntityContainer.Name;
+	return  "MSO" + ((CustomHost)Host).Model.EntityContainer.Namespace.Split('.')[1];
 }
 
 public string GetCommentHeader()
@@ -21,6 +21,25 @@ public string GetCommentHeader()
 @"/* To make changes to this code, please make changes to the generation framework itself:" +
 @"/* https://github.com/MSOpenTech/odata-codegen" +
 @"/*******************************************************************************/";
+}
+
+public string GetInterfaceLine(OdcmClass e){
+
+	string baseEntity = e.Base == null ? "NSObject" 
+					  : GetPrefix() + e.Base.Name.Substring(e.Base.Name.LastIndexOf(".") +1);
+	
+	var s = new StringBuilder();
+	s.AppendLine("#import <Foundation/Foundation.h>");
+	s.AppendLine("#import \""+GetPrefix()+"Protocols.h\"");
+
+	if(baseEntity != "NSObject"){
+		s.AppendFormat("#import \"{0}.h\"", baseEntity);
+	}
+
+	s.AppendLine().AppendLine().AppendLine(GetHeaderDoc(e.Name))
+	.AppendFormat("@interface {0}{1} : {2}",GetPrefix(), e.Name, baseEntity);
+	
+	return s.ToString();
 }
 
 public string GetHeaderDoc(string name)

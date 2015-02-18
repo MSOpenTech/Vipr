@@ -13,6 +13,11 @@ namespace Vipr.CLI.Output
         {
         }
 
+		public new string FileExtension
+		{
+			get { return ".java"; }
+		}
+
         public override void WriteText(Template template, string fileName, string text)
         {
             var destPath = string.Format("{0}{1}", Path.DirectorySeparatorChar, Configuration.BuilderArguments.OutputDir);
@@ -22,7 +27,7 @@ namespace Vipr.CLI.Output
             var identifier = FileName(template, fileName);
 
             var fullPath = Path.Combine(destPath, pathFromNamespace);
-            var filePath = Path.Combine(fullPath, string.Format("{0}{1}", identifier, Configuration.BuilderArguments.FileExtension));
+            var filePath = Path.Combine(fullPath, string.Format("{0}{1}", identifier, FileExtension));
 
             using (var writer = new StreamWriter(filePath, false, Encoding.ASCII))
             {

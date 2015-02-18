@@ -10,7 +10,4 @@ public string GetCommentHeader(){
  ******************************************************************************/";
 }
 
-public string CreateEndOfFile(string name){
-	return string.Format("/n{0} EndOfFile",name);
-}	
 #>

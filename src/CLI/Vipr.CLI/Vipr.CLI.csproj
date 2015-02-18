@@ -73,6 +73,7 @@
     <Compile Include="Template.cs" />
     <Compile Include="TemplateSourceReader.cs" />
     <Compile Include="TemplateTempLocationFileWriter.cs" />
+    <Compile Include="Output\ObjectiveCFileWriter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
