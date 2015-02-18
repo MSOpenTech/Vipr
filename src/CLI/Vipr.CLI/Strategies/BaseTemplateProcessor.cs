@@ -18,7 +18,7 @@ namespace Vipr.CLI.Strategies
         public const string EntityType = "EntityType";
         public const string EnumType = "EnumType";
         public const string ODataBaseEntity = "ODataBaseEntity";
-        public const string EntityCollectionOperation = "EntityCollectionOperation";
+        public const string EntityCollectionOperation = "EntityCollectionOperations";
         public const string EntityFetcher = "EntityFetcher";
         public const string EntityOperations = "EntityOperations";
         public const string EntryPoint = "EntryPoint";

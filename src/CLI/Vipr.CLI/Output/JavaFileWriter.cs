@@ -8,16 +8,17 @@ namespace Vipr.CLI.Output
 {
     public class JavaFileWriter : BaseFileWriter
     {
-        public JavaFileWriter(OdcmModel model, IConfigArguments configuration) : base(model,configuration)
+        public JavaFileWriter(OdcmModel model, IConfigArguments configuration)
+            : base(model, configuration)
         {
         }
 
         public override void WriteText(Template template, string fileName, string text)
         {
             var destPath = string.Format("{0}{1}", Path.DirectorySeparatorChar, Configuration.BuilderArguments.OutputDir);
-			var @namespace = CreateNamespace(template.FolderName).ToLower();
+            var @namespace = CreateNamespace(template.FolderName).ToLower();
             var pathFromNamespace = CreatePathFromNamespace(@namespace);
-            
+
             var identifier = FileName(template, fileName);
 
             var fullPath = Path.Combine(destPath, pathFromNamespace);
@@ -29,28 +30,28 @@ namespace Vipr.CLI.Output
             }
         }
 
-		private string CreateNamespace(string folderName)
-		{
-			var @namespace = Model.GetNamespace();
-			var prefix = Configuration.TemplateConfiguration.NamespacePrefix;
+        private string CreateNamespace(string folderName)
+        {
+            var @namespace = Model.GetNamespace();
+            var prefix = Configuration.TemplateConfiguration.NamespacePrefix;
 
-			return string.IsNullOrEmpty(prefix) ? string.Format("{0}.{1}", @namespace, folderName)
+            return string.IsNullOrEmpty(prefix) ? string.Format("{0}.{1}", @namespace, folderName)
                                                 : string.Format("{0}.{1}.{2}", prefix, @namespace, folderName);
-		}
+        }
 
         private string CreatePathFromNamespace(string @namespace)
         {
             var splittedPaths = @namespace.Split('.');
 
-			var destinationPath = splittedPaths.Aggregate(string.Empty, (current, path) =>
-							      current + string.Format("{0}{1}", Path.DirectorySeparatorChar, path));
+            var destinationPath = splittedPaths.Aggregate(string.Empty, (current, path) =>
+                                  current + string.Format("{0}{1}", Path.DirectorySeparatorChar, path));
 
-			if (!DirectoryExists(destinationPath))
+            if (!DirectoryExists(destinationPath))
             {
-					CreateDirectory(destinationPath);
+                CreateDirectory(destinationPath);
             }
 
-			return destinationPath;
+            return destinationPath;
         }
     }
 }
