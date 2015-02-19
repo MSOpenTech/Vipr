@@ -4,7 +4,7 @@
 <#
 CustomHost host = (CustomHost)Host;
 
-OdcmModel model = host.OdcmEntity.AsEntityType();
+var entity = host.OdcmType.AsOdcmClass();
 	
 var entityName = GetPrefix() +entity.Name + "CollectionOperations";
 
@@ -16,7 +16,7 @@ string baseEntity = entity.Base == null ? "MSODataOperations"
 <#=GetCommentHeader()#>
 
 #import <office365_odata_base/office365_odata_base.h>
-#import "<#=GetPreix()#>Models.h"
+#import "<#=GetPrefix()#>Models.h"
 <#
 if(entity.Base != null)
 {

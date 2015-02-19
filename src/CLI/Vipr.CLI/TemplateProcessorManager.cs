@@ -31,7 +31,7 @@ namespace Vipr.CLI
                 {"java", (model, configArguments, baseFilePath) => 
                     new JavaTemplateProcessor(new JavaFileWriter(model, configArguments), model,baseFilePath)},
                 {"objectivec", (model, configArguments,baseFilePath) =>
-                    new ObjectiveCTemplateProcessor(new BaseFileWriter(model, configArguments), model, baseFilePath )}
+					new ObjectiveCTemplateProcessor(new ObjectiveCFileWriter(model, configArguments), model, baseFilePath )}
             };
         }
 

@@ -256,10 +256,26 @@ public string GetParamsString(List<OdcmParameter> parameters){
 
 public string GetParamString(OdcmType p){
 
+	if(p == null) return string.Empty;
 	if(p.IsComplex()){
 		return p.IsSystem() ? string.Empty : p.GetTypeString() + " *" + p.Name.ToLowerFirstChar();
 	}
 
 	return p.GetTypeString() + " " + p.Name;
+}
+
+public string GetMethodHeader(OdcmMethod action)
+{
+	var returnString = action.ReturnType == null ? "" : GetParamString(action.ReturnType);
+	return string.Format("-(NSURLSessionDataTask*) {0} {1} (^)({2}, MSODataException *error)) callback;",
+	action.Name.ToLowerFirstChar(),GetParamsString(action.Parameters),returnString );	
+}
+
+public string GetMethodHeaderRaw(OdcmMethod action)
+{
+	var returnString = action.ReturnType == null ? "" : GetParamString(action.ReturnType);
+	return string.Format("-(NSURLSessionDataTask*) {0}Raw {1} (^)({2}, MSODataException *error)) callback;",
+	action.Name.ToLowerFirstChar(),
+	GetParamsForRaw(action.Parameters.Select(p => p.Name)),(action.ReturnType == null ? "NSString* resultCode " : GetParamRaw(action.ReturnType.Name)));	
 }
 #>

@@ -14,12 +14,12 @@ var clasess = new List<string>();
 
 foreach(var prop in containerProps)
 {
-	var classString =  prop.Type.GetTypeString() + (prop.IsCollection() ?  "CollectionFetcher;": "Fetcher;"
+	var classString =  prop.Type.GetTypeString() + (prop.IsCollection() ?  "CollectionFetcher;": "Fetcher;");
 
-	if(!clasess.Contains(classString)) classess.Add(classString);
+	if(!clasess.Contains(classString)) clasess.Add(classString);
 }
 
-foreach(var propertyClass in classess)
+foreach(var propertyClass in clasess)
 {
 
 #>

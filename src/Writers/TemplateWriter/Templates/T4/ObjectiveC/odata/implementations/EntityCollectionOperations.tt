@@ -3,7 +3,7 @@
 <#@ output extension="\\" #>
 <#
 CustomHost host = (CustomHost)Host;
-var entity = host.OdcmType.AsEntityType();
+var entity = host.OdcmType.AsOdcmClass();
 var entityName = GetPrefix() + entity.Name + "CollectionOperations";
 
 #>
@@ -37,7 +37,7 @@ if(entity.HasActions())
 	[[request getUrl] appendPathComponent:[[NSString alloc] initWithFormat:@"<#= action.Name#>(%@)",parameters]];
 	NSData* payload = nil;
 		
-	<#=GetTaskType()#>* task = [super oDataExecuteWithRequest:request callback: ^(id<MSODataResponse> r, MSODataException *error){
+	NSURLSessionDataTask* task = [super oDataExecuteWithRequest:request callback: ^(id<MSODataResponse> r, MSODataException *error){
 
        if(error == nil){
 			<#=GetType(action.ReturnType)#> result = (<#=GetType(action.ReturnType)#>)[[[self getResolver]getJsonSerializer] deserialize:[r getPayload] : <#=clazz#>];

@@ -6,7 +6,7 @@ CustomHost host = (CustomHost)Host;
 
 OdcmModel model = host.Model;
 
-var entity = host.OdcmType.AsEntityType();
+var entity = host.OdcmType.AsOdcmClass();
 var entityName = GetPrefix() + entity.Name;
 
 #>
@@ -62,7 +62,7 @@ foreach(var prop in entity.NavigationProperties())
 	}
 }
 
-foreach(var child in entity.ChildEntities())
+foreach(var child in entity.Derived)
 {
 #>
 -(<#=GetPrefix() + child.Name#>Fetcher*) as<#=child.Name#>{

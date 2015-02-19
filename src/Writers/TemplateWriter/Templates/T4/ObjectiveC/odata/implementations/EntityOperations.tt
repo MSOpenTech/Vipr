@@ -3,7 +3,7 @@
 <#@ output extension="\\" #>
 <#
 CustomHost host = (CustomHost)Host;
-var entity = host.OdcmType.AsEntityType();	
+var entity = host.OdcmType.AsOdcmClass();	
 var entityName = GetPrefix() + entity.Name + "Operations";
 
 #>
@@ -30,7 +30,7 @@ if(entity.HasActions())
 			if (action.IsFunction())
 			{
 #>
--(NSURLSessionDataTask*)<#= action.Name.ToLowerFirstChar() #> <#=GetParamsString(action.Parameters)#>(void (^)(<#=GetParamString(action.ReturnType)#>, MSODataException *error))callback{
+<#=GetMethodHeader(action)#>{
 
 	id<MSODataRequest> request = [[self getResolver] createODataRequest];
 	<#=GetFunctionParameters(action.Parameters)#>
@@ -56,7 +56,8 @@ if(entity.HasActions())
     		else if(action != null)
     		{
 #>
--(NSURLSessionDataTask*)<#= action.Name.ToLowerFirstChar() #> <#=GetParamsString(action.Parameters)#>(void (^)(<#=GetParamString(action.ReturnType)#>, MSODataException *error))callback{
+
+<#=GetMethodHeader(action)#>{
 	<#=GetParametersToJson(action.Parameters)#>
 
 	NSURLSessionDataTask* task = [self <#= action.Name.ToLowerFirstChar() #>Raw <#=GetParametersForRawCall(action.Parameters.Select(p => p.Name))#> :^(NSString *returnValue, MSODataException *error){
@@ -72,7 +73,7 @@ if(entity.HasActions())
     return task;
 }
 
--(NSURLSessionDataTask*)<#= action.Name.ToLowerFirstChar() #>Raw <#=GetParamsForRaw(action.Parameters.Select(p => p.Name))#>(void (^)(<#=GetParamRaw(action.ReturnType.Name)#>, MSODataException *error))callback{
+<#=GetMethodHeaderRaw(action)#>{
 
 	id<MSODataRequest> request = [[self getResolver] createODataRequest];
 	<#=GetParametersToJsonRaw(action.Parameters.Select(p => p.Name))#>

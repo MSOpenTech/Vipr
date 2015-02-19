@@ -1,9 +1,10 @@
 ﻿<Properties StartupItem="src/Core/Vipr/Vipr.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="src/Writers/TemplateWriter/ConfigurationService.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="src/Writers/TemplateWriter/Templates/T4/ObjectiveC/Base/BaseTemplate.tt">
     <Files>
       <File FileName="src/Writers/TemplateWriter/Templates/T4/Java/Models/ComplexType.tt" Line="1" Column="1" />
       <File FileName="src/Writers/TemplateWriter/ConfigurationService.cs" Line="1" Column="1" />
+      <File FileName="src/Writers/TemplateWriter/Templates/T4/ObjectiveC/Base/BaseTemplate.tt" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

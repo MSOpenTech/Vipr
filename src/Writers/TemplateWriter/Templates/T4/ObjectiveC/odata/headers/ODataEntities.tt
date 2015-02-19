@@ -11,7 +11,7 @@ var entityTypes = model.GetEntityTypes();
 
 foreach(var et in entityTypes)
 {
-		 
+
 #>
 #import "<#=GetPrefix() + et.Name #>CollectionFetcher.h"
 #import "<#=GetPrefix() + et.Name #>CollectionOperation.h"
@@ -21,6 +21,6 @@ foreach(var et in entityTypes)
 <#
 
 }
-		
+
 #>
-#import "<#GetPrefix()#>Client.h" 
+#import "<#=GetPrefix()#>Client.h" 

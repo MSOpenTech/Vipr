@@ -109,7 +109,7 @@ namespace Vipr.CLI.Strategies
             }
         }
 
-        private CustomHost GetCustomHost(Template template, OdcmObject odcmObject)
+		protected CustomHost GetCustomHost(Template template, OdcmObject odcmObject)
         {
             if(_hostIntance == null)
                 _hostIntance = new CustomHost(StrategyName, odcmObject);
@@ -122,7 +122,7 @@ namespace Vipr.CLI.Strategies
             return _hostIntance;
         }
 
-        private void ProcessTemplate(Template template, OdcmObject odcmObject)
+		protected virtual void ProcessTemplate(Template template, OdcmObject odcmObject)
         {
             var host = GetCustomHost(template, odcmObject);
 
