@@ -1,6 +1,7 @@
 ﻿<#@ template debug="true" hostspecific="true" language="C#" #>
 <#@ include file="BaseTemplate.tt"#>
 <#@ output extension="\\" #>
+<#=GetCommentHeader()#>
 <#
 CustomHost host = (CustomHost)Host;
 
@@ -10,7 +11,6 @@ var entity = host.OdcmType.AsOdcmClass();
 var entityName = GetPrefix() + entity.Name;
 
 #>
-<#=GetCommentHeader()#>
 
 #import "<#=GetPrefix()#>ODataEntities.h"
 

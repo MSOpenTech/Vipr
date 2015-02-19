@@ -1,6 +1,7 @@
 ﻿<#@ template debug="true" hostspecific="true" language="C#" #>
 <#@ include file="BaseTemplate.tt"#>
 <#@ output extension="\\" #>
+<#=GetCommentHeader()#>
 <#
 CustomHost host = (CustomHost)Host;
 var entity = host.OdcmType.AsOdcmClass();
@@ -10,7 +11,6 @@ string baseEntity = entity.Base == null ? "MSODataOperations"
 					  : GetPrefix() + entity.Base.Name.Substring(entity.Base.Name.LastIndexOf(".") +1) + "Operations";
 
 #>
-<#=GetCommentHeader()#>
 					  		
 #import <office365_odata_base/office365_odata_base.h>
 #import "<#=GetPrefix()#>Models".h"

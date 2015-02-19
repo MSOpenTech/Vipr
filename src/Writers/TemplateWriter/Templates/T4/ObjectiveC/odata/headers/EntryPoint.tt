@@ -1,15 +1,13 @@
 ﻿<#@ template debug="true" hostspecific="true" language="C#" #>
 <#@ include file="BaseTemplate.tt"#>
 <#@ output extension="\\" #>
+<#=GetCommentHeader()#>
 <#
 CustomHost host = (CustomHost)Host;
 OdcmModel model = host.Model;
 var containerProps = model.EntityContainer.Properties;
 var entityName = GetPrefix() + "Client"; 
 
-#>
-<#=GetCommentHeader()#>
-<#
 var clasess = new List<string>();
 
 foreach(var prop in containerProps)

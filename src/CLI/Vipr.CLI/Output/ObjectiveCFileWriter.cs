@@ -26,10 +26,16 @@ namespace Vipr.CLI.Output
 			FileExtension = template.ResourceName.Contains("header") ? ".h" : ".m";
 
 			var fullPath = Path.Combine(destPath, destPath);
-			var filePath = Path.Combine(fullPath, string.Format("{0}{1}", identifier, FileExtension));
 
 			if (!DirectoryExists(fullPath))
 				CreateDirectory(fullPath);
+
+			fullPath = Path.Combine(fullPath, template.FolderName);
+
+			if (!DirectoryExists(fullPath))
+				CreateDirectory(fullPath);
+
+			var filePath = Path.Combine(fullPath, string.Format("{0}{1}", identifier, FileExtension));
 
 			using (var writer = new StreamWriter(filePath, false, Encoding.ASCII))
 			{
