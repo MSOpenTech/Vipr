@@ -7,8 +7,17 @@ using TemplateWriter;
 
 namespace Vipr.CLI
 {
+    public enum TemplateType
+    {
+        Model,
+        OData,
+        Other
+    }
+
     public class Template
     {
+        public TemplateType TemplateType { get; set; }
+
         public bool IsBase { get; set; }
 
         public string Name { get; set; }

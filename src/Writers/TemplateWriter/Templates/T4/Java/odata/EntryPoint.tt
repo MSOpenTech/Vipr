@@ -8,9 +8,9 @@ OdcmModel model = host.Model;
 <#=GetCommentHeader()#>
 package <#=model.Namespaces.FirstOrDefault().Name#>;
 
-import <#=model.Namespaces.FirstOrDefault()#>.*;
-import <#=model.Namespaces.FirstOrDefault()#>.interfaces.DependencyResolver;
-import <#=model.Namespaces.FirstOrDefault().Name.ToLower()#>.*;
+//import com.microsoft.outlookservices.*;
+import com.microsoft.services.odata.*;
+import com.microsoft.services.odata.interfaces.DependencyResolver;
 
 /**
  * The type <#="SomeContainer"#>Client.

@@ -14,9 +14,9 @@ var className = entity.Kind == OdcmClassKind.MediaEntity ? "ODataMediaEntityFetc
 package <#=model.Namespaces.FirstOrDefault().Name#>;
 
 import com.google.common.util.concurrent.*;
-import <#=model.Namespaces.FirstOrDefault().Name#>.*;
-import <#=model.Namespaces.FirstOrDefault().Name#>.Readable;
-import <#=model.Namespaces.FirstOrDefault().Name#>.interfaces.*;
+import com.microsoft.services.odata.*;
+import com.microsoft.services.odata.Readable;
+import com.microsoft.services.odata.interfaces.*;
 
 /**
  * The type  <#=entity.Name#>Fetcher.

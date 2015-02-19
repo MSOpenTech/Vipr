@@ -12,11 +12,12 @@ var baseOperation = entity.Base == null ? "extends ODataOperations" : "extends "
 <#=GetCommentHeader()#>
 package <#=model.Namespaces.FirstOrDefault().Name#>;
 
+//import com.microsoft.outlookservices.*;
+
 import com.google.common.util.concurrent.*;
-import <#=model.Namespaces.FirstOrDefault()#>.*;
-import <#=model.Namespaces.FirstOrDefault()#>.interfaces.*;
-import <#=model.Namespaces.FirstOrDefault().Name.ToLower()#>.*;
-import static <#="baseReference"#>.Helpers.*;
+import com.microsoft.services.odata.*;
+import com.microsoft.services.odata.interfaces.*;
+import static com.microsoft.services.odata.Helpers.*;
 
 /**
  * The type <#=entity.Name#>Operations.

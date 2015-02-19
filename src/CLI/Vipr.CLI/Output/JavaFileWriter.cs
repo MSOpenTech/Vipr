@@ -13,19 +13,20 @@ namespace Vipr.CLI.Output
         {
         }
 
-		public new string FileExtension
-		{
-			get { return ".java"; }
-		}
+        public new string FileExtension
+        {
+            get { return ".java"; }
+        }
 
         public override void WriteText(Template template, string fileName, string text)
         {
             var destPath = string.Format("{0}{1}", Path.DirectorySeparatorChar, Configuration.BuilderArguments.OutputDir);
-            var @namespace = CreateNamespace(template.FolderName).ToLower();
+
+            var @namespace = template.TemplateType == TemplateType.Model ? CreateNamespace(string.Empty).ToLower()
+                                                                         : CreateNamespace(template.FolderName).ToLower();
+
             var pathFromNamespace = CreatePathFromNamespace(@namespace);
-
             var identifier = FileName(template, fileName);
-
             var fullPath = Path.Combine(destPath, pathFromNamespace);
             var filePath = Path.Combine(fullPath, string.Format("{0}{1}", identifier, FileExtension));
 
@@ -39,6 +40,12 @@ namespace Vipr.CLI.Output
         {
             var @namespace = Model.GetNamespace();
             var prefix = Configuration.TemplateConfiguration.NamespacePrefix;
+
+            if (string.IsNullOrEmpty(folderName))
+            {
+                return string.IsNullOrEmpty(prefix) ? @namespace
+                                                    : string.Format("{0}.{1}", prefix, @namespace);
+            }
 
             return string.IsNullOrEmpty(prefix) ? string.Format("{0}.{1}", @namespace, folderName)
                                                 : string.Format("{0}.{1}.{2}", prefix, @namespace, folderName);

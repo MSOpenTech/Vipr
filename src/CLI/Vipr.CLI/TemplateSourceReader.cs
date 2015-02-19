@@ -17,15 +17,32 @@ namespace Vipr.CLI
             {
                 var splits = resource.Split('.');
                 var name = splits.ElementAt(splits.Count() - 2);
+                var folderName = FolderName(resource, arguments);
 
                 return new Template(name, resource)
                 {
-                    FolderName = FolderName(resource, arguments),
+                    FolderName = folderName,
                     Name = name,
                     ResourceName = resource,
-                    IsBase = resource.Contains(baseString, StringComparison.InvariantCultureIgnoreCase)
+                    IsBase = resource.Contains(baseString, StringComparison.InvariantCultureIgnoreCase),
+                    TemplateType = ResolveTemplateType(folderName)
                 };
             }).ToList();
+        }
+
+        public TemplateType ResolveTemplateType(string name)
+        {
+            if (name.Equals("model", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return TemplateType.Model;
+            }
+
+            if (name.Equals("odata", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return TemplateType.OData;
+            }
+
+            return TemplateType.Other;
         }
 
         private string FolderName(string resourceName, BuilderArguments arguments)
