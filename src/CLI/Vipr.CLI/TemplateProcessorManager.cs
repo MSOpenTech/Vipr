@@ -13,16 +13,16 @@ namespace Vipr.CLI
 {
     public class TemplateProcessorManager : ITemplateProcessorManager
     {
-        private readonly IReader _reader;
+        private readonly IOdcmReader _reader;
         private readonly ITemplateTempLocationFileWriter _tempLocationFileWriter;
         private readonly Dictionary<string, Func<OdcmModel, IConfigArguments, string, ITemplateProcessor>> _processors;
 
         public TemplateProcessorManager()
-            : this(new Reader(), new TemplateTempLocationFileWriter(new TemplateSourceReader()))
+            : this(new OdcmReader(), new TemplateTempLocationFileWriter(new TemplateSourceReader()))
         {
         }
 
-        public TemplateProcessorManager(IReader reader, ITemplateTempLocationFileWriter tempLocationFileWriter)
+        public TemplateProcessorManager(IOdcmReader reader, ITemplateTempLocationFileWriter tempLocationFileWriter)
         {
             _reader = reader;
             _tempLocationFileWriter = tempLocationFileWriter;

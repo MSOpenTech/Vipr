@@ -37,25 +37,10 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Practices.Unity">
-      <HintPath>..\..\..\packages\Unity.3.5.1405-prerelease\lib\net45\Microsoft.Practices.Unity.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.Unity.Configuration">
-      <HintPath>..\..\..\packages\Unity.3.5.1405-prerelease\lib\net45\Microsoft.Practices.Unity.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.Unity.RegistrationByConvention">
-      <HintPath>..\..\..\packages\Unity.3.5.1405-prerelease\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Collections.Immutable, Version=1.1.32.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\System.Collections.Immutable.1.1.32-beta\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
-    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -76,18 +61,21 @@
     <Compile Include="ContainerGetPathMethod.cs" />
     <Compile Include="ContainerNameFromTypeMethod.cs" />
     <Compile Include="ContainerTypeFromNameMethod.cs" />
+    <Compile Include="CSharpProject.cs" />
     <Compile Include="EntityContainerConstructor.cs" />
     <Compile Include="EntityVoidMethod.cs" />
     <Compile Include="EntityFunctionMethod.cs" />
+    <Compile Include="Enum.cs" />
+    <Compile Include="EnumMember.cs" />
     <Compile Include="ExplicitlyImplementableMember.cs" />
+    <Compile Include="Feature.cs" />
+    <Compile Include="Features.cs" />
     <Compile Include="FetcherExecuteAsyncMethod.cs" />
     <Compile Include="DefaultConstructor.cs" />
     <Compile Include="CollectionConstructor.cs" />
     <Compile Include="CollectionGetByIdIndexer.cs" />
     <Compile Include="CollectionExecuteAsyncMethod.cs" />
     <Compile Include="CollectionGetByIdMethod.cs" />
-    <Compile Include="CSharpModel\Enum.cs" />
-    <Compile Include="CSharpModel\Namespace.cs" />
     <Compile Include="FetcherExpandMethod.cs" />
     <Compile Include="FetcherNavigationCollectionProperty.cs" />
     <Compile Include="FetcherNavigationProperty.cs" />
@@ -107,6 +95,8 @@
     <Compile Include="MethodSignature.cs" />
     <Compile Include="ConcreteNavigationAccessorProperty.cs" />
     <Compile Include="ModelField.cs" />
+    <Compile Include="Namespace.cs" />
+    <Compile Include="Namespaces.cs" />
     <Compile Include="NavigationProperty.cs" />
     <Compile Include="ObsoletedNavigationProperty.cs" />
     <Compile Include="ObsoletedProperty.cs" />
@@ -117,6 +107,8 @@
     <Compile Include="Properties.cs" />
     <Compile Include="ContainerNavigationCollectionProperty.cs" />
     <Compile Include="ContainerNavigationProperty.cs" />
+    <Compile Include="Settings\CSharpWriterSettings.cs" />
+    <Compile Include="SourceCodeGenerator.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="StructuralCollectionProperty.cs" />
     <Compile Include="StructuralProperty.cs" />
@@ -124,7 +116,7 @@
     <Compile Include="EnsureQueryMethod.cs" />
     <Compile Include="Identifier.cs" />
     <Compile Include="Interface.cs" />
-    <Compile Include="CSharpWriter.Code.cs" />
+    <Compile Include="CSharpWriter.cs" />
     <Compile Include="Indenter.cs" />
     <Compile Include="InterfaceProperty.cs" />
     <Compile Include="Method.cs" />
@@ -139,9 +131,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Vipr.Core\Vipr.Core.csproj">
