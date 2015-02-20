@@ -20,8 +20,7 @@ namespace TemplateWriter
                                            .ToList();
             if (filtered.Count() > 1)
             {
-                return model.Namespaces.Find(x => String.Equals(x.Name,
-                    ConfigurationService.PrimaryNamespaceName,
+                return model.Namespaces.Find(x => String.Equals(x.Name,ConfigurationService.PrimaryNamespaceName,
                     StringComparison.InvariantCultureIgnoreCase));
             }
             return filtered.Single();

@@ -82,11 +82,11 @@ public class <#=entity.Name#>Fetcher extends <#=className#><<#=entity.Name#>,<#=
     }
 
     /**
-     * Gets <#=prop.Name.SplitCamelCase().ToLower()#>.
+     * Gets <#=prop.Name.SplitCamelCase().ToLower().Singularize()#>.
      *
-     * @return the <#=prop.Name.SplitCamelCase().ToLower()#>
+     * @return the <#=prop.Name.SplitCamelCase().ToLower().Singularize()#>
      */
-    public <#=prop.Type.Name#>Fetcher get<#=prop.Name#>(String id){
+    public <#=prop.Type.Name#>Fetcher get<#=prop.Name.Singularize()#>(String id){
          return new ODataCollectionFetcher<<#=prop.Type.Name#>, <#=prop.Type.Name#>Fetcher, <#=prop.Type.Name#>CollectionOperations>("<#=prop.Name#>", this, <#=prop.Type.Name#>.class, <#=prop.Type.Name#>CollectionOperations.class).getById(id);
     }
 <#
@@ -97,7 +97,7 @@ public class <#=entity.Name#>Fetcher extends <#=className#><<#=entity.Name#>,<#=
      *
      * @return the <#=prop.Name.SplitCamelCase().ToLower()#>
      */
-    public <#=prop.Type.Name#>Fetcher get<#=prop.Name#>() {
+    public <#=prop.Type.Name#>Fetcher get<#=prop.Name.Singularize()#>() {
         return new <#=prop.Type.Name#>Fetcher("<#=prop.Name#>", this);
     }
 <#             
