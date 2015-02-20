@@ -10,10 +10,9 @@ OdcmClass entity = host.OdcmType.AsOdcmClass();
 var baseOperation = entity.Base == null ? "extends ODataOperations" : "extends " + entity.Base.Name.Substring(entity.Base.Name.LastIndexOf(".") +1) + "Operations";
 #>
 <#=GetCommentHeader()#>
-package <#=model.Namespaces.FirstOrDefault().Name#>;
+package <#=model.ODataPackageNamespace()#>;
 
-//import com.microsoft.outlookservices.*;
-
+import <#=model.NamespaceName()#>.*;
 import com.google.common.util.concurrent.*;
 import com.microsoft.services.odata.*;
 import com.microsoft.services.odata.interfaces.*;
@@ -161,8 +160,8 @@ java.util.Map<String, String> map = new java.util.HashMap<String, String>();
         Request request = getResolver().createRequest();
         request.setVerb(HttpVerb.POST);
         <#if (someAction.Parameters.Any()) { #>
-        request.setContent(getResolver().getJsonSerializer()
-                                        .jsonObjectFromJsonMap(map).getBytes(Constants.UTF8));
+    request.setContent(getResolver().getJsonSerializer()
+    .jsonObjectFromJsonMap(map).getBytes(Constants.UTF8));
 
         <#}#>
 request.getUrl().appendPathComponent("<#= someAction.Name#>");

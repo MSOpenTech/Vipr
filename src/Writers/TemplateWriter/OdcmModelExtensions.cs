@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using Vipr.Core.CodeModel;
 
 namespace TemplateWriter
@@ -85,6 +86,25 @@ namespace TemplateWriter
         public static OdcmEnum AsOdcmEnum(this OdcmObject odcmObject)
         {
             return odcmObject as OdcmEnum;
+        }
+
+        public static string NamespaceName(this OdcmModel model)
+        {
+            var @namespace = GetOdcmNamespace(model).Name;
+            var name = string.Format("{0}.{1}", ConfigurationService.Configuration.NamespacePrefix, @namespace);
+            return name.ToLower();
+        }
+
+        public static string ODataPackageNamespace(this OdcmModel model)
+        {
+            var @namespace = NamespaceName(model);
+            var package = string.Format("{0}.{1}", @namespace, "odata");
+            return package.ToLower();
+        }
+
+        public static string GetEntityContainer(this OdcmModel model)
+        {
+            return model.EntityContainer.Name;
         }
     }
 }

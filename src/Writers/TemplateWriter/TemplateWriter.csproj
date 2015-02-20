@@ -68,7 +68,7 @@
     <EmbeddedResource Include="Templates\T4\Java\OData\EntityCollectionOperations.tt" />
     <EmbeddedResource Include="Templates\T4\Java\OData\EntityFetcher.tt" />
     <EmbeddedResource Include="Templates\T4\Java\OData\EntityOperations.tt" />
-    <EmbeddedResource Include="Templates\T4\Java\OData\EntryPoint.tt" />
+    <EmbeddedResource Include="Templates\T4\Java\OData\EntityClient.tt" />
     <None Include="Templates.json" />
     <EmbeddedResource Include="Templates\T4\ObjectiveC\Models\headers\ComplexType.tt" />
     <EmbeddedResource Include="Templates\T4\ObjectiveC\Models\headers\EntityType.tt" />

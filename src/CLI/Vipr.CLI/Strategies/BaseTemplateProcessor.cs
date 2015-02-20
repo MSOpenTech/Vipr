@@ -21,7 +21,7 @@ namespace Vipr.CLI.Strategies
         public const string EntityCollectionOperation = "EntityCollectionOperations";
         public const string EntityFetcher = "EntityFetcher";
         public const string EntityOperations = "EntityOperations";
-        public const string EntryPoint = "EntryPoint";
+        public const string EntryPoint = "EntityClient";
 
         protected readonly IFileWriter FileWriter;
         protected readonly Engine Engine;
@@ -109,9 +109,9 @@ namespace Vipr.CLI.Strategies
             }
         }
 
-		protected CustomHost GetCustomHost(Template template, OdcmObject odcmObject)
+        protected CustomHost GetCustomHost(Template template, OdcmObject odcmObject)
         {
-            if(_hostIntance == null)
+            if (_hostIntance == null)
                 _hostIntance = new CustomHost(StrategyName, odcmObject);
 
             _hostIntance.BaseTemplatePath = BaseFilePath;
@@ -122,7 +122,7 @@ namespace Vipr.CLI.Strategies
             return _hostIntance;
         }
 
-		protected virtual void ProcessTemplate(Template template, OdcmObject odcmObject)
+        protected virtual void ProcessTemplate(Template template, OdcmObject odcmObject)
         {
             var host = GetCustomHost(template, odcmObject);
 

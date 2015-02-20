@@ -4,11 +4,12 @@
 <#
 
 CustomHost host = (CustomHost)Host;
+OdcmModel model = host.Model;
 OdcmClass entity = host.OdcmType.AsOdcmClass();
 
 #>
 <#=GetCommentHeader()#>
-package <#=entity.Namespace.ToLower()#>;
+package <#=model.NamespaceName().ToLower()#>;
 <#
     string extends = entity.Base == null ? " extends ODataBaseEntity" : " extends " + entity.Base.Name.Substring(entity.Base.Name.LastIndexOf(".") +1);
 #>
