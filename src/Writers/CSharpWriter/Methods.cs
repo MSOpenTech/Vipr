@@ -105,7 +105,7 @@ namespace CSharpWriter
             };
         }
 
-        public static IEnumerable<Method> Emtpy { get { return Enumerable.Empty<Method>(); } }
+        public static IEnumerable<Method> Empty { get { return Enumerable.Empty<Method>(); } }
 
         private static IEnumerable<Method> ForEntityType(OdcmClass odcmClass)
         {
@@ -115,7 +115,7 @@ namespace CSharpWriter
         private static IEnumerable<Method> ForFetcherUpcasts(OdcmClass odcmClass)
         {
             return ConfigurationService.Settings.OmitFetcherUpcastMethods
-                ? Methods.Emtpy
+                ? Methods.Empty
                 : odcmClass.NestedDerivedTypes()
                     .Select(dr => new FetcherUpcastMethod(odcmClass, dr));
         }
@@ -130,7 +130,7 @@ namespace CSharpWriter
         private static IEnumerable<Method> ForConcreteUpcasts(OdcmClass odcmClass)
         {
             return ConfigurationService.Settings.OmitFetcherUpcastMethods
-                ? Methods.Emtpy
+                ? Methods.Empty
                 : odcmClass.NestedDerivedTypes()
                     .Select(dr => new ConcreteUpcastMethod(odcmClass, dr));
         }
@@ -143,6 +143,11 @@ namespace CSharpWriter
         private static IEnumerable<Method> GetMethodsBoundToEntityType(OdcmClass odcmClass)
         {
             return odcmClass.Methods.Where(m => !m.IsBoundToCollection).Select(Method.ForEntityType);
+        }
+
+        public static IEnumerable<Method> ForCountableCollectionInterface(OdcmClass odcmClass)
+        {
+            return new[] { new CollectionCountAsyncMethod() };
         }
     }
 }
