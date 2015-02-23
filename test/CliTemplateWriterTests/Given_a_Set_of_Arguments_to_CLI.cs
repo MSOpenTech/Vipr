@@ -77,6 +77,16 @@ namespace CliTemplateWriterTests
         }
 
         [Fact]
+        public void When_passing_specific_Arguments_should_procces_files_metadata()
+        {
+            var args = "--language=java --inputFile=Metadata\\files.xml --outputDir=Out".Split(' ');
+            var builder = new ConfigurationBuilder().WithConfiguration(new FilesConfiguration())
+                                                    .WithArguments(args);
+            var entrypoint = new CLIEntryPoint(builder, new TemplateProcessorManager());
+            entrypoint.Process();
+        }
+
+        [Fact]
         public void When_passing_specific_Arguments_should_procces_templates_objc()
         {
             var args = "--language=objectivec --inputFile=Metadata\\Exchange.edmx.xml --outputDir=Out".Split(' ');
