@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
-using Vipr.CLI.Output;
+using TemplateWriter.Output;
 using Vipr.Core.CodeModel;
 
-namespace Vipr.CLI.Strategies
+namespace TemplateWriter.Strategies
 {
 	public class ObjectiveCTemplateProcessor : BaseTemplateProcessor
 	{

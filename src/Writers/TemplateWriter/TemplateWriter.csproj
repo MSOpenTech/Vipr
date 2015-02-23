@@ -53,14 +53,31 @@
     <Compile Include="ConfigArguments.cs" />
     <Compile Include="ConfigurationService.cs" />
     <Compile Include="CustomHost.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Helpers\Java\PropertyHelper.cs" />
     <Compile Include="Helpers\Java\StringExtensions.cs" />
     <Compile Include="Helpers\ObjectiveC\PropertyHelper.cs" />
     <Compile Include="Helpers\Swift\PropertyHelper.cs" />
     <Compile Include="IConfigArguments.cs" />
     <Compile Include="ITemplateConfiguration.cs" />
+    <Compile Include="ITemplateProcessorManager.cs" />
+    <Compile Include="ITemplateSourceReader.cs" />
+    <Compile Include="ITemplateTempLocationFileWriter.cs" />
     <Compile Include="OdcmModelExtensions.cs" />
+    <Compile Include="Output\BaseFileWriter.cs" />
+    <Compile Include="Output\IFileWriter.cs" />
+    <Compile Include="Output\JavaFileWriter.cs" />
+    <Compile Include="Output\ObjectiveCFileWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Strategies\BaseTemplateProcessor.cs" />
+    <Compile Include="Strategies\ITemplateProcessor.cs" />
+    <Compile Include="Strategies\JavaTemplateProcessor.cs" />
+    <Compile Include="Strategies\ObjectiveCTemplateProcessor.cs" />
+    <Compile Include="Template.cs" />
+    <Compile Include="TemplateProcessorManager.cs" />
+    <Compile Include="TemplateSourceReader.cs" />
+    <Compile Include="TemplateTempLocationFileWriter.cs" />
+    <Compile Include="TemplateType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -73,7 +90,6 @@
     <EmbeddedResource Include="Templates\T4\Java\OData\EntityFetcher.tt" />
     <EmbeddedResource Include="Templates\T4\Java\OData\EntityOperations.tt" />
     <EmbeddedResource Include="Templates\T4\Java\OData\EntityClient.tt" />
-    <None Include="Templates.json" />
     <EmbeddedResource Include="Templates\T4\ObjectiveC\Models\headers\ComplexType.tt" />
     <EmbeddedResource Include="Templates\T4\ObjectiveC\Models\headers\EntityType.tt" />
     <EmbeddedResource Include="Templates\T4\ObjectiveC\Models\headers\EnumType.tt" />

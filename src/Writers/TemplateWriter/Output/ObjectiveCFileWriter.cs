@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Text;
-using System.Threading.Tasks;
-using TemplateWriter;
 using Vipr.Core.CodeModel;
 
-namespace Vipr.CLI.Output
+namespace TemplateWriter.Output
 {
 	class ObjectiveCFileWriter : BaseFileWriter
 	{
