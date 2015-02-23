@@ -46,7 +46,8 @@ namespace Vipr.CLI.Configuration
 
         public IConfigurationBuilder WithConfiguration(ITemplateConfiguration configuration)
         {
-            _configuration = configuration;
+            ConfigurationService.Initialize(configuration);
+            _configuration = ConfigurationService.Configuration;
             return this;
         }
 

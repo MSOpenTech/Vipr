@@ -8,5 +8,10 @@ namespace TemplateWriter.Extensions
         {
             return source.IndexOf(compare, comparison) >= 0;
         }
+
+        public static string Singularize(this string source)
+        {
+            return Inflector.Inflector.Singularize(source);
+        }
     }
 }

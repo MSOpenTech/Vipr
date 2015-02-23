@@ -17,8 +17,8 @@ namespace TemplateWriter.Helpers.Java
 
         public static string Singularize(this string input)
         {
-            return Inflector.Inflector.Singularize(input);
+            var output = Inflector.Inflector.Singularize(input);
+            return output ?? string.Empty;
         }
     }
 }
-    

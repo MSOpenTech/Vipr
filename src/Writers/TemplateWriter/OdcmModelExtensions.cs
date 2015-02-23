@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using Vipr.Core.CodeModel;
 
 namespace TemplateWriter
@@ -20,7 +19,7 @@ namespace TemplateWriter
                                            .ToList();
             if (filtered.Count() > 1)
             {
-                return model.Namespaces.Find(x => String.Equals(x.Name,ConfigurationService.PrimaryNamespaceName,
+                return model.Namespaces.Find(x => String.Equals(x.Name, ConfigurationService.PrimaryNamespaceName,
                     StringComparison.InvariantCultureIgnoreCase));
             }
             return filtered.Single();
