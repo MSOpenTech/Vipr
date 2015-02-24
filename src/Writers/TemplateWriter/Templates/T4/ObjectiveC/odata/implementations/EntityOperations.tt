@@ -41,7 +41,7 @@ if(entity.HasActions())
 
 	NSURLSessionDataTask* task = [super oDataExecuteWithRequest:request callback:^(id<MSODataResponse> r, MSODataException *error) {
        if(error == nil){
-			<#=GetType(action.ReturnType)#> result = (<#=GetType(action.ReturnType)#>)[[[self getResolver]getJsonSerializer] deserialize:[r getPayload] : <#=clazz#>];
+			<#=GetTypeForAction(action)#> result = (<#=GetTypeForAction(action)#>)[[[self getResolver]getJsonSerializer] deserialize:[r getPayload] : <#=clazz#>];
             callback(result, error);
         }
         else{
@@ -61,8 +61,9 @@ if(entity.HasActions())
 	<#=GetParametersToJson(action.Parameters)#>
 
 	NSURLSessionDataTask* task = [self <#= action.Name.ToLowerFirstChar() #>Raw <#=GetParametersForRawCall(action.Parameters.Select(p => p.Name))#> :^(NSString *returnValue, MSODataException *error){
-       if(error == nil){
-			<#=GetType(action.ReturnType)#> result = (<#=GetType(action.ReturnType)#>)[[[self getResolver]getJsonSerializer] deserialize:[returnValue dataUsingEncoding:NSUTF8StringEncoding] : <#=clazz#>];
+       
+	   if(error == nil){
+			<#=GetTypeForAction(action)#> result = (<#=GetTypeForAction(action)#>)[[[self getResolver]getJsonSerializer] deserialize:[returnValue dataUsingEncoding:NSUTF8StringEncoding] : <#=clazz#>];
             callback(result, error);
         }
         else{
@@ -76,12 +77,15 @@ if(entity.HasActions())
 <#=GetMethodHeaderRaw(action)#>{
 
 	id<MSODataRequest> request = [[self getResolver] createODataRequest];
+	
 	<#=GetParametersToJsonRaw(action.Parameters.Select(p => p.Name))#>
+	
 	[[request getUrl] appendPathComponent:@"<#= action.Name#>"];
 	[request setVerb:POST];
 
 	NSURLSessionDataTask* task = [super oDataExecuteWithRequest:request callback:^(id<MSODataResponse> r, MSODataException *error) {
-        if(error == nil){
+        
+		if(error == nil){
             callback([[NSString alloc] initWithData:[r getPayload] encoding:NSUTF8StringEncoding], error);
         }
         else{

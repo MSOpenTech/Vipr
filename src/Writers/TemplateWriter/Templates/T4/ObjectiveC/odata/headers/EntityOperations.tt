@@ -13,7 +13,12 @@ string baseEntity = entity.Base == null ? "MSODataOperations"
 #>
 					  		
 #import <office365_odata_base/office365_odata_base.h>
-#import "<#=GetPrefix()#>Models".h"
+#import "<#=GetPrefix()#>Models.h"
+<#if(entity.Base != null){
+#>
+#import "<#=baseEntity#>.h"
+<#
+}#>
 
 <#=GetHeaderDoc(entityName)#>
 @interface <#=entityName#> : <#=baseEntity#>

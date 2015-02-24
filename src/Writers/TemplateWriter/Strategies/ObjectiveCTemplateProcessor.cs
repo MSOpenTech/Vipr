@@ -15,11 +15,29 @@ namespace TemplateWriter.Strategies
 			Templates.Add("Protocols", ProcessSimpleFile);
 			Templates.Add("ODataEntities", ProcessSimpleFile);
 			Templates.Add("EntityCollectionFetcher", EntityTypes);
+			Templates.Add("EntryPoint", ProcessEntryPoint);
 		}
 
 		void ProcessSimpleFile(Template template)
 		{
 			ProcessTemplate(template, null);
+		}
+
+		void ProcessEntryPoint(Template template)
+		{
+			var host = GetCustomHost(template, Model.EntityContainer);
+
+			var templateContent = File.ReadAllText(host.TemplateFile);
+			var output = Engine.ProcessTemplate(templateContent, host);
+
+			if (host.Errors != null && host.Errors.HasErrors)
+			{
+				var errors = LogErrors(host, template);
+				throw new InvalidOperationException(errors);
+			}
+
+			FileWriter.WriteText(template, string.Format("{0}{1}{2}", "MS",
+				host.Model.EntityContainer.Name, "Client"), output);
 		}
 
 		protected override void ProcessTemplate(Template template, OdcmObject odcmObject)
@@ -35,9 +53,10 @@ namespace TemplateWriter.Strategies
 				throw new InvalidOperationException(errors);
 			}
 
-			FileWriter.WriteText(template, string.Format("{0}{1}{2}", "MSO", //TODO: Prefix should be in the configuration
-				host.Model.EntityContainer.Namespace.Split('.')[1], odcmObject == null 
-				? template.Name :odcmObject.Name ) , output);
+			FileWriter.WriteText(template, string.Format("{0}{1}{2}", "MS", 
+				//TODO: Prefix should be in the configuration
+				host.Model.EntityContainer.Name, odcmObject == null 
+				? template.Name : odcmObject.Name ) , output);
 		}
 	}
 }

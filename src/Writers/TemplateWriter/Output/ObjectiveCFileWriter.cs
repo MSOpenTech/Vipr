@@ -1,12 +1,14 @@
 ﻿using System.IO;
 using System.Text;
+using TemplateWriter;
 using Vipr.Core.CodeModel;
 
 namespace TemplateWriter.Output
 {
 	class ObjectiveCFileWriter : BaseFileWriter
 	{
-		public ObjectiveCFileWriter(OdcmModel model, IConfigArguments configuration) : base(model, configuration)
+		public ObjectiveCFileWriter(OdcmModel model, IConfigArguments configuration)
+			: base(model, configuration)
 		{
 		}
 
@@ -37,5 +39,14 @@ namespace TemplateWriter.Output
 				writer.Write(text);
 			}
 		}
+
+		protected override string FileName(Template template, string identifier)
+		{
+			return template.Name.Contains("Entity")
+				? (template.FolderName == "odata"
+					? template.Name.Replace("Entity", identifier)
+					: identifier)
+					: identifier;
+		}
 	}
-}	
+}
