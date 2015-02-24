@@ -34,7 +34,7 @@ namespace TemplateWriter
         public static IEnumerable<OdcmClass> GetEntityTypes(this OdcmModel model)
         {
             var @namespace = GetOdcmNamespace(model);
-            return @namespace.Classes.Where(x => x.Kind == OdcmClassKind.Entity);
+            return @namespace.Classes.Where(x => x.Kind == OdcmClassKind.Entity || x.Kind == OdcmClassKind.MediaEntity);
         }
 
         public static IEnumerable<OdcmEnum> GetEnumTypes(this OdcmModel model)

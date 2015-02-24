@@ -79,7 +79,7 @@ namespace TemplateWriter.Strategies
                 throw new InvalidOperationException(errors);
             }
 
-            FileWriter.WriteText(template, Model.EntityContainer.Name, output);
+            FileWriter.WriteText(template, template.Name, output);
         }
 
         private void EnumTypes(Template template)
