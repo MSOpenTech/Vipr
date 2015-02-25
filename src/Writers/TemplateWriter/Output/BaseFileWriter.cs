@@ -28,10 +28,10 @@ namespace TemplateWriter.Output
 
         public virtual void WriteText(Template template, string fileName, string text)
         {
-            var destPath = string.Format("{0}{1}", Path.DirectorySeparatorChar, Configuration.OutputDirectory);
+            var destPath = string.Format("{0}{1}", Configuration.OutputDirectory, Path.DirectorySeparatorChar);
             var identifier = FileName(template, fileName);
-            var fullPath = Path.Combine(destPath, destPath);
-            var filePath = Path.Combine(fullPath, string.Format("{0}{1}", identifier, FileExtension));
+            // var fullPath = Path.Combine(destPath, destPath);
+            var filePath = Path.Combine(destPath, string.Format("{0}{1}", identifier, FileExtension));
 
             using (var writer = new StreamWriter(filePath, false, Encoding.ASCII))
             {
