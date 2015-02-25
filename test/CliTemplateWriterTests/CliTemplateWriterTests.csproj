@@ -73,6 +73,8 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="DirectoryConfiguration.cs" />
+    <Compile Include="DisoveryConfiguration.cs" />
     <Compile Include="FilesConfiguration.cs" />
     <Compile Include="Given_a_Set_of_Arguments_to_CLI.cs" />
     <Compile Include="Given_a_Single_File_Processing_Strategy.cs" />
