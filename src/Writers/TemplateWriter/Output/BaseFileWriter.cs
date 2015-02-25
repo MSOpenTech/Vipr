@@ -7,14 +7,14 @@ namespace TemplateWriter.Output
     public class BaseFileWriter : IFileWriter
     {
         protected readonly OdcmModel Model;
-        protected readonly IConfigArguments Configuration;
+        protected readonly TemplateWriterConfiguration Configuration;
 
         public string FileExtension
         {
             get { return ".txt"; }
         }
 
-        public BaseFileWriter(OdcmModel model, IConfigArguments configuration)
+        public BaseFileWriter(OdcmModel model, TemplateWriterConfiguration configuration)
         {
             Model = model;
             Configuration = configuration;
@@ -28,7 +28,7 @@ namespace TemplateWriter.Output
 
         public virtual void WriteText(Template template, string fileName, string text)
         {
-            var destPath = string.Format("{0}{1}", Path.DirectorySeparatorChar, Configuration.BuilderArguments.OutputDir);
+            var destPath = string.Format("{0}{1}", Path.DirectorySeparatorChar, Configuration.OutputDirectory);
             var identifier = FileName(template, fileName);
             var fullPath = Path.Combine(destPath, destPath);
             var filePath = Path.Combine(fullPath, string.Format("{0}{1}", identifier, FileExtension));

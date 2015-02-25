@@ -4,50 +4,40 @@ using TemplateWriter;
 
 namespace Vipr.CLI.Configuration
 {
+    /// <summary>
+    /// This class builds writer and writer instance configs based on command-line parameters.
+    /// These configs will be passed to TemplateProcessors to parameterize generation of code.
+    /// </summary>
     public class ConfigurationBuilder : IConfigurationBuilder
     {
-        private ITemplateConfiguration _configuration;
-        private readonly BuilderArguments _arguments;
-
-        public OptionSet OptionSet { get; private set; }
+        private TemplateWriterConfiguration _configuration;
+        private OptionSet optionSet;
 
         public ConfigurationBuilder()
         {
-            _arguments = new BuilderArguments();
+            _configuration = new TemplateWriterConfiguration();
+
+            optionSet = new OptionSet {
+                {"h|help", "Shows help", v => _configuration.ShowHelp = v != null},
+                {"lang|language=", string.Format("Lang to generate (required). Available langs: {0}", _configuration.AvailableLanguages),
+                    v => _configuration.TargetLanguage = v
+                },
+                {"in|inputFile=", "API metadata file", v => _configuration.InputFile = v},
+                {"out|outputDir=", "Directory in which to save the generated files (required).", v => _configuration.OutputDirectory = v},
+                {"p|plugins=", "Alternative configurations (optional).", v => _configuration.Plugins = v.Split(',')},
+            };
         }
 
         public IConfigurationBuilder WithArguments(params string[] args)
         {
-            CreateOptionSet(args);
+            optionSet.Parse(args);
             return this;
         }
 
-        public void CreateOptionSet(params string[] args)
-        {
-            if (_configuration == null)
-            {
-                //TODO: Load default config? fallback to default settings?
-            }
 
-            Debug.Assert(_configuration != null, "_configuration != null");
-            OptionSet = new OptionSet
-            {
-                {"h|help", "Shows help", v => _arguments.ShowHelp = v != null},
-                {
-                    "lang|language=", string.Format("Language to generate(required) :{0}", _configuration.Languages),
-                    v => _arguments.Language = v
-                },
-                {"in|inputFile=", "OData Metadata file", v => _arguments.InputFile = v},
-                {"out|outputDir=", "Directory to save the generated files(required).", v => _arguments.OutputDir = v},
-                {"p|plugins=", "Diferents configurations.(optional)", v => _arguments.Plugins = v.Split(',')},
-            };
-            OptionSet.Parse(args);
-        }
-
-        public IConfigurationBuilder WithConfiguration(ITemplateConfiguration configuration)
+        public IConfigurationBuilder WithConfiguration(TemplateWriterConfiguration configuration)
         {
-            ConfigurationService.Initialize(configuration);
-            _configuration = ConfigurationService.Configuration;
+            _configuration = configuration;
             return this;
         }
 
@@ -61,14 +51,11 @@ namespace Vipr.CLI.Configuration
             return this;
         }
 
-        public IConfigArguments Build()
+        public TemplateWriterConfiguration Build()
         {
-            var configArguments = new ConfigArguments
-            {
-                BuilderArguments = _arguments,
-                TemplateConfiguration = _configuration //TODO: Static Config
-            };
-            return configArguments;
+            _configuration.PrimaryNamespaceName = _configuration.PrimaryNamespaceName ?? TemplateWriterConfiguration.Default.PrimaryNamespaceName;
+            _configuration.NamespacePrefix = _configuration.NamespacePrefix ?? TemplateWriterConfiguration.Default.NamespacePrefix;
+            return _configuration;
         }
     }
 }

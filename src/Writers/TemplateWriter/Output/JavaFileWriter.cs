@@ -7,7 +7,7 @@ namespace TemplateWriter.Output
 {
     public class JavaFileWriter : BaseFileWriter
     {
-        public JavaFileWriter(OdcmModel model, IConfigArguments configuration)
+        public JavaFileWriter(OdcmModel model, TemplateWriterConfiguration configuration)
             : base(model, configuration)
         {
         }
@@ -19,7 +19,7 @@ namespace TemplateWriter.Output
 
         public override void WriteText(Template template, string fileName, string text)
         {
-            var destPath = string.Format("{0}{1}", Path.DirectorySeparatorChar, Configuration.BuilderArguments.OutputDir);
+            var destPath = string.Format("{0}{1}", Path.DirectorySeparatorChar, Configuration.OutputDirectory);
 
             var @namespace = template.TemplateType == TemplateType.Model ? CreateNamespace(string.Empty).ToLower()
                                                                          : CreateNamespace(template.FolderName).ToLower();
@@ -38,7 +38,7 @@ namespace TemplateWriter.Output
         private string CreateNamespace(string folderName)
         {
             var @namespace = Model.GetNamespace();
-            var prefix = Configuration.TemplateConfiguration.NamespacePrefix;
+            var prefix = Configuration.NamespacePrefix;
 
             if (string.IsNullOrEmpty(folderName))
             {

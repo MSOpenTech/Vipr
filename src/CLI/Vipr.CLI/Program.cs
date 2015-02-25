@@ -13,8 +13,11 @@ namespace Vipr.CLI
         {
 			try
             {
-                var builder = new ConfigurationBuilder().WithArguments(args);
-                var entrypoint = new CLIEntryPoint(builder, new TemplateProcessorManager());
+                var config = new ConfigurationBuilder().WithArguments(args).Build();
+                if (config.ShowHelp) {
+                    //TODO show help and exit
+                }
+                var entrypoint = new CLIEntryPoint(config, new TemplateProcessorManager());
                 entrypoint.Process();
 
             }

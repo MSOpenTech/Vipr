@@ -7,7 +7,7 @@ namespace TemplateWriter.Output
 {
 	class ObjectiveCFileWriter : BaseFileWriter
 	{
-		public ObjectiveCFileWriter(OdcmModel model, IConfigArguments configuration)
+		public ObjectiveCFileWriter(OdcmModel model, TemplateWriterConfiguration configuration)
 			: base(model, configuration)
 		{
 		}
@@ -16,7 +16,7 @@ namespace TemplateWriter.Output
 
 		public override void WriteText(Template template, string fileName, string text)
 		{
-			var destPath = string.Format("{0}{1}", Path.DirectorySeparatorChar, Configuration.BuilderArguments.OutputDir);
+			var destPath = string.Format("{0}{1}", Path.DirectorySeparatorChar, Configuration.OutputDirectory);
 
 			var identifier = FileName(template, fileName);
 

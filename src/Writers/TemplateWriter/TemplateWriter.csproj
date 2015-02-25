@@ -49,35 +49,32 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BuilderArguments.cs" />
-    <Compile Include="ConfigArguments.cs" />
     <Compile Include="ConfigurationService.cs" />
+    <Compile Include="TemplateProcessors\BaseTemplateProcessor.cs" />
+    <Compile Include="TemplateProcessors\ITemplateProcessor.cs" />
+    <Compile Include="TemplateProcessors\JavaTemplateProcessor.cs" />
+    <Compile Include="TemplateProcessors\ObjectiveCTemplateProcessor.cs" />
+    <Compile Include="TemplateProcessors\TemplateProcessorManager.cs" />
     <Compile Include="CustomHost.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Helpers\Java\PropertyHelper.cs" />
     <Compile Include="Helpers\Java\StringExtensions.cs" />
     <Compile Include="Helpers\ObjectiveC\PropertyHelper.cs" />
     <Compile Include="Helpers\Swift\PropertyHelper.cs" />
-    <Compile Include="IConfigArguments.cs" />
-    <Compile Include="ITemplateConfiguration.cs" />
-    <Compile Include="ITemplateProcessorManager.cs" />
-    <Compile Include="ITemplateSourceReader.cs" />
-    <Compile Include="ITemplateTempLocationFileWriter.cs" />
-    <Compile Include="OdcmModelExtensions.cs" />
+    <Compile Include="TemplateWriterConfiguration.cs" />
+    <Compile Include="TemplateProcessors\ITemplateProcessorManager.cs" />
+    <Compile Include="Templates\ITemplateSourceReader.cs" />
+    <Compile Include="Templates\ITemplateTempLocationFileWriter.cs" />
+    <Compile Include="Extensions\OdcmModelExtensions.cs" />
     <Compile Include="Output\BaseFileWriter.cs" />
     <Compile Include="Output\IFileWriter.cs" />
     <Compile Include="Output\JavaFileWriter.cs" />
     <Compile Include="Output\ObjectiveCFileWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Strategies\BaseTemplateProcessor.cs" />
-    <Compile Include="Strategies\ITemplateProcessor.cs" />
-    <Compile Include="Strategies\JavaTemplateProcessor.cs" />
-    <Compile Include="Strategies\ObjectiveCTemplateProcessor.cs" />
-    <Compile Include="Template.cs" />
-    <Compile Include="TemplateProcessorManager.cs" />
-    <Compile Include="TemplateSourceReader.cs" />
-    <Compile Include="TemplateTempLocationFileWriter.cs" />
-    <Compile Include="TemplateType.cs" />
+    <Compile Include="Templates\Template.cs" />
+    <Compile Include="Templates\TemplateSourceReader.cs" />
+    <Compile Include="Templates\TemplateTempLocationFileWriter.cs" />
+    <Compile Include="Templates\TemplateType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
