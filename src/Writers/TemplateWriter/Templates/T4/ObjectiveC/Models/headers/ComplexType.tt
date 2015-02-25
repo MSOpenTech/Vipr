@@ -12,14 +12,31 @@ var entity = host.OdcmType.AsOdcmClass();
 <#=GetInterfaceLine(entity)#>
 
 <#
+if(entity.Base == null)
+{
+
+#>
+@property NSString *$$__ODataType;
+<#
+}
 
 foreach(var prop in entity.Properties)
 {
+	if(prop.Type is OdcmEnum && !prop.IsCollection){
+
+		var propertyString = string.Format("{0} {1}", prop.GetFullType(), GetName(prop.Name));
+#>
+@property <#=propertyString#>;
+-(void)set<#=prop.Name#>String:(NSString*)value;
+<#
+	}
+	else
+	{
 
 #>
 @property <#=prop.ToPropertyString()#>;
 <#			
-
+	}
 }
 
 #>

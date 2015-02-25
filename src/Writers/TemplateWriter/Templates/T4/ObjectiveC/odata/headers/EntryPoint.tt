@@ -2,6 +2,7 @@
 <#@ include file="BaseTemplate.tt"#>
 <#@ output extension="\\" #>
 <#=GetCommentHeader()#>
+
 <#
 CustomHost host = (CustomHost)Host;
 OdcmModel model = host.Model;
@@ -21,7 +22,7 @@ foreach(var propertyClass in clasess)
 {
 
 #>
-<#=propertyClass#>
+@class <#=propertyClass#>
 <#
 
 }
@@ -29,7 +30,7 @@ foreach(var propertyClass in clasess)
 #>
 
 #import <office365_odata_base/office365_odata_base.h>
-#import "<#=GetPrefix()#>Models".h"
+#import "<#=GetPrefix()#>Models.h"
 
 <#=GetHeaderDoc(entityName)#>
 @interface <#=entityName#> : MSODataBaseContainer
@@ -57,4 +58,5 @@ foreach(var prop in containerProps)
 }
 
 #>
+
 @end

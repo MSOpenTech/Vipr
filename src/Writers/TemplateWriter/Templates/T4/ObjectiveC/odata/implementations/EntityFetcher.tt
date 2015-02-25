@@ -43,11 +43,11 @@ foreach(var prop in entity.NavigationProperties())
 	{
 #>
 -(<#=GetPrefix() + prop.Type.Name#>CollectionFetcher*) get<#=prop.Name#>{
-    return [[<#=GetPrefix() + prop.Type.Name#>CollectionFetcher alloc] initWithUrl:@"<#=prop.Name#>" parent:self andEntityClass:[<#=GetPrefix() + prop.Type#> class]];
+    return [[<#=GetPrefix() + prop.Type.Name#>CollectionFetcher alloc] initWithUrl:@"<#=prop.Name#>" parent:self andEntityClass:[<#=GetPrefix() + prop.Type.Name#> class]];
 }
 
 -(id<<#=GetPrefix() + prop.Type.Name#>Fetcher>) get<#=prop.Name#>ById : (NSString*)_id{
-    return [[[<#=GetPrefix() + prop.Type.Name#>CollectionFetcher alloc] initWithUrl:@"<#=prop.Name#>" parent:self andEntityClass:[<#=GetPrefix() + prop.Type#> class]] getById:_id];
+    return [[[<#=GetPrefix() + prop.Type.Name#>CollectionFetcher alloc] initWithUrl:@"<#=prop.Name#>" parent:self andEntityClass:[<#=GetPrefix() + prop.Type.Name#> class]] getById:_id];
 }
 <#
 	}

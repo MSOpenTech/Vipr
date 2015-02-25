@@ -10,7 +10,7 @@ var entity = host.OdcmType.AsOdcmEnum();
 
 @interface NSObject ()
 
-typedef enum {
+typedef NS_ENUM(NSInteger, <#=GetPrefix() + entity.Name #>){
 
 <#
 
@@ -27,6 +27,6 @@ string value = entity.Members[i -1].Name + (i == entity.Members.Count ? string.E
 
 #>
 
-} <#=GetPrefix() + entity.Name #>;
+};
 
 @end

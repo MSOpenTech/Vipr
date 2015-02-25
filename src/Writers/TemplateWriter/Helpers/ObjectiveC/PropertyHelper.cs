@@ -4,13 +4,15 @@ using Vipr.Core.CodeModel;
 
 namespace TemplateWriter.Helpers.ObjectiveC
 {
-	public static class PropertyHelperIsSystem
+	public static class PropertyHelper
 	{
+		public static string Prefix = "";
+
 		public static string GetTypeString(this OdcmType type)
 		{
 			if (type == null)
 			{
-				return "error!";
+				return "int";
 			}
 			switch (type.Name)
 			{
@@ -25,13 +27,13 @@ namespace TemplateWriter.Helpers.ObjectiveC
 			case "DateTimeOffset":
 				return "NSDate";
 			case "Binary":
-				return "Byte";
+				return "NSData";
 			case "Boolean":
-				return "bool";
+				return "BOOL";
 			case "Stream":
 				return "NSStream";
 			default:
-				return "MSO" + type.FullName.Substring(type.FullName.LastIndexOf('.') +1); //TODO: MSO Prefix should be configurable
+				return Prefix + type.Name;
 			}
 		}
 
@@ -43,25 +45,34 @@ namespace TemplateWriter.Helpers.ObjectiveC
 		public static bool IsComplex(this OdcmProperty property)
 		{
 			string t = property.GetTypeString();
-			return !(t == "int" || t == "bool" || t == "Byte");
+			return !(t == "int" || t == "BOOL" || t == "Byte");
 		}
 
 		public static bool IsComplex(this OdcmType type)
 		{
 			string t = type.GetTypeString();
-			return !(t == "int" || t == "bool" || t == "Byte");
+			return !(t == "int" || t == "BOOL" || t == "Byte");
 		}
 
 		public static string ToPropertyString(this OdcmProperty property)
 		{
-			return string.Format("{0} {1}{2}", property.GetFullType(), (property.IsComplex() ? "*" : string.Empty), property.Name);
+			return string.Format("{0} {1}{2}",property.GetFullType(), (property.IsComplex() ? "*" : string.Empty), GetName(property.Name));
+		}
+
+		public static string GetName(string name)
+		{
+			if (name.Trim() == "description") return "$$__description";
+
+			if (name.Trim() == "default") return "$$__default";
+
+			return name;
 		}
 
 		public static string GetFullType(this OdcmProperty property)
 		{
 			string result;
 			if (property.IsCollection)
-				result = !property.IsSystem() ? 
+				result = !property.IsSystem() && property.GetTypeString() != "NSData" ? 
 					string.Format("NSMutableArray<{0}>", property.GetTypeString()) : "NSMutableArray";
 			else
 				result = property.GetTypeString();
@@ -77,13 +88,13 @@ namespace TemplateWriter.Helpers.ObjectiveC
 		public static bool IsSystem(this OdcmProperty property)
 		{
 			string t = property.GetTypeString();
-			return (t == "int" || t == "bool" || t == "Byte" || t == "NSString" || t == "NSDate");
+			return (t == "int" || t == "BOOL" || t == "Byte" || t == "NSString" || t == "NSDate");
 		}
 
 		public static bool IsSystem(this OdcmType type)
 		{
 			string t = type.GetTypeString();
-			return (t == "int" || t == "bool" || t == "Byte" || t == "NSString" || t == "NSDate");
+			return (t == "int" || t == "BOOL" || t == "Byte" || t == "NSString" || t == "NSDate");
 		}
 
 		public static string GetToLowerFirstCharName(this OdcmProperty property)
