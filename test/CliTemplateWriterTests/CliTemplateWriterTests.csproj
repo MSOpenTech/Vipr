@@ -78,6 +78,7 @@
     <Compile Include="FilesConfiguration.cs" />
     <Compile Include="Given_a_Set_of_Arguments_to_CLI.cs" />
     <Compile Include="Given_a_Single_File_Processing_Strategy.cs" />
+    <Compile Include="Java_Output_Integration_Tests.cs" />
     <Compile Include="OneNoteConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ExchangeConfiguration.cs" />
@@ -144,9 +145,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Metadata\outlook.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Metadata\SampleService.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

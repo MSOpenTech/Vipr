@@ -37,15 +37,15 @@ namespace CliTemplateWriterTests
             entrypoint.Process();
         }
 
-        [Fact]
-        public void When_passing_specific_Arguments_should_procces_directory_metadata()
-        {
-            var args = "--language=java --inputFile=Metadata\\aad_graph_v15_augmented_v4.xml --outputDir=Out".Split(' ');
-            var builder = new ConfigurationBuilder().WithConfiguration(new DirectoryConfiguration())
-                                                    .WithArguments(args);
-            var entrypoint = new CLIEntryPoint(builder, new TemplateProcessorManager());
-            entrypoint.Process();
-        }
+        //[Fact]
+        //public void When_passing_specific_Arguments_should_procces_directory_metadata()
+        //{
+        //    var args = "--language=java --inputFile=Metadata\\aad_graph_v15_augmented_v4.xml --outputDir=Out".Split(' ');
+        //    var builder = new ConfigurationBuilder().WithConfiguration(new DirectoryConfiguration())
+        //                                            .WithArguments(args);
+        //    var entrypoint = new CLIEntryPoint(builder, new TemplateProcessorManager());
+        //    entrypoint.Process();
+        //}
 
         [Fact]
         public void When_passing_specific_Arguments_should_procces_files_metadata()
