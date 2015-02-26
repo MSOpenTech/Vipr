@@ -13,10 +13,10 @@ namespace TemplateWriter
             _templateSourceReader = templateSourceReader;
         }
 
-        public IList<Template> WriteUsing(Type sourceType, BuilderArguments arguments)
+        public IList<Template> WriteUsing(Type sourceType, TemplateWriterConfiguration config)
         {
             var writtenTemplates = new List<Template>();
-            var templates = _templateSourceReader.Read(sourceType, arguments);
+            var templates = _templateSourceReader.Read(sourceType, config);
 
             foreach (var template in templates)
             {

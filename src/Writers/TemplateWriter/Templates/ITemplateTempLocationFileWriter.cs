@@ -5,6 +5,6 @@ namespace TemplateWriter
 {
     public interface ITemplateTempLocationFileWriter
     {
-        IList<Template> WriteUsing(Type sourceType, BuilderArguments arguments);
+        IList<Template> WriteUsing(Type sourceType, TemplateWriterConfiguration config);
     }
 }

@@ -7,16 +7,16 @@ namespace TemplateWriter
 {
     public class TemplateSourceReader : ITemplateSourceReader
     {
-        public IList<Template> Read(Type targetType, BuilderArguments arguments)
+        public IList<Template> Read(Type targetType, TemplateWriterConfiguration config)
         {
             var resourceNames = targetType.Assembly.GetManifestResourceNames();
-            var baseString = string.Format("{0}.Base", arguments.Language);
+            var baseString = string.Format("{0}.Base", config.TargetLanguage);
 
             return resourceNames.Select(resource =>
             {
                 var splits = resource.Split('.');
                 var name = splits.ElementAt(splits.Count() - 2);
-                var folderName = FolderName(resource, arguments);
+                var folderName = FolderName(resource, config);
 
                 return new Template(name, resource)
                 {
@@ -44,10 +44,10 @@ namespace TemplateWriter
             return TemplateType.Other;
         }
 
-        private string FolderName(string resourceName, BuilderArguments arguments)
+        private string FolderName(string resourceName, TemplateWriterConfiguration config)
         {
-            var modelLocation = string.Format("{0}.Models", arguments.Language);
-            var odataLocation = string.Format("{0}.OData", arguments.Language);
+            var modelLocation = string.Format("{0}.Models", config.TargetLanguage);
+            var odataLocation = string.Format("{0}.OData", config.TargetLanguage);
 
             if (resourceName.Contains(modelLocation, StringComparison.InvariantCultureIgnoreCase))
             {

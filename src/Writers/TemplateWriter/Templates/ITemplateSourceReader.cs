@@ -5,6 +5,6 @@ namespace TemplateWriter
 {
     public interface ITemplateSourceReader
     {
-        IList<Template> Read(Type targetType, BuilderArguments arguments);
+        IList<Template> Read(Type targetType, TemplateWriterConfiguration config);
     }
 }

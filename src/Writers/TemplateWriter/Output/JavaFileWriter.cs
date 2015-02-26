@@ -7,7 +7,7 @@ namespace TemplateWriter.Output
 {
     public class JavaFileWriter : BaseFileWriter
     {
-        public JavaFileWriter(OdcmModel model, IConfigArguments configuration)
+        public JavaFileWriter(OdcmModel model, TemplateWriterConfiguration configuration)
             : base(model, configuration)
         {
         }
@@ -19,14 +19,19 @@ namespace TemplateWriter.Output
 
         public override void WriteText(Template template, string fileName, string text)
         {
-            var destPath = string.Format("{0}{1}", Path.DirectorySeparatorChar, Configuration.BuilderArguments.OutputDir);
-
+            // var destPath = string.Format("{0}{1}", Path.DirectorySeparatorChar, Configuration.OutputDirectory);
+            var destPath = Configuration.OutputDirectory;
             var @namespace = template.TemplateType == TemplateType.Model ? CreateNamespace(string.Empty).ToLower()
                                                                          : CreateNamespace(template.FolderName).ToLower();
 
             var pathFromNamespace = CreatePathFromNamespace(@namespace);
             var identifier = FileName(template, fileName);
             var fullPath = Path.Combine(destPath, pathFromNamespace);
+
+            if (!DirectoryExists(fullPath)) {
+                CreateDirectory(fullPath);
+            }
+            
             var filePath = Path.Combine(fullPath, string.Format("{0}{1}", identifier, FileExtension));
 
             using (var writer = new StreamWriter(filePath, false, Encoding.ASCII))
@@ -38,7 +43,7 @@ namespace TemplateWriter.Output
         private string CreateNamespace(string folderName)
         {
             var @namespace = Model.GetNamespace();
-            var prefix = Configuration.TemplateConfiguration.NamespacePrefix;
+            var prefix = Configuration.NamespacePrefix;
 
             if (string.IsNullOrEmpty(folderName))
             {
@@ -55,12 +60,9 @@ namespace TemplateWriter.Output
             var splittedPaths = @namespace.Split('.');
 
             var destinationPath = splittedPaths.Aggregate(string.Empty, (current, path) =>
-                                  current + string.Format("{0}{1}", Path.DirectorySeparatorChar, path));
+                                  current + string.Format("{0}{1}", path, Path.DirectorySeparatorChar));
 
-            if (!DirectoryExists(destinationPath))
-            {
-                CreateDirectory(destinationPath);
-            }
+
 
             return destinationPath;
         }
