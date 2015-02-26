@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using TemplateWriter.Templates;
 
-namespace TemplateWriter.Strategies
+namespace TemplateWriter.TemplateProcessors
 {
     interface ITemplateProcessor
     {

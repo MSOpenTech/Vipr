@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace TemplateWriter
+namespace TemplateWriter.Templates
 {
     public class TemplateTempLocationFileWriter : ITemplateTempLocationFileWriter
     {

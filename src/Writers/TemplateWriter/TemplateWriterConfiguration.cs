@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace TemplateWriter
 {
     public class TemplateWriterConfiguration
     {
-        public static TemplateWriterConfiguration Default = new TemplateWriterConfiguration() {
+        public static TemplateWriterConfiguration Default = new TemplateWriterConfiguration
+        {
             AvailableLanguages = new HashSet<string> { "java", "objectivec" },
             PrimaryNamespaceName = "com",
             NamespacePrefix = "MS"
@@ -22,7 +19,7 @@ namespace TemplateWriter
         public string PrimaryNamespaceName { get; set; }
 
         public string NamespacePrefix { get; set; }
-        
+
         public IReadOnlyDictionary<string, string> Parameters { get; set; }
 
         /// <summary>
@@ -38,7 +35,7 @@ namespace TemplateWriter
         public string OutputDirectory { get; set; }
 
         public string[] Plugins { get; set; }
-        
+
         public bool ShowHelp { get; set; }
     }
 }

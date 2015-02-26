@@ -4,7 +4,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Microsoft.VisualStudio.TextTemplating;
+using TemplateWriter.Extensions;
 using TemplateWriter.Output;
+using TemplateWriter.TemplateProcessors;
+using TemplateWriter.Templates;
 using Vipr.Core.CodeModel;
 
 namespace TemplateWriter.Strategies

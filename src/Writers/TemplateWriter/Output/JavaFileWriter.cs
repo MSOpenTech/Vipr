@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Text;
+using TemplateWriter.Extensions;
+using TemplateWriter.Templates;
 using Vipr.Core.CodeModel;
 
 namespace TemplateWriter.Output

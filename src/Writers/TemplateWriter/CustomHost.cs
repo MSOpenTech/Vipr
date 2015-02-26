@@ -19,10 +19,6 @@ namespace TemplateWriter
     {
         private OdcmObject _odcmObject;
 
-        static readonly String BaseTemplateDirPattern =
-            "Templates" + Path.DirectorySeparatorChar + "T4" + Path.DirectorySeparatorChar + "{0}";
-
-
         public CustomHost(string language, OdcmObject odcmObject)
             : this(language)
         {

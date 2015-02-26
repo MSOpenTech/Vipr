@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Text;
+using TemplateWriter.Templates;
 using Vipr.Core.CodeModel;
 
 namespace TemplateWriter.Output
@@ -20,7 +21,7 @@ namespace TemplateWriter.Output
             Configuration = configuration;
         }
 
-		protected virtual string FileName(Template template, string identifier)
+        protected virtual string FileName(Template template, string identifier)
         {
             return template.FolderName == "odata" ? template.Name.Replace("Entity", identifier)
                                                   : identifier;

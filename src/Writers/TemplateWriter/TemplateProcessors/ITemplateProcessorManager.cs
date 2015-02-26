@@ -1,4 +1,4 @@
-namespace TemplateWriter
+namespace TemplateWriter.TemplateProcessors
 {
     public interface ITemplateProcessorManager
     {

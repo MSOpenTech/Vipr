@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace TemplateWriter
+namespace TemplateWriter.Templates
 {
     public interface ITemplateTempLocationFileWriter
     {

@@ -5,6 +5,8 @@ using System.Linq;
 using ODataReader.v4;
 using TemplateWriter.Output;
 using TemplateWriter.Strategies;
+using TemplateWriter.TemplateProcessors;
+using TemplateWriter.Templates;
 using Vipr.Core;
 using Vipr.Core.CodeModel;
 

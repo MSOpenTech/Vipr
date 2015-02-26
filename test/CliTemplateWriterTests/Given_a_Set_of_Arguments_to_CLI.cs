@@ -1,6 +1,7 @@
 ﻿using System;
 using Moq;
 using TemplateWriter;
+using TemplateWriter.TemplateProcessors;
 using Vipr.CLI;
 using Vipr.CLI.Configuration;
 using Xunit;

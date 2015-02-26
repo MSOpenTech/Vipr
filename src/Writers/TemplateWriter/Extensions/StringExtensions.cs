@@ -1,4 +1,5 @@
 ﻿using System;
+using Inflector;
 
 namespace TemplateWriter.Extensions
 {
