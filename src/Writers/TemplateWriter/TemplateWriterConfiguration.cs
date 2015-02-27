@@ -2,7 +2,7 @@
 
 namespace TemplateWriter
 {
-    public class TemplateWriterConfiguration
+    public class TemplateWriterConfiguration 
     {
         public static TemplateWriterConfiguration Default = new TemplateWriterConfiguration
         {

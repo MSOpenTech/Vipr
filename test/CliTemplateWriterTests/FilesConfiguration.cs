@@ -3,7 +3,7 @@ using TemplateWriter;
 
 namespace CliTemplateWriterTests
 {
-    public class FilesConfiguration : ITemplateConfiguration
+    public class FilesConfiguration 
     {
         public string PrimaryNamespaceName { get; set; }
         public IReadOnlyDictionary<string, string> Parameters { get; set; }

@@ -3,7 +3,7 @@ using TemplateWriter;
 
 namespace CliTemplateWriterTests
 {
-    public class DisoveryConfiguration : ITemplateConfiguration
+    public class DisoveryConfiguration
     {
         public string PrimaryNamespaceName { get; set; }
         public IReadOnlyDictionary<string, string> Parameters { get; set; }

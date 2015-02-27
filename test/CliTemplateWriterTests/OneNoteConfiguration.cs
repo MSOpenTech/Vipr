@@ -3,7 +3,7 @@ using TemplateWriter;
 
 namespace CliTemplateWriterTests
 {
-    public class OneNoteConfiguration : ITemplateConfiguration
+    public class OneNoteConfiguration 
     {
         public string PrimaryNamespaceName { get; set; }
         public IReadOnlyDictionary<string, string> Parameters { get; set; }

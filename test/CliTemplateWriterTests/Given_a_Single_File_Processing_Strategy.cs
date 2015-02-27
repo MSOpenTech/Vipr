@@ -20,13 +20,6 @@ namespace CliTemplateWriterTests
         }
 
         [Fact]
-        public void Can_create_a_representation_of_templates_from_an_assembly()
-        {
-            var reader = new TemplateSourceReader();
-            reader.Read(typeof(CustomHost), new BuilderArguments { Language = "Java" });
-        }
-
-        [Fact]
         public void Can_write_template_into_temp_location()
         {
             var reader = new Mock<ITemplateSourceReader>();

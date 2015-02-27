@@ -13,15 +13,13 @@ namespace CliTemplateWriterTests
         [Fact]
         public void When_the_CLI_receives_a_set_of_arguments()
         {
-            var configArguments = new Mock<IConfigArguments>();
             var configBuilder = new Mock<IConfigurationBuilder>();
             var processorManager = new Mock<ITemplateProcessorManager>();
 
             configBuilder.Setup(x => x.WithArguments(It.IsAny<string>()));
             configBuilder.Setup(x => x.WithJsonConfig());
-            configBuilder.Setup(x => x.Build()).Returns(configArguments.Object);
 
-            var entryPoint = new CLIEntryPoint(configBuilder.Object, processorManager.Object);
+            var entryPoint = new CLIEntryPoint(new TemplateWriterConfiguration(), processorManager.Object);
             Assert.NotNull(entryPoint);
         }
 
@@ -30,13 +28,8 @@ namespace CliTemplateWriterTests
         {
             var configBuilder = new Mock<IConfigurationBuilder>();
             var processorManager = new Mock<ITemplateProcessorManager>();
-            var configArguments = new Mock<IConfigArguments>();
 
-            configBuilder.Setup(x => x.Build())
-                         .Returns(configArguments.Object);
-            processorManager.Setup(x => x.Process(configArguments.Object));
-
-            var entryPoint = new CLIEntryPoint(configBuilder.Object, processorManager.Object);
+            var entryPoint = new CLIEntryPoint(new TemplateWriterConfiguration(), processorManager.Object);
             entryPoint.Process();
 
             configBuilder.VerifyAll();
@@ -48,12 +41,10 @@ namespace CliTemplateWriterTests
         {
             var configBuilder = new Mock<IConfigurationBuilder>();
             var processorManager = new Mock<ITemplateProcessorManager>();
-            var configArguments = new Mock<IConfigArguments>();
 
             configBuilder.Setup(x => x.Build());
-            processorManager.Setup(x => x.Process(configArguments.Object));
 
-            var entryPoint = new CLIEntryPoint(configBuilder.Object, processorManager.Object);
+            var entryPoint = new CLIEntryPoint(new TemplateWriterConfiguration(), processorManager.Object);
             Assert.Throws<InvalidOperationException>(() => entryPoint.Process());
         }
 
@@ -63,17 +54,16 @@ namespace CliTemplateWriterTests
         {
             var args = "--language=objectivec --inputFile=Metadata\\Exchange.edmx.xml --outputDir=Out".Split(' ');
             var builder = new ConfigurationBuilder().WithArguments(args);
-            var entrypoint = new CLIEntryPoint(builder, new TemplateProcessorManager());
+            var entrypoint = new CLIEntryPoint(new TemplateWriterConfiguration(), new TemplateProcessorManager());
             entrypoint.Process();
         }
 
-		[Fact]
-		public void When_passing_specific_Arguments_should_procces_files_templates_objc()
-		{
-			var args = "--language=objectivec --inputFile=Metadata\\files.xml --outputDir=Out".Split(' ');
-			var builder = new ConfigurationBuilder().WithConfiguration(new FilesConfiguration()).WithArguments(args);
-			var entrypoint = new CLIEntryPoint(builder, new TemplateProcessorManager());
-			entrypoint.Process();
-		}
+        [Fact]
+        public void When_passing_specific_Arguments_should_procces_files_templates_objc()
+        {
+            var args = "--language=objectivec --inputFile=Metadata\\files.xml --outputDir=Out".Split(' ');
+            var entrypoint = new CLIEntryPoint(new TemplateWriterConfiguration(), new TemplateProcessorManager());
+            entrypoint.Process();
+        }
     }
 }

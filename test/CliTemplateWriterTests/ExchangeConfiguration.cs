@@ -3,7 +3,7 @@ using TemplateWriter;
 
 namespace CliTemplateWriterTests
 {
-    public class ExchangeConfiguration : ITemplateConfiguration
+    public class ExchangeConfiguration 
     {
         public string PrimaryNamespaceName { get; set; }
         public IReadOnlyDictionary<string, string> Parameters { get; set; }
