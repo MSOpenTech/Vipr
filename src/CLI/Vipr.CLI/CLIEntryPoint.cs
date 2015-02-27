@@ -1,8 +1,5 @@
-using System;
-using System.IO;
 using TemplateWriter;
 using TemplateWriter.TemplateProcessors;
-using Vipr.CLI.Configuration;
 
 namespace Vipr.CLI
 {

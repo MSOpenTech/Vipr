@@ -6,11 +6,10 @@ using System.Text;
 using Microsoft.VisualStudio.TextTemplating;
 using TemplateWriter.Extensions;
 using TemplateWriter.Output;
-using TemplateWriter.TemplateProcessors;
 using TemplateWriter.Templates;
 using Vipr.Core.CodeModel;
 
-namespace TemplateWriter.Strategies
+namespace TemplateWriter.TemplateProcessors
 {
     public class BaseTemplateProcessor : ITemplateProcessor
     {

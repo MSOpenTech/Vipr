@@ -1,4 +1,5 @@
 ﻿using TemplateWriter;
+using TemplateWriter.TemplateProcessors;
 using Vipr.CLI;
 using Vipr.CLI.Configuration;
 using Xunit;
@@ -11,7 +12,8 @@ namespace CliTemplateWriterTests
         public void When_passing_specific_Arguments_should_procces_one_note_metadata()
         {
             var args = "--language=java --inputFile=Metadata\\OneNote.edmx.xml --outputDir=Out".Split(' ');
-            var entrypoint = new CLIEntryPoint(new TemplateWriterConfiguration(),  new TemplateProcessorManager());
+            var config = new ConfigurationBuilder().WithArguments(args).Build();
+            var entrypoint = new CLIEntryPoint(config, new TemplateProcessorManager());
             entrypoint.Process();
         }
 
@@ -19,7 +21,8 @@ namespace CliTemplateWriterTests
         public void When_passing_specific_Arguments_should_procces_exchange_metadata()
         {
             var args = "--language=java --inputFile=Metadata\\Exchange.edmx.xml --outputDir=Out".Split(' ');
-            var entrypoint = new CLIEntryPoint(new TemplateWriterConfiguration(), new TemplateProcessorManager());
+            var config = new ConfigurationBuilder().WithArguments(args).Build();
+            var entrypoint = new CLIEntryPoint(config, new TemplateProcessorManager());
             entrypoint.Process();
         }
 
@@ -27,7 +30,17 @@ namespace CliTemplateWriterTests
         public void When_passing_specific_Arguments_should_procces_discovery_metadata()
         {
             var args = "--language=java --inputFile=Metadata\\discovery.xml --outputDir=Out".Split(' ');
-            var entrypoint = new CLIEntryPoint(new TemplateWriterConfiguration(), new TemplateProcessorManager());
+            var config = new ConfigurationBuilder().WithArguments(args).Build();
+            var entrypoint = new CLIEntryPoint(config, new TemplateProcessorManager());
+            entrypoint.Process();
+        }
+
+        [Fact]
+        public void When_passing_specific_Arguments_should_procces_graph_v4_metadata()
+        {
+            var args = "--language=java --inputFile=Metadata\\ODataV4apiversion15.xml --outputDir=Out".Split(' ');
+            var config = new ConfigurationBuilder().WithArguments(args).Build();
+            var entrypoint = new CLIEntryPoint(config, new TemplateProcessorManager());
             entrypoint.Process();
         }
 
@@ -45,7 +58,8 @@ namespace CliTemplateWriterTests
         public void When_passing_specific_Arguments_should_procces_files_metadata()
         {
             var args = "--language=java --inputFile=Metadata\\files.xml --outputDir=Out".Split(' ');
-            var entrypoint = new CLIEntryPoint(new TemplateWriterConfiguration(), new TemplateProcessorManager());
+            var config = new ConfigurationBuilder().WithArguments(args).Build();
+            var entrypoint = new CLIEntryPoint(config, new TemplateProcessorManager());
             entrypoint.Process();
         }
 

@@ -1,5 +1,6 @@
 ﻿using Moq;
 using TemplateWriter;
+using TemplateWriter.TemplateProcessors;
 using TemplateWriter.Templates;
 using Vipr.Core;
 using Xunit;
