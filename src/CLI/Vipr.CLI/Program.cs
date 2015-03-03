@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using Mono.Options;
-using TemplateWriter;
 using TemplateWriter.TemplateProcessors;
 using Vipr.CLI.Configuration;
 
@@ -18,7 +17,7 @@ namespace Vipr.CLI
                 if (config.ShowHelp) {
                     //TODO show help and exit
                 }
-                var entrypoint = new CLIEntryPoint(config, new TemplateProcessorManager());
+                var entrypoint = new CLIEntryPoint(new TemplateProcessorManager(), config);
                 entrypoint.Process();
 
             }

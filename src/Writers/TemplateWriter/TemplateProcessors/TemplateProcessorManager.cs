@@ -30,7 +30,7 @@ namespace TemplateWriter.TemplateProcessors
                 {"java", (model, config, baseFilePath) => 
                     new JavaTemplateProcessor(new JavaFileWriter(model, config), model, baseFilePath)},
                 {"objectivec", (model, config ,baseFilePath) =>
-					new ObjectiveCTemplateProcessor(new ObjectiveCFileWriter(model, config), model, baseFilePath )}
+		 			new ObjectiveCTemplateProcessor(new ObjectiveCFileWriter(model, config), model, baseFilePath )}
             };
         }
 
@@ -46,11 +46,12 @@ namespace TemplateWriter.TemplateProcessors
                                                            .Single(x => x.IsBase && x.IsForLanguage(configuration.TargetLanguage));
 
             //TODO: model should come from CLI
-            var model = _reader.GenerateOdcmModel(new Dictionary<string, string>
+            var serviceMetadata = new TextFileCollection
             {
-                { "$metadata", File.ReadAllText(configuration.InputFile) }
-            });
+                new TextFile("$metadata", File.ReadAllText(configuration.InputFile))
+            };
 
+            var model = _reader.GenerateOdcmModel(serviceMetadata);
             var processor = _processors[configuration.TargetLanguage]
                                 .Invoke(model, configuration, baseTemplate.Path);
 

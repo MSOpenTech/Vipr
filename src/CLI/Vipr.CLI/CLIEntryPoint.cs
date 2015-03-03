@@ -8,7 +8,12 @@ namespace Vipr.CLI
         private readonly TemplateWriterConfiguration _config;
         private readonly ITemplateProcessorManager _processor;
 
-        public CLIEntryPoint(TemplateWriterConfiguration config, ITemplateProcessorManager processor)
+        public CLIEntryPoint(TemplateWriterConfiguration configuration)
+            : this(new TemplateProcessorManager(), configuration)
+        {
+        }
+
+        public CLIEntryPoint(ITemplateProcessorManager processor, TemplateWriterConfiguration config)
         {
             _config = config;
             _processor = processor;

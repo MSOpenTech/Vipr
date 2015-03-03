@@ -7,8 +7,8 @@ namespace TemplateWriter
         public static TemplateWriterConfiguration Default = new TemplateWriterConfiguration
         {
             AvailableLanguages = new HashSet<string> { "java", "objectivec" },
-            PrimaryNamespaceName = "com",
-            NamespacePrefix = "MS"
+            PrimaryNamespaceName = "some.namespace.here",
+            NamespacePrefix = "com"
         };
 
         /// <summary>

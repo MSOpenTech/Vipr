@@ -49,8 +49,9 @@ namespace CSharpWriterUnitTests
 
         private Assembly ODataToAssembly<T>(string edmxString) where T : IOdcmReader, new()
         {
+            var edmx = XElement.Parse(edmxString);
             var reader = new T();
-            var model = reader.GenerateOdcmModel(new Dictionary<string, string>{{"$metadata", edmxString}});
+            var model = reader.GenerateOdcmModel(new TextFileCollection {new TextFile("$metadata", edmxString)});
             return GetProxy(model);
         }
     }

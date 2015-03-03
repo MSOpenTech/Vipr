@@ -13,7 +13,7 @@ namespace CliTemplateWriterTests
         {
             var args = "--language=java --inputFile=Metadata\\OneNote.edmx.xml --outputDir=Out".Split(' ');
             var config = new ConfigurationBuilder().WithArguments(args).Build();
-            var entrypoint = new CLIEntryPoint(config, new TemplateProcessorManager());
+            var entrypoint = new CLIEntryPoint(new TemplateProcessorManager(), config);
             entrypoint.Process();
         }
 
@@ -22,7 +22,7 @@ namespace CliTemplateWriterTests
         {
             var args = "--language=java --inputFile=Metadata\\Exchange.edmx.xml --outputDir=Out".Split(' ');
             var config = new ConfigurationBuilder().WithArguments(args).Build();
-            var entrypoint = new CLIEntryPoint(config, new TemplateProcessorManager());
+            var entrypoint = new CLIEntryPoint(new TemplateProcessorManager(), config);
             entrypoint.Process();
         }
 
@@ -31,7 +31,7 @@ namespace CliTemplateWriterTests
         {
             var args = "--language=java --inputFile=Metadata\\discovery.xml --outputDir=Out".Split(' ');
             var config = new ConfigurationBuilder().WithArguments(args).Build();
-            var entrypoint = new CLIEntryPoint(config, new TemplateProcessorManager());
+            var entrypoint = new CLIEntryPoint(new TemplateProcessorManager(), config);
             entrypoint.Process();
         }
 
@@ -40,7 +40,7 @@ namespace CliTemplateWriterTests
         {
             var args = "--language=java --inputFile=Metadata\\ODataV4apiversion15.xml --outputDir=Out".Split(' ');
             var config = new ConfigurationBuilder().WithArguments(args).Build();
-            var entrypoint = new CLIEntryPoint(config, new TemplateProcessorManager());
+            var entrypoint = new CLIEntryPoint(new TemplateProcessorManager(), config);
             entrypoint.Process();
         }
 
@@ -59,7 +59,7 @@ namespace CliTemplateWriterTests
         {
             var args = "--language=java --inputFile=Metadata\\files.xml --outputDir=Out".Split(' ');
             var config = new ConfigurationBuilder().WithArguments(args).Build();
-            var entrypoint = new CLIEntryPoint(config, new TemplateProcessorManager());
+            var entrypoint = new CLIEntryPoint(new TemplateProcessorManager(), config);
             entrypoint.Process();
         }
 

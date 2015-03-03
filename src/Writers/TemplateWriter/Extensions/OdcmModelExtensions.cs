@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Vipr.Core.CodeModel;
 
-namespace TemplateWriter.Extensions
+namespace TemplateWriter
 {
     public static class OdcmModelExtensions
     {
