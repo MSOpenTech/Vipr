@@ -26,7 +26,7 @@ Options:
 
         private IOdcmReader _odcmReader;
         private IOdcmWriter _odcmWriter;
-        private string _ocdmModelExportPath = String.Empty;
+        private string _odcmModelExportPath = String.Empty;
         private string _readerName = "ODataReader.v4";
         private string _writerName = "CSharpWriter";
         private string _metadataPath = "http://services.odata.org/V4/TripPinServiceRW/$metadata";
@@ -51,7 +51,7 @@ Options:
 
             IDictionary<string, ValueObject> res = docopt.Apply(Usage, args, help: true, exit: true);
 
-            _ocdmModelExportPath = res["--modelExport"] == null ? _ocdmModelExportPath : res["--modelExport"].ToString();
+            _odcmModelExportPath = res["--modelExport"] == null ? _odcmModelExportPath : res["--modelExport"].ToString();
 
             _readerName = res["--reader"] == null ? _readerName : res["--reader"].ToString();
 
@@ -116,11 +116,11 @@ Options:
 
         private void ExportOcdmModel(OdcmModel model)
         {
-            if (string.IsNullOrEmpty(_ocdmModelExportPath)) return;
+            if (string.IsNullOrEmpty(_odcmModelExportPath)) return;
 
             var jss = new JsonSerializerSettings {PreserveReferencesHandling = PreserveReferencesHandling.Objects};
 
-            File.WriteAllText(_ocdmModelExportPath, JsonConvert.SerializeObject(model, jss));
+            File.WriteAllText(_odcmModelExportPath, JsonConvert.SerializeObject(model, jss));
         }
     }
 }
