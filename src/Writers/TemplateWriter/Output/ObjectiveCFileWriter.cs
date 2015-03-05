@@ -17,18 +17,18 @@ namespace TemplateWriter.Output
 
         public override void WriteText(Template template, string fileName, string text)
         {
-            var destPath = string.Format("{0}{1}", Path.DirectorySeparatorChar, ConfigurationService.Settings.OutputDirectory);
+            var destPath = string.Format("{0}{1}", ConfigurationService.Settings.OutputDirectory, Path.DirectorySeparatorChar);
 
             var identifier = FileName(template, fileName);
 
             FileExtension = template.ResourceName.Contains("header") ? ".h" : ".m";
 
-            var fullPath = Path.Combine(destPath, destPath);
+            // var fullPath = Path.Combine(destPath, destPath);
 
-            if (!DirectoryExists(fullPath))
-                CreateDirectory(fullPath);
+            if (!DirectoryExists(destPath))
+                CreateDirectory(destPath);
 
-            fullPath = Path.Combine(fullPath, template.FolderName);
+            var fullPath = Path.Combine(destPath, template.FolderName);
 
             if (!DirectoryExists(fullPath))
                 CreateDirectory(fullPath);

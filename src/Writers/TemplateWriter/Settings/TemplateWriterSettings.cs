@@ -12,7 +12,6 @@ namespace TemplateWriter.Settings
             PrimaryNamespaceName = "";
             NamespacePrefix = "com";
             Plugins = new List<string>();
-            OutputDirectory = @"c:\VIPR.Output";
         }
 
         /// <summary>
