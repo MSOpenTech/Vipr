@@ -1,8 +1,6 @@
 ﻿using Moq;
-using TemplateWriter;
 using TemplateWriter.TemplateProcessors;
 using TemplateWriter.Templates;
-using Vipr.Core;
 using Xunit;
 
 namespace CliTemplateWriterTests
@@ -13,9 +11,8 @@ namespace CliTemplateWriterTests
         [Fact]
         public void When_Instantiated_should_have_a_valid_state()
         {
-            var reader = new Mock<IOdcmReader>();
             var tempLocationWriter = new Mock<ITemplateTempLocationFileWriter>();
-            var processorManager = new TemplateProcessorManager(reader.Object, tempLocationWriter.Object);
+            var processorManager = new TemplateProcessorManager(tempLocationWriter.Object);
 
             Assert.NotNull(processorManager);
         }

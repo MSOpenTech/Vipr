@@ -73,24 +73,18 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="DirectoryConfiguration.cs" />
-    <Compile Include="DisoveryConfiguration.cs" />
-    <Compile Include="FilesConfiguration.cs" />
-    <Compile Include="Given_a_Set_of_Arguments_to_CLI.cs" />
     <Compile Include="Given_a_Single_File_Processing_Strategy.cs" />
     <Compile Include="Java_Output_Integration_Tests.cs" />
-    <Compile Include="OneNoteConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ExchangeConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\CLI\Vipr.CLI\Vipr.CLI.csproj">
-      <Project>{be6af3dc-831a-48e1-9563-03141eb0ae5b}</Project>
-      <Name>Vipr.CLI</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\Vipr.Core\Vipr.Core.csproj">
       <Project>{04C24936-006A-4FD8-A872-EE55588C1CBE}</Project>
       <Name>Vipr.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\Vipr\Vipr.csproj">
+      <Project>{d9e57059-bad6-483b-985c-c7d1da24ed7f}</Project>
+      <Name>Vipr</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Readers\ODataReader.v4\ODataReader.v4.csproj">
       <Project>{6D8D8008-0A34-490F-8B38-21D9C8BF25C0}</Project>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TemplateWriter.Settings;
 using Vipr.Core.CodeModel;
 
 namespace TemplateWriter

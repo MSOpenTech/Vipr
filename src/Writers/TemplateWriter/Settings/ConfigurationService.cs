@@ -1,24 +1,19 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vipr.Core;
-using TemplateWriter.Settings;
+﻿using Vipr.Core;
 
-namespace TemplateWriter
+namespace TemplateWriter.Settings
 {
     public static class ConfigurationService
     {
-        private static IConfigurationProvider s_configurationProvider;
+        private static IConfigurationProvider _configurationProvider;
 
         public static void Initialize(IConfigurationProvider configurationProvider) {
-            s_configurationProvider = configurationProvider;
+            _configurationProvider = configurationProvider;
         }
 
         public static TemplateWriterSettings Settings {
             get {
-                return s_configurationProvider != null
-                    ? s_configurationProvider.GetConfiguration<TemplateWriterSettings>()
+                return _configurationProvider != null
+                    ? _configurationProvider.GetConfiguration<TemplateWriterSettings>()
                     : new TemplateWriterSettings();
             }
         }
