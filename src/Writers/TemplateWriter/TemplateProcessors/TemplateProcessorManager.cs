@@ -5,16 +5,17 @@ using System.Linq;
 using ODataReader.v4;
 using TemplateWriter.Output;
 using TemplateWriter.Templates;
+using TemplateWriter.Settings;
 using Vipr.Core;
 using Vipr.Core.CodeModel;
 
 namespace TemplateWriter.TemplateProcessors
 {
-    public class TemplateProcessorManager : ITemplateProcessorManager
+    public class TemplateProcessorManager : ITemplateProcessorManager, IConfigurable
     {
         private readonly IOdcmReader _reader;  // TODO: should be in main CLI, not in writer
         private readonly ITemplateTempLocationFileWriter _tempLocationFileWriter;
-        private readonly Dictionary<string, Func<OdcmModel, TemplateWriterConfiguration, string /* path to base template */, ITemplateProcessor>> _processors;
+        private readonly Dictionary<string, Func<OdcmModel, TemplateWriterSettings, string /* path to base template */, ITemplateProcessor>> _processors;
 
         public TemplateProcessorManager()
             : this(new OdcmReader(), new TemplateTempLocationFileWriter(new TemplateSourceReader()))
@@ -25,7 +26,7 @@ namespace TemplateWriter.TemplateProcessors
         {
             _reader = reader;
             _tempLocationFileWriter = tempLocationFileWriter;
-            _processors = new Dictionary<string, Func<OdcmModel, TemplateWriterConfiguration, string, ITemplateProcessor>>
+            _processors = new Dictionary<string, Func<OdcmModel, TemplateWriterSettings, string, ITemplateProcessor>>
             {
                 {"java", (model, config, baseFilePath) => 
                     new JavaTemplateProcessor(new JavaFileWriter(model, config), model, baseFilePath)},
@@ -33,10 +34,11 @@ namespace TemplateWriter.TemplateProcessors
 		 			new ObjectiveCTemplateProcessor(new ObjectiveCFileWriter(model, config), model, baseFilePath )}
             };
         }
-
-        public void Process(TemplateWriterConfiguration configuration)
+        public void SetConfigurationProvider(IConfigurationProvider configurationProvider) {
+            ConfigurationService.Initialize(configurationProvider);
+        }
+        public void Process(TemplateWriterSettings configuration)
         {
-            ConfigurationService.Initialize(configuration);
 
             var runnableTemplates = _tempLocationFileWriter.WriteUsing(typeof(CustomHost), configuration)
                                                            .Where(x => !x.IsBase &&
@@ -48,7 +50,8 @@ namespace TemplateWriter.TemplateProcessors
             //TODO: model should come from CLI
             var serviceMetadata = new TextFileCollection
             {
-                new TextFile("$metadata", File.ReadAllText(configuration.InputFile))
+                // removed in prep for merging with CLI
+               // new TextFile("$metadata", File.ReadAllText(configuration.InputFile))
             };
 
             var model = _reader.GenerateOdcmModel(serviceMetadata);

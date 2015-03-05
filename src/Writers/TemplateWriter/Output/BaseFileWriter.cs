@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 using TemplateWriter.Templates;
+using TemplateWriter.Settings;
 using Vipr.Core.CodeModel;
 
 namespace TemplateWriter.Output
@@ -8,14 +9,14 @@ namespace TemplateWriter.Output
     public class BaseFileWriter : IFileWriter
     {
         protected readonly OdcmModel Model;
-        protected readonly TemplateWriterConfiguration Configuration;
+        protected readonly TemplateWriterSettings Configuration;
 
         public string FileExtension
         {
             get { return ".txt"; }
         }
 
-        public BaseFileWriter(OdcmModel model, TemplateWriterConfiguration configuration)
+        public BaseFileWriter(OdcmModel model, TemplateWriterSettings configuration)
         {
             Model = model;
             Configuration = configuration;

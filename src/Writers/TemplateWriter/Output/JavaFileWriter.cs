@@ -2,13 +2,14 @@
 using System.Linq;
 using System.Text;
 using TemplateWriter.Templates;
+using TemplateWriter.Settings;
 using Vipr.Core.CodeModel;
 
 namespace TemplateWriter.Output
 {
     public class JavaFileWriter : BaseFileWriter
     {
-        public JavaFileWriter(OdcmModel model, TemplateWriterConfiguration configuration)
+        public JavaFileWriter(OdcmModel model, TemplateWriterSettings configuration)
             : base(model, configuration)
         {
         }
@@ -21,7 +22,7 @@ namespace TemplateWriter.Output
         public override void WriteText(Template template, string fileName, string text)
         {
             // var destPath = string.Format("{0}{1}", Path.DirectorySeparatorChar, Configuration.OutputDirectory);
-            var destPath = Configuration.OutputDirectory;
+            var destPath = ConfigurationService.Settings.OutputDirectory;
             var @namespace = template.TemplateType == TemplateType.Model ? CreateNamespace(string.Empty).ToLower()
                                                                          : CreateNamespace(template.FolderName).ToLower();
 

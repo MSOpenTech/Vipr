@@ -1,0 +1,7 @@
+﻿{
+    "AvailableLanguages": [ "java", "objectivec" ],
+    "TargetLanguage": "java",
+    "PrimaryNamespaceName": "",
+    "NamespacePrefix": "com",
+    "OutputDirectory": "C:\\Vipr.Output"
+}

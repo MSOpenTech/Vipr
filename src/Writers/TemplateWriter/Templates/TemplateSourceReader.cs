@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using TemplateWriter.Extensions;
+using TemplateWriter.Settings;
 
 namespace TemplateWriter.Templates
 {
     public class TemplateSourceReader : ITemplateSourceReader
     {
-        public IList<Template> Read(Type targetType, TemplateWriterConfiguration config)
+        public IList<Template> Read(Type targetType, TemplateWriterSettings config)
         {
             var resourceNames = targetType.Assembly.GetManifestResourceNames();
             var baseString = string.Format("{0}.Base", config.TargetLanguage);
@@ -44,7 +45,7 @@ namespace TemplateWriter.Templates
             return TemplateType.Other;
         }
 
-        private string FolderName(string resourceName, TemplateWriterConfiguration config)
+        private string FolderName(string resourceName, TemplateWriterSettings config)
         {
             var modelLocation = string.Format("{0}.Models", config.TargetLanguage);
             var odataLocation = string.Format("{0}.OData", config.TargetLanguage);

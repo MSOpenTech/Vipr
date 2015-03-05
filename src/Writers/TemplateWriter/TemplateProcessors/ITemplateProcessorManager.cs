@@ -1,7 +1,9 @@
+using TemplateWriter.Settings;
+
 namespace TemplateWriter.TemplateProcessors
 {
     public interface ITemplateProcessorManager
     {
-        void Process(TemplateWriterConfiguration configuration);
+        void Process(TemplateWriterSettings configuration);
     }
 }

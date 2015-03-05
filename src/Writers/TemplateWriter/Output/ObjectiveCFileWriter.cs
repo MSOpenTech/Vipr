@@ -1,13 +1,14 @@
 ﻿using System.IO;
 using System.Text;
 using TemplateWriter.Templates;
+using TemplateWriter.Settings;
 using Vipr.Core.CodeModel;
 
 namespace TemplateWriter.Output
 {
     class ObjectiveCFileWriter : BaseFileWriter
     {
-        public ObjectiveCFileWriter(OdcmModel model, TemplateWriterConfiguration configuration)
+        public ObjectiveCFileWriter(OdcmModel model, TemplateWriterSettings configuration)
             : base(model, configuration)
         {
         }
@@ -16,7 +17,7 @@ namespace TemplateWriter.Output
 
         public override void WriteText(Template template, string fileName, string text)
         {
-            var destPath = string.Format("{0}{1}", Path.DirectorySeparatorChar, Configuration.OutputDirectory);
+            var destPath = string.Format("{0}{1}", Path.DirectorySeparatorChar, ConfigurationService.Settings.OutputDirectory);
 
             var identifier = FileName(template, fileName);
 
