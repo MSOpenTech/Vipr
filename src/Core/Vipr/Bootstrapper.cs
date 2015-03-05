@@ -59,7 +59,7 @@ Options:
 
             _outputPath = res["--outputPath"] == null ? _outputPath : res["--outputPath"].ToString();
 
-            _metadataPath = res["<inputFile>"] == null ? _metadataPath : res["<inputFile>"].ToString();
+            _metadataPath = res["<inputFile>"].ToString() == "" ? _metadataPath : res["<inputFile>"].ToString();
         }
 
         public IOdcmReader OdcmReader
