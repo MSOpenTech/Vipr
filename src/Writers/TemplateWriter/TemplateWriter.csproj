@@ -62,7 +62,6 @@
     <Compile Include="Helpers\ObjectiveC\PropertyHelper.cs" />
     <Compile Include="Helpers\Swift\PropertyHelper.cs" />
     <Compile Include="Settings\TemplateWriterSettings.cs" />
-    <Compile Include="TemplateProcessors\ITemplateProcessorManager.cs" />
     <Compile Include="Templates\ITemplateSourceReader.cs" />
     <Compile Include="Templates\ITemplateTempLocationFileWriter.cs" />
     <Compile Include="Extensions\OdcmModelExtensions.cs" />
@@ -77,7 +76,9 @@
     <Compile Include="Templates\TemplateType.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include=".config\TemplateWriterSettings.json" />
+    <None Include=".config\TemplateWriterSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <EmbeddedResource Include="Templates\T4\Java\Base\BaseTemplateCustomHost.tt" />
     <EmbeddedResource Include="Templates\T4\Java\Models\ComplexType.tt" />

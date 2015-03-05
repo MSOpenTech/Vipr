@@ -30,7 +30,7 @@ namespace TemplateWriter.Output
 
         public virtual void WriteText(Template template, string fileName, string text)
         {
-            var destPath = string.Format("{0}{1}", Configuration.OutputDirectory, Path.DirectorySeparatorChar);
+            var destPath = string.Format("{0}{1}", ConfigurationService.Settings.OutputDirectory, Path.DirectorySeparatorChar);
             var identifier = FileName(template, fileName);
             // var fullPath = Path.Combine(destPath, destPath);
             var filePath = Path.Combine(destPath, string.Format("{0}{1}", identifier, FileExtension));

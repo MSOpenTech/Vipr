@@ -11,19 +11,16 @@ namespace TemplateWriter
     {
         private static IConfigurationProvider s_configurationProvider;
 
-        public static void Initialize(IConfigurationProvider configuration)
-        {
-            s_configurationProvider = configuration;
+        public static void Initialize(IConfigurationProvider configurationProvider) {
+            s_configurationProvider = configurationProvider;
         }
 
-        public static TemplateWriterSettings Settings
-        {
-            get
-            {
+        public static TemplateWriterSettings Settings {
+            get {
                 return s_configurationProvider != null
                     ? s_configurationProvider.GetConfiguration<TemplateWriterSettings>()
                     : new TemplateWriterSettings();
-            } 
+            }
         }
     }
 }
