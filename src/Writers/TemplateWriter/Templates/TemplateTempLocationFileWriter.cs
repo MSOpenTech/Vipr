@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using TemplateWriter.Settings;
 
 namespace TemplateWriter.Templates
 {
@@ -13,7 +14,7 @@ namespace TemplateWriter.Templates
             _templateSourceReader = templateSourceReader;
         }
 
-        public IList<Template> WriteUsing(Type sourceType, TemplateWriterConfiguration config)
+        public IList<Template> WriteUsing(Type sourceType, TemplateWriterSettings config)
         {
             var writtenTemplates = new List<Template>();
             var templates = _templateSourceReader.Read(sourceType, config);

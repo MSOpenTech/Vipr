@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.TextTemplating;
 using TemplateWriter.Extensions;
 using TemplateWriter.Output;
 using TemplateWriter.Templates;
+using TemplateWriter.Settings;
 using Vipr.Core.CodeModel;
 
 namespace TemplateWriter.TemplateProcessors

@@ -1,5 +1,6 @@
 ﻿using TemplateWriter.Output;
 using Vipr.Core.CodeModel;
+using TemplateWriter.Settings;
 
 namespace TemplateWriter.TemplateProcessors
 {

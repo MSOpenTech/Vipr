@@ -5,27 +5,26 @@ using System.Linq;
 using ODataReader.v4;
 using TemplateWriter.Output;
 using TemplateWriter.Templates;
+using TemplateWriter.Settings;
 using Vipr.Core;
 using Vipr.Core.CodeModel;
 
 namespace TemplateWriter.TemplateProcessors
 {
-    public class TemplateProcessorManager : ITemplateProcessorManager
+    public class TemplateProcessorManager : IConfigurable, IOdcmWriter
     {
-        private readonly IOdcmReader _reader;  // TODO: should be in main CLI, not in writer
         private readonly ITemplateTempLocationFileWriter _tempLocationFileWriter;
-        private readonly Dictionary<string, Func<OdcmModel, TemplateWriterConfiguration, string /* path to base template */, ITemplateProcessor>> _processors;
+        private readonly Dictionary<string, Func<OdcmModel, TemplateWriterSettings, string /* path to base template */, ITemplateProcessor>> _processors;
 
         public TemplateProcessorManager()
-            : this(new OdcmReader(), new TemplateTempLocationFileWriter(new TemplateSourceReader()))
+            : this(new TemplateTempLocationFileWriter(new TemplateSourceReader()))
         {
         }
 
-        public TemplateProcessorManager(IOdcmReader reader, ITemplateTempLocationFileWriter tempLocationFileWriter)
+        public TemplateProcessorManager(ITemplateTempLocationFileWriter tempLocationFileWriter)
         {
-            _reader = reader;
             _tempLocationFileWriter = tempLocationFileWriter;
-            _processors = new Dictionary<string, Func<OdcmModel, TemplateWriterConfiguration, string, ITemplateProcessor>>
+            _processors = new Dictionary<string, Func<OdcmModel, TemplateWriterSettings, string, ITemplateProcessor>>
             {
                 {"java", (model, config, baseFilePath) => 
                     new JavaTemplateProcessor(new JavaFileWriter(model, config), model, baseFilePath)},
@@ -34,35 +33,34 @@ namespace TemplateWriter.TemplateProcessors
             };
         }
 
-        public void Process(TemplateWriterConfiguration configuration)
-        {
-            ConfigurationService.Initialize(configuration);
+        public void SetConfigurationProvider(IConfigurationProvider configurationProvider) {
+            ConfigurationService.Initialize(configurationProvider);
+        }
 
-            var runnableTemplates = _tempLocationFileWriter.WriteUsing(typeof(CustomHost), configuration)
-                                                           .Where(x => !x.IsBase &&
-                                                                        x.IsForLanguage(configuration.TargetLanguage));
+        public TextFileCollection GenerateProxy(OdcmModel model) {
 
-            var baseTemplate = _tempLocationFileWriter.WriteUsing(typeof(CustomHost), configuration)
-                                                           .Single(x => x.IsBase && x.IsForLanguage(configuration.TargetLanguage));
+            // TODO: Collect output into TextFileCollection
+            var fileCollection = new TextFileCollection();
 
-            //TODO: model should come from CLI
-            var serviceMetadata = new TextFileCollection
-            {
-                new TextFile("$metadata", File.ReadAllText(configuration.InputFile))
-            };
+            var runnableTemplates = _tempLocationFileWriter.WriteUsing(typeof(CustomHost), ConfigurationService.Settings)
+                                               .Where(x => !x.IsBase &&
+                                                            x.IsForLanguage(ConfigurationService.Settings.TargetLanguage));
 
-            var model = _reader.GenerateOdcmModel(serviceMetadata);
-            var processor = _processors[configuration.TargetLanguage]
-                                .Invoke(model, configuration, baseTemplate.Path);
+            var baseTemplate = _tempLocationFileWriter.WriteUsing(typeof(CustomHost), ConfigurationService.Settings)
+                                                           .Single(x => x.IsBase && x.IsForLanguage(ConfigurationService.Settings.TargetLanguage));
 
-            foreach (var template in runnableTemplates)
-            {
+            var processor = _processors[ConfigurationService.Settings.TargetLanguage]
+                                .Invoke(model, ConfigurationService.Settings, baseTemplate.Path);
+
+            foreach (var template in runnableTemplates) {
                 Action<Template> action;
-                if (processor.Templates.TryGetValue(template.Name, out action))
-                {
+                if (processor.Templates.TryGetValue(template.Name, out action)) {
                     action(template);
                 }
             }
+
+
+            return fileCollection;
         }
     }
 }
