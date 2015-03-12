@@ -1,4 +1,5 @@
-﻿using Vipr;
+﻿using System.IO;
+using Vipr;
 using Xunit;
 
 namespace CliTemplateWriterTests
@@ -8,7 +9,7 @@ namespace CliTemplateWriterTests
         [Fact]
         public void When_passing_specific_Arguments_should_procces_exchange_metadata()
         {
-            var args = @"C:\Users\developer\src\forks\msot\Vipr\test\CliTemplateWriterTests\Metadata\outlook.xml --writer=TemplateWriter".Split(' ');
+            var args = string.Format("Metadata{0}outlook.xml --writer=TemplateWriter", Path.DirectorySeparatorChar).Split(' ');
             var boostraper = new Bootstrapper();
             boostraper.Start(args);
         }
