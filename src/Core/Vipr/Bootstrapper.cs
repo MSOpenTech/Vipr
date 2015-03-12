@@ -42,13 +42,20 @@ Options:
 
         private void GetCommandLineConfiguration(string[] args)
         {
-            var docopt = new Docopt();
-            var res = docopt.Apply(Usage, args, help: true, exit: true);
-            _odcmModelExportPath = res["--modelExport"] == null ? _odcmModelExportPath : res["--modelExport"].ToString();
-            _readerName = res["--reader"] == null ? _readerName : res["--reader"].ToString();
-            _writerName = res["--writer"] == null ? _writerName : res["--writer"].ToString();
-            _outputPath = res["--outputPath"] == null ? _outputPath : res["--outputPath"].ToString();
-            _metadataPath = res["<inputFile>"].ToString() == "" ? _metadataPath : res["<inputFile>"].ToString();
+            try
+            {
+                var docopt = new Docopt();
+                var res = docopt.Apply(Usage, args);
+                _odcmModelExportPath = res["--modelExport"] == null ? _odcmModelExportPath : res["--modelExport"].ToString();
+                _readerName = res["--reader"] == null ? _readerName : res["--reader"].ToString();
+                _writerName = res["--writer"] == null ? _writerName : res["--writer"].ToString();
+                _outputPath = res["--outputPath"] == null ? _outputPath : res["--outputPath"].ToString();
+                _metadataPath = res["<inputFile>"].ToString() == "" ? _metadataPath : res["<inputFile>"].ToString();
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Unable to parse command line arguments", ex);
+            }
         }
 
         public IOdcmReader OdcmReader

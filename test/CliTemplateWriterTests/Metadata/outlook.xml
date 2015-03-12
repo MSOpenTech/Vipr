@@ -340,4 +340,7 @@
 			</EntityContainer>
 		</Schema>
 	</edmx:DataServices>
-</edmx:Edmx>
+</edmx:Edmx>Usage:
+    vipr.exe <inputFile> [--reader=<readerName>] [--writer=<writerName>] [--outputPath=<outputPath>] [--modelExport=<modelExportPath>]
+Usage:
+    vipr.exe <inputFile> [--reader=<readerName>] [--writer=<writerName>] [--outputPath=<outputPath>] [--modelExport=<modelExportPath>]
