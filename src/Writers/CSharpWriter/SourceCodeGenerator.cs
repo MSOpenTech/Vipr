@@ -103,6 +103,7 @@ namespace CSharpWriter
 
         private void Write(Enum @enum)
         {
+            WriteDescription(@enum.Description);
             _("public enum {0} : {1}", @enum.Name, @enum.UnderlyingType);
             using (_builder.IndentBraced)
             {
@@ -135,6 +136,7 @@ namespace CSharpWriter
 
         private void Write(Class @class)
         {
+            WriteDescription(@class.Description);
             Write(@class.Attributes);
 
             _("{0}{1}partial class {2}{3}", @class.AccessModifier, @class.AbstractModifier, @class.Identifier.Name,
@@ -193,23 +195,70 @@ namespace CSharpWriter
             WriteSignature(method);
             using (_builder.IndentBraced)
             {
-                _("if (_entity == null)");
+                _("if (Entity == null)");
 
                 using (_builder.IndentBraced)
                 {
-                    _("Context.AddObject(_path, item);");
+                    _("Context.AddObject(Path, item);");
                 }
 
                 _("else");
 
                 using (_builder.IndentBraced)
                 {
-                    _("var lastSlash = _path.LastIndexOf('/');");
-                    _("var shortPath = (lastSlash >= 0 && lastSlash < _path.Length - 1) ? _path.Substring(lastSlash + 1) : _path;");
-                    _("Context.AddRelatedObject(_entity, shortPath, item);");
+                    _("var lastSlash = Path.LastIndexOf('/');");
+                    _("var shortPath = (lastSlash >= 0 && lastSlash < Path.Length - 1) ? Path.Substring(lastSlash + 1) : Path;");
+                    _("Context.AddRelatedObject(Entity, shortPath, item);");
                 }
 
-                _("if (!dontSave)");
+                _("if (!deferSaveChanges)");
+
+                using (_builder.IndentBraced)
+                {
+                    _("return Context.SaveChangesAsync();");
+                }
+
+                _("else");
+
+                using (_builder.IndentBraced)
+                {
+                    _("var retVal = new global::System.Threading.Tasks.TaskCompletionSource<object>();");
+                    _("retVal.SetResult(null);");
+                    _("return retVal.Task;");
+                }
+            }
+        }
+
+        private void Write(AddAsyncMediaMethod method)
+        {
+            WriteSignature(method);
+            using (_builder.IndentBraced)
+            {
+                _("if (Entity == null)");
+
+                using (_builder.IndentBraced)
+                {
+                    _("Context.AddObject(Path, item);");
+                }
+
+                _("else");
+
+                using (_builder.IndentBraced)
+                {
+                    _("var lastSlash = Path.LastIndexOf('/');");
+                    _("var shortPath = (lastSlash >= 0 && lastSlash < Path.Length - 1) ? Path.Substring(lastSlash + 1) : Path;");
+                    _("Context.AddRelatedObject(Entity, shortPath, item);");
+                }
+
+                _("Context.SetSaveStream(item, stream, closeStream, new DataServiceRequestArgs()");
+                _("{");
+                using (_builder.Indent)
+                {
+                    _("ContentType = contentType");
+                }
+                _("});");
+
+                _("if (!deferSaveChanges)");
 
                 using (_builder.IndentBraced)
                 {
@@ -241,7 +290,7 @@ namespace CSharpWriter
             WriteSignature(method);
             using (_builder.IndentBraced)
             {
-                _("return new DataServiceQuerySingle<long>(Context, _path + \"/$count\").GetValueAsync();");
+                _("return new DataServiceQuerySingle<long>(Context, Path + \"/$count\").GetValueAsync();");
             }
         }
 
@@ -344,7 +393,7 @@ namespace CSharpWriter
             using (_builder.IndentBraced)
             {
                 _("string resolvedType;");
-                _("resolvedType = Context.DefaultResolveNameInternal(clientType,  \"{0}\", \"{1}\");", method.ClientNamespace, method.ServerNamespace);
+                _("resolvedType = Context.DefaultResolveNameInternal(clientType,  \"{0}\", \"{1}\");", method.ServerNamespace, method.ClientNamespace);
                 _("if (!string.IsNullOrEmpty(resolvedType))");
                 using (_builder.IndentBraced)
                 {
@@ -453,7 +502,7 @@ namespace CSharpWriter
             }
         }
 
-        private void Write(EntityFunctionMethod method)
+        private void Write(EntityInstanceFunctionMethod method)
         {
             WriteSignature(method);
             using (_builder.IndentBraced)
@@ -461,6 +510,22 @@ namespace CSharpWriter
                 WriteEntityMethodBodyStart(method);
                 _("return ({0}) Enumerable.Single<{1}>(await this.Context.ExecuteAsync<{1}>(requestUri, \"{2}\", true, new OperationParameter[]",
                     method.ReturnType.GenericParameters.First(), method.InstanceName, method.HttpMethod);
+                using (_builder.IndentBraced)
+                {
+                    WriteMethodOperationParameters(method);
+                }
+                _("));");
+            }
+        }
+
+        private void Write(EntityCollectionFunctionMethod method)
+        {
+            WriteSignature(method);
+            using (_builder.IndentBraced)
+            {
+                WriteEntityMethodBodyStart(method);
+                _("return (await this.Context.ExecuteAsync<{0}>(requestUri, \"{1}\", false, new OperationParameter[]",
+                    method.InstanceName, method.HttpMethod);
                 using (_builder.IndentBraced)
                 {
                     WriteMethodOperationParameters(method);
@@ -496,17 +561,23 @@ namespace CSharpWriter
 
         private void WriteEntityMethodBodyStart(Method method)
         {
-            _("if (this.Context == null)");
-            _("    throw new InvalidOperationException(\"Not Initialized\");");
+            WriteInitializationEnforcer();
+
             _("Uri myUri = this.GetUrl();");
             _("if (myUri == (Uri) null)");
             _(" throw new Exception(\"cannot find entity\");");
             _("Uri requestUri = new Uri(myUri.ToString().TrimEnd('/') + \"/{0}\");", method.ModelName);
         }
 
+        private void WriteInitializationEnforcer()
+        {
+            _("if (this.Context == null)");
+            _("    throw new InvalidOperationException(\"Not Initialized\");");
+        }
+
         private void WriteSignature(MethodSignature method, bool isForInterface = false)
         {
-            var accessModifier = method.IsPublic ? "public " : "private ";
+            var accessModifier = GetAccessModifier(method.Visibility);
 
             var asyncModifier = method.IsAsync ? "async " : "";
 
@@ -526,8 +597,27 @@ namespace CSharpWriter
 
             var template = isForInterface ? "{3}{4} {6}{7}({8});" : "{0}{1}{2}{3}{4} {5}{6}{7}({8})";
 
+            WriteMethodDescription(method);
             _(template, accessModifier, asyncModifier, staticModifier, overrideModifier, method.ReturnType, explicitName, method.Name,
                 genericParameters, method.Parameters.ToParametersString());
+        }
+
+        private string GetAccessModifier(Visibility visibility)
+        {
+            switch (visibility)
+            {
+                case Visibility.Internal:
+                    return "internal ";
+                case Visibility.Private:
+                    return "private ";
+                case Visibility.Protected:
+                    return "protected ";
+                case Visibility.ProtectedInternal:
+                    return "protected internal ";
+                case Visibility.Public:
+                    return "public ";
+            }
+            return string.Empty;
         }
 
         private void WriteSignature(IndexerSignature indexer, bool? @public = true)
@@ -622,8 +712,8 @@ namespace CSharpWriter
                         NamesService.GetExtensionTypeName("PagedCollection"),
                         NamesService.GetConcreteInterfaceName(property.OdcmType),
                         NamesService.GetConcreteTypeName(property.OdcmType),
-                        NamesService.GetExtensionTypeName("EntityCollectionImpl"),
-                        property.FieldName);
+                        "DataServiceCollection",
+                        property.Name);
                 }
             }
         }
@@ -652,14 +742,16 @@ namespace CSharpWriter
 
                 using (_builder.IndentBraced)
                 {
-                    _("{0}.Clear();", property.FieldName);
+                    WriteInitializationEnforcer();
+
+                    _("{0}.Clear();", property.Name);
                     _("if (value != null)");
                     using (_builder.IndentBraced)
                     {
                         _("foreach (var i in value)");
                         using (_builder.IndentBraced)
                         {
-                            _("{0}.Add(i);", property.FieldName);
+                            _("{0}.Add(i);", property.Name);
                         }
                     }
                 }
@@ -782,10 +874,10 @@ namespace CSharpWriter
 
                 using (_builder.IndentBraced)
                 {
-                    _("if (this.{0} != value)", property.FieldName);
+                    _("if (this.{0} != value)", property.Name);
                     using (_builder.IndentBraced)
                     {
-                        _("this.{0} = ({1})value;", property.FieldName, property.FieldType);
+                        _("this.{0} = ({1})value;", property.Name, property.FieldType);
                     }
                 }
             }
@@ -793,7 +885,8 @@ namespace CSharpWriter
 
         private void WriteDeclaration(Property property, bool isForInterface = false)
         {
-            var accessModifier = property.IsPublic ? "public " : "private ";
+            WriteDescription(property.Description);
+            var accessModifier = GetAccessModifier(property.Visibility);                        
 
             var template = isForInterface ? "{1} {3};" : "{0}{1} {2}{3}";
 
@@ -809,6 +902,7 @@ namespace CSharpWriter
 
         private void Write(Interface @interface)
         {
+            WriteDescription(@interface.Description);
             Write(@interface.Attributes);
             _("public partial interface {0}{1}", @interface.Identifier.Name, GetInheritenceString(@interface.Interfaces));
 
@@ -849,8 +943,11 @@ namespace CSharpWriter
         {
             foreach (var methodSignature in methodSignatures)
             {
+                if (methodSignature.Visibility == Visibility.Public)
+                {
                 WriteSignature(methodSignature, true);
             }
+        }
         }
 
         private static string GetInheritenceString(IEnumerable<Type> interfaces, Type baseClass = null)
@@ -917,7 +1014,7 @@ namespace CSharpWriter
                 _("set");
                 using (_builder.IndentBraced)
                 {
-                    _("{0}.Clear();", property.FieldName);
+                    _("{0}.Clear();", property.Name);
                     _("if (value != null)");
 
                     using (_builder.IndentBraced)
@@ -926,7 +1023,7 @@ namespace CSharpWriter
 
                         using (_builder.IndentBraced)
                         {
-                            _("{0}.Add(i);", property.FieldName);
+                            _("{0}.Add(i);", property.Name);
                         }
                     }
                 }
@@ -955,7 +1052,39 @@ namespace CSharpWriter
 
         private void WriteDeclaration(InterfaceProperty property)
         {
+            WriteDescription(property.Description);
             WritePropertyDeclaration(property.Type.ToString(), property.Name);
+        }
+
+        private void WriteDescription(string description)
+        {
+            if(!string.IsNullOrEmpty(description))
+            {
+                _builder.Write("/// <summary>");
+                _builder.Write("/// " + description);
+                _builder.Write("/// </summary>");
+            }
+        }
+
+        private void WriteMethodDescription(MethodSignature method)
+        {
+            if (!string.IsNullOrEmpty(method.Description))
+            {
+                _builder.Write("/// <summary>");
+                _builder.Write("/// " + method.Description);
+                _builder.Write("/// </summary>");
+            }
+
+            if (method.Parameters != null)
+            {
+                var parameters = method.Parameters.Where(p => !string.IsNullOrEmpty(p.Description));
+                foreach (var param in parameters)
+                {
+                    _builder.Write(string.Format("/// <param name=\"{0}\">", param.Name));
+                    _builder.Write("/// " + param.Description);
+                    _builder.Write("/// </param>");
+                }
+            }
         }
 
         private void WritePropertyDeclaration(string typeName, string name)

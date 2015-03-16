@@ -18,7 +18,7 @@ namespace ODataReader.v3
 {
     public class OdcmReader : IOdcmReader
     {
-        private static readonly string[][] PrimitiveTypes = new[]
+        private static readonly string[][] PrimitiveTypes =
         {
             new[] {"Edm", "Binary"},
             new[] {"Edm", "Boolean"},
@@ -108,7 +108,7 @@ namespace ODataReader.v3
             {
                 foreach (var entry in PrimitiveTypes)
                 {
-                    _odcmModel.AddType(new OdcmPrimitiveType(entry[1], entry[0]));
+                    _odcmModel.AddType(new OdcmPrimitiveType(entry[1], OdcmNamespace.GetWellKnownNamespace(entry[0])));
                 }
             }
 
@@ -128,6 +128,8 @@ namespace ODataReader.v3
 
             private void WriteNamespaceShallow(IEdmModel edmModel, string @namespace)
             {
+                _odcmModel.AddNamespace(@namespace);
+
                 var namespaceElements = from se in edmModel.SchemaElements
                                         where string.Equals(se.Namespace, @namespace)
                                         select se;
@@ -154,22 +156,22 @@ namespace ODataReader.v3
 
                 foreach (var enumType in enumTypes)
                 {
-                    _odcmModel.AddType(new OdcmEnum(enumType.Name, enumType.Namespace));
+                    _odcmModel.AddType(new OdcmEnum(enumType.Name, ResolveNamespace(enumType.Namespace)));
                 }
 
                 foreach (var complexType in complexTypes)
                 {
-                    _odcmModel.AddType(new OdcmClass(complexType.Name, complexType.Namespace));
+                    _odcmModel.AddType(new OdcmComplexClass(complexType.Name, ResolveNamespace(complexType.Namespace)));
                 }
 
                 foreach (var entityType in entityTypes)
                 {
-                    _odcmModel.AddType(new OdcmEntityClass(entityType.Name, entityType.Namespace));
+                    _odcmModel.AddType(new OdcmEntityClass(entityType.Name, ResolveNamespace(entityType.Namespace)));
                 }
 
                 foreach (var entityContainer in entityContainers)
                 {
-                    _odcmModel.AddType(new OdcmServiceClass(entityContainer.Name, entityContainer.Namespace));
+                    _odcmModel.AddType(new OdcmServiceClass(entityContainer.Name, ResolveNamespace(entityContainer.Namespace)));
                 }
             }
 
@@ -401,7 +403,7 @@ namespace ODataReader.v3
 
                 bool isBoundToCollection = operation.IsBindable && operation.Parameters.First().Type.IsCollection();
 
-                var odcmMethod = new OdcmMethod(operation.Name)
+                var odcmMethod = new OdcmMethod(operation.Name, odcmClass.Namespace)
                 {
                     Verbs = operation.IsSideEffecting ? OdcmAllowedVerbs.Post : OdcmAllowedVerbs.Any,
                     IsBoundToCollection = isBoundToCollection,
@@ -475,6 +477,17 @@ namespace ODataReader.v3
                 }
 
                 return type;
+            }
+
+            private OdcmNamespace ResolveNamespace(string @namespace)
+            {
+                OdcmNamespace odcmNamespace;
+                if (!_odcmModel.TryResolveNamespace(@namespace, out odcmNamespace))
+                {
+                    throw new InvalidOperationException();
+                }
+
+                return odcmNamespace;
             }
         }
     }

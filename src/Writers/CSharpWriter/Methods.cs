@@ -14,14 +14,16 @@ namespace CSharpWriter
         {
             return Methods.ForEntityType(odcmClass);
         }
+        public static IEnumerable<Method> ForConcreteMediaInterface(OdcmClass odcmClass)
+        {
+            return Methods.ForEntityType(odcmClass);
+        }
 
         public static IEnumerable<Method> ForConcrete(OdcmClass odcmClass)
         {
             var retVal = Methods.ForConcreteInterface(odcmClass).ToList();
 
             retVal.Add(new EnsureQueryMethod(odcmClass));
-
-            retVal.AddRange(Methods.ForConcreteUpcasts(odcmClass));
 
             if (!odcmClass.IsAbstract)
             {
@@ -32,13 +34,22 @@ namespace CSharpWriter
             return retVal;
         }
 
+        public static IEnumerable<Method> ForFetcherInterfaceUpcasts(OdcmClass odcmClass)
+        {
+            return odcmClass.NestedDerivedTypes()
+                    .Select(dr => new FetcherUpcastMethod(odcmClass, dr));
+        }
+
+        public static IEnumerable<Method> ForFetcherUpcasts(OdcmClass odcmClass)
+        {
+            return Methods.ForFetcherInterfaceUpcasts(odcmClass);
+        }
+
         public static IEnumerable<Method> ForFetcherInterface(OdcmClass odcmClass)
         {
             var retVal = new List<Method>();
 
             retVal.AddRange(Methods.ForEntityType(odcmClass));
-
-            retVal.AddRange(Methods.ForFetcherUpcasts(odcmClass));
 
             if (!odcmClass.IsAbstract)
             {
@@ -63,12 +74,29 @@ namespace CSharpWriter
 
         public static IEnumerable<Method> ForCollectionInterface(OdcmClass odcmClass)
         {
+            var odcmMediaClass = odcmClass as OdcmMediaClass;
+            if (odcmMediaClass != null)
+            {
+                return ForMediaCollectionInterface(odcmMediaClass);
+            }
+
             return Methods.GetMethodsBoundToCollection(odcmClass)
                 .Concat(new Method[]
                 {
                     new CollectionGetByIdMethod(odcmClass),
                     new CollectionExecuteAsyncMethod(odcmClass),
                     new AddAsyncMethod(odcmClass)
+                });
+        }
+
+        public static IEnumerable<Method> ForMediaCollectionInterface(OdcmMediaClass odcmClass)
+        {
+            return Methods.GetMethodsBoundToCollection(odcmClass)
+                .Concat(new Method[]
+                {
+                    new CollectionGetByIdMethod(odcmClass),
+                    new CollectionExecuteAsyncMethod(odcmClass),
+                    new AddAsyncMediaMethod(odcmClass)
                 });
         }
 
@@ -82,7 +110,7 @@ namespace CSharpWriter
             return Methods.ForEntityType(odcmContainer);
         }
 
-        public static IEnumerable<Method> ForEntityContainer(OdcmClass odcmContainer)
+        public static IEnumerable<Method> ForEntityContainer(OdcmServiceClass odcmContainer)
         {
             return Methods.ForEntityContainerInterface(odcmContainer)
                 .Concat(Methods.ForContainerAddToCollection(odcmContainer))
@@ -112,14 +140,6 @@ namespace CSharpWriter
             return GetMethodsBoundToEntityType(odcmClass);
         }
 
-        private static IEnumerable<Method> ForFetcherUpcasts(OdcmClass odcmClass)
-        {
-            return ConfigurationService.Settings.OmitFetcherUpcastMethods
-                ? Methods.Empty
-                : odcmClass.NestedDerivedTypes()
-                    .Select(dr => new FetcherUpcastMethod(odcmClass, dr));
-        }
-
         private static IEnumerable<Method> ForContainerAddToCollection(OdcmClass odcmClass)
         {
             return odcmClass.NavigationProperties()
@@ -127,11 +147,9 @@ namespace CSharpWriter
                     .Select(p => new ContainerAddToCollectionMethod(p));
         }
 
-        private static IEnumerable<Method> ForConcreteUpcasts(OdcmClass odcmClass)
+        internal static IEnumerable<Method> ForConcreteUpcasts(OdcmClass odcmClass)
         {
-            return ConfigurationService.Settings.OmitFetcherUpcastMethods
-                ? Methods.Empty
-                : odcmClass.NestedDerivedTypes()
+            return odcmClass.NestedDerivedTypes()
                     .Select(dr => new ConcreteUpcastMethod(odcmClass, dr));
         }
 

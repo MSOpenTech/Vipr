@@ -2,11 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Vipr.Core.CodeModel
 {
-    public class OdcmMethod : OdcmAnnotatedObject
+    public class OdcmMethod : OdcmType
     {
         public OdcmClass Class { get; set; }
 
@@ -24,8 +23,8 @@ namespace Vipr.Core.CodeModel
 
         public OdcmType ReturnType { get; set; }
 
-        public OdcmMethod(string name)
-            : base(name)
+        public OdcmMethod(string name, OdcmNamespace @namespace)
+            : base(name, @namespace)
         {
             Parameters = new List<OdcmParameter>();
         }

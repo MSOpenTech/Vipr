@@ -1,11 +1,9 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
-using System.Runtime.InteropServices;
-using System.Runtime.Remoting.Messaging;
-using System.Xml.Linq;
 using ODataReader.v4UnitTests;
+using System;
+using System.Xml.Linq;
 
 namespace Microsoft.Its.Recipes
 {
@@ -24,7 +22,7 @@ namespace Microsoft.Its.Recipes
 
         internal static class Csdl
         {
-            private readonly static string[] PrimitiveTypes = new[]
+            private readonly static string[] PrimitiveTypes =
             {
                 "Edm.Binary",
                 "Edm.Boolean",
@@ -144,6 +142,32 @@ namespace Microsoft.Its.Recipes
             public static XElement DataServices(Action<XElement> config = null)
             {
                 var element = XElement.Parse(ODataReader.v4UnitTests.Properties.Resources.DataServices_element);
+
+                if (config != null) config(element);
+
+                return element;
+            }
+
+            public static XElement DescriptionAnnotation(string description, Action<XElement> config = null)
+            {
+                string descriptionAnnotationString =
+                    string.Format(ODataReader.v4UnitTests.Properties.Resources.Annotation_element, "Org.OData.Core.V1.Description");
+
+                XElement element = XElement.Parse(descriptionAnnotationString);
+                element.AddAttribute("String", description);
+
+                if (config != null) config(element);
+
+                return element;
+            }
+
+            public static XElement LongDescriptionAnnotation(string longDescription, Action<XElement> config = null)
+            {
+                string longDescriptionAnnotationString =
+                    string.Format(ODataReader.v4UnitTests.Properties.Resources.Annotation_element, "Org.OData.Core.V1.LongDescription");
+
+                XElement element = XElement.Parse(longDescriptionAnnotationString);
+                element.AddAttribute("String", longDescription);
 
                 if (config != null) config(element);
 

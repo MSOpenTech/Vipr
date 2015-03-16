@@ -3,14 +3,10 @@
 
 namespace Vipr.Core.CodeModel
 {
-    public abstract class OdcmAnnotatedObject : OdcmObject
+    public class OdcmComplexClass : OdcmClass
     {
-        public string PreText { get; set; }
-
-        public string InText { get; set; }
-
-        public OdcmAnnotatedObject(string name)
-            : base(name)
+        public OdcmComplexClass(string name, OdcmNamespace @namespace) :
+            base(name, @namespace, OdcmClassKind.Complex)
         {
         }
     }
